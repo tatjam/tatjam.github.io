@@ -1,0 +1,10 @@
+dev/CMakeFiles/
+dev/.vimrc
+dev/*.cmake
+dev/CMakeCache.txt
+dev/.clangd/
+dev/compile_commands.json
+dev/Makefile
+dev/sweb
+nohup.out
+

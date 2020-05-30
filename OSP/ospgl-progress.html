@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<meta charset="UTF-8">
+<html>
+	<head>
+		<title>Early 2020 progress</title>
+		<script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+		<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+		<link href="/prism.css" rel="stylesheet" />
+		<link rel="stylesheet" type="text/css" href="/theme.css">
+
+		<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:ital@0;1&family=IBM+Plex+Sans+Condensed:ital@0;1&family=IBM+Plex+Sans:ital,wght@0,100;0,400;0,700;1,100;1,400;1,700&family=IBM+Plex+Serif:ital@0;1&display=swap" rel="stylesheet">
+
+	</head>
+	<body>
+		<script src="/prism.js"></script>
+		
+		<div class="navbar">
+			<div class="nav-left">
+				<a href="">Early 2020 progress</a>
+			</div>
+			<div class="nav-right">
+				<a href="/index.html">Home</a>
+				<a href=/category-OSP.html>OSP</a>
+				<a href="/OSP/models-and-vehicles.html" title="Previous: Models and Vehicles">&#9664</a>
+				<a href="" title="Next: (None)">&#9654</a>
+			</div>
+		</div>
+
+		<div class = "intro">
+			<h1>Early 2020 progress</h1>
+			<p>A summary of the progress that has happened since the last blogpost<br>2020-04-06</p>
+		</div>
+
+		<div id = page>
+			<div class = "main">
+				<p>Since the last blogpost OSPGL has received quite a lot of changes, the repo has received almost 80 commits! (Some of them are relatively small though).</p>
+
+<p>Here are the new features, sorted by time of introduction (But changes have happened uniformly through time to almost all these features):</p>
+
+<hr>
+
+<h1>Vehicles in the World</h1>
+
+<p>Getting vehicles to work nicely with the planet renderer was difficult, mostly because of the physics simulation.
+To get collision to work, a custom bullet3 collider was neccesary. The task ended up being relatively simple, but took more time
+than expected. Bullet3 documentation is a bit lacking, and some code changes had to be done in bullet3&#39;s source code, as it was never
+designed to work with planetary sized objects moving at high speeds. Nevertheless, it ended up working perfectly!
+There are still some issues with the code that generates surface colliders. For example, &quot;physical&quot; tiles need to be the same size as &quot;graphical&quot; tiles,  something which will be fixed later on.</p>
+
+<h1>CMake building</h1>
+
+<p>Previously building the project was basically impossible for anybody but me, but, after awesome contributions from <a href="https://github.com/Capital-Asterisk">Capital-Asterisk</a> and <a href="https://github.com/Titaniumtown">Titaniumtown</a>, and help from <a href="https://github.com/jonesmz">jonesmz</a>, the project is now compiled using CMake.
+This change does not only mean that building is easier, it also makes the game as easy to build on Linux (and MacOS) as on Windows!</p>
+
+<h1>Deferred Rendering</h1>
+
+<p>Deferred rendering is a technique which allows an almost arbitrary amount of lights to be drawn without a big perfomance penalty.
+This technique works by first rendering every object to a texture, where fragment information is stored. Afterwards, lights will read these textures and apply lighting.
+In forward rendering (the traditional method which was used before this renderer was written), all objects have to process every single light in the scene. This means that many unseen fragments have to do the expensive lighting calculations.</p>
+
+<p>Perfomance is very sensitive to light size and position (the bigger and closer the light the more pixels it hits), but, with properly configured lights good framerates can be achieved. Here are 100 lights (seen from far away) running at around 40FPS on my Intel 530 HD GPU:</p>
+
+<p><img src="img/deferred.png" alt="Deferred shading in action"></p>
+
+<p>We use a technique called light volumes. It consists on drawing a mesh that approximates the shape of the light (a sphere for a point light, a cone for a spot light, fullscreen quad for sunlight...) and applying the light shader to that mesh. The result is that only pixels which are hit by the light have to do the expensive computations.
+Other techniques exists, such as tiled deferred shading, which allow an even higher number of lights. For now this is good enough, most lights are gonna be relatively small.</p>
+
+<p>A very basic shadow casting system has also been implemented, but it still requires a lot of work. Rendering shadows on a game like OSP is a really difficult topic, where traditional techniques don&#39;t work &quot;out of the box&quot;. Cascaded shadow maps could be used for near to medium distance shadows, but landscape shadows are probably going to need an special method, otherwise we could run into precision issues. The final renderer will include planetary scale shadows, including eclipses.</p>
+
+<h1>Lua Machines, Links and Vehicle Serialization</h1>
+
+<p>First of all, links are now implemented in lua, allowing any kind of behaviour to happen. For now, only a single link type has been implemented.</p>
+
+<p>Also, vehicles can be loaded from a TOML file.</p>
+
+<p>Here is the current implementation of two machines, a capsule and an engine, to showcase the wiring system explained below.
+(Code has been simplified for brevity)</p>
+
+<pre><code class="language-lua">-- core:machines/capsule.lua
+require(&quot;vehicle&quot;)
+local logger = require(&quot;logger&quot;)
+local toml = require(&quot;toml&quot;)
+
+function define_ports()
+    machine:add_output_port(&quot;Throttle&quot;, &quot;number&quot;)
+end
+
+function update(dt)
+    machine:write_to_port(&quot;Throttle&quot;, 1.0)
+end
+</code></pre>
+
+<pre><code class="language-lua">-- core:machines/engine.lua
+require(&quot;vehicle&quot;)
+local bullet = require(&quot;bullet&quot;)
+local glm = require(&quot;glm&quot;)
+local toml = require(&quot;toml&quot;)
+
+local thrust = machine.init_toml:get_number(&quot;thrust&quot;)
+local nozzle = machine.init_toml:get_string(&quot;nozzle&quot;)
+
+local throttle = 0.0
+local nozzle_dir = nil
+local nozzle_pos = nil
+
+function set_throttle(port, value)
+    throttle = math.max(math.min(value, 1.0), 0.0)
+end
+
+function define_ports()
+    machine:add_input_port(&quot;Throttle&quot;, &quot;number&quot;, set_throttle)
+end
+
+function update(dt)
+    local f_thrust = thrust * throttle
+
+    if nozzle_dir == nil then
+        nozzle_dir = part:get_piece(&quot;p_root&quot;):get_marker_forward(nozzle)
+        nozzle_pos = part:get_piece(&quot;p_root&quot;):get_marker_position(nozzle)
+    end
+
+    if f_thrust &gt; 0 then
+        local p_root = part:get_piece(&quot;p_root&quot;)
+        -- Direction is on world coordinates
+        local rdir = -p_root:transform_axis(nozzle_dir)
+        -- Position is relative to the center of mass of the rigidbody
+        local rpos = p_root:transform_point_to_rigidbody(nozzle_pos)
+
+        p_root.rigid_body:apply_force(rdir * thrust * throttle, rpos)
+    end
+end
+</code></pre>
+
+<p>As you can see, the capsule simply writes a value to a port. This port can be connected (wired) by the user to anything, for example, to the engine.
+The engine code is a bit more complex as it also showcases loading settings from the TOML configuration. <code>thrust</code> is a number value while
+<code>nozzle</code> is the name of a marker in the 3D model where the nozzle is.</p>
+
+<p>Ports are the most interesting part of all this. They can only be read from the callback functions that the machine sets up in <code>define_ports</code>,
+but values can be written to them from anywhere. Once a port has been written to, it is blocked until the next frame. This is done in order to avoid
+&quot;write loops&quot; that could freeze the game where a machine, upon receiving a value, writes to a port which causes the machine that sent the first value
+to re-send said value, blocking the game.</p>
+
+<h1>Buildings</h1>
+
+<p>The latest feature, buildings are entities which are fixed to a position in a planet&#39;s surface. They are going to be used for launchpads, space centers, easter eggs, and maybe even cities and fixed landmarks. Terrain details (rocks, trees and similar) could also be implemented using buildings, but will most likely use other system
+to avoid perfomance issues.</p>
+
+<p>That&#39;s it for this update. Hopefully next one will actually showcase game features, as the engine is about to become complete enough to start writing the game!</p>
+
+<p><img src="img/launchpad.png" alt="The launchpad, the vessel and a sunset"></p>
+
+			</div>
+			
+			<div class="disqus">
+				<div id="disqus_thread"></div>
+			</div>
+
+			<script>
+				var disqus_config = function () {
+					this.page.url = tatjam.github.io;  
+					
+					// Replace PAGE_IDENTIFIER with your page's unique identifier variable
+					this.page.identifier = PAGE_IDENTIFIER; 
+				};
+				
+				(function() {  // REQUIRED CONFIGURATION VARIABLE: EDIT THE SHORTNAME BELOW
+					var d = document, s = d.createElement('script');
+					
+					// IMPORTANT: Replace EXAMPLE with your forum shortname!
+					s.src = 'https://tatjam-blog.disqus.com/embed.js';
+					
+					s.setAttribute('data-timestamp', +new Date());
+					(d.head || d.body).appendChild(s);
+				})();
+			</script>
+			<noscript>
+				Please enable JavaScript to view the 
+				<a href="https://disqus.com/?ref_noscript" rel="nofollow">
+					comments powered by Disqus.
+				</a>
+			</noscript>
+
+		</div>
+
+	</body>
+</html>

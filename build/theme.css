@@ -1,0 +1,134 @@
+body {
+  margin:0; 
+  background-color: #AAAAAA;
+  font-family: 'IBM Plex Sans';
+}
+
+.navbar {
+  overflow: hidden;
+  background-color: #333;
+  position: fixed;
+  top: 0;
+  width: 100%;
+  z-index:1000;
+  box-shadow: 0px 0px 5px #333;
+}
+
+.navbar .nav-left {
+	float: left;
+}
+
+.navbar .nav-right {
+	float: right;
+}
+
+.vl {
+  border-left: 6px solid white;
+  height: 500px;
+}
+
+.main .post-list {
+	border: 1px solid black; 
+	margin-bottom: 10px;
+	padding-left: 15px;
+	background-color: #888888;
+	box-shadow: 0px 3px 4px #222222;
+}
+
+.main .post-list:hover {
+	background-color: #AAAAAA;
+}
+
+
+.main .post-list {
+	display: block;
+	color: #FFFFFF;
+	text-decoration: none;
+}
+
+.main .post-list:hover {
+	color: #FFFFFF;
+	text-decoration: none;
+}
+
+.navbar a {
+  float: left;
+  display: block;
+  color: #f2f2f2;
+  text-align: center;
+  padding: 14px 16px;
+  text-decoration: none;
+  font-size: 17px;
+}
+
+.navbar a:hover {
+  background: #ddd;
+  color: black;
+}
+
+.intro {
+	overflow: hidden;
+	position: relative;
+	width: 100%;
+	margin: 40px 0px;
+	background-color: #555;
+	color: #dfdfdf;
+	text-align: center;
+}
+
+.disqus {
+	width: 70%;
+	margin: auto;
+}
+
+.main .footnotes {
+	background-color: #EEEEEE
+}
+
+
+.main {
+  padding: 16px;
+  margin-left: 60px;
+  margin-right: 60px;
+}
+
+.main h1 {
+	position: relative;
+	padding: 6px 20px 6px 100px;
+	width: 50%;
+	box-shadow: 0px 4px 8px #888;
+	margin: 30px 10px 10px -100px;
+	background-color: #555;
+	color: #dfdfdf;
+}
+
+.main a {
+	color: #1111AA;
+	text-decoration: none;
+}
+
+.main a:hover {
+	text-decoration: underline;
+}
+
+
+#page {
+  background-color: #DEDEDE;
+  width: 90%;
+  height: 200%;
+  margin: 0 auto;
+  border: 1px solid #222f;
+}
+
+.main img {
+  display: block;
+  width: 65%;
+
+  margin-left:auto;
+  margin-right:auto;
+
+  align: center;
+  height: auto;
+}
+
+

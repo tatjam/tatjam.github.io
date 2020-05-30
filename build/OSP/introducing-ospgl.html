@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<meta charset="UTF-8">
+<html>
+	<head>
+		<title>Introducing OSPGL</title>
+		<script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+		<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+		<link href="/prism.css" rel="stylesheet" />
+		<link rel="stylesheet" type="text/css" href="/theme.css">
+
+		<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:ital@0;1&family=IBM+Plex+Sans+Condensed:ital@0;1&family=IBM+Plex+Sans:ital,wght@0,100;0,400;0,700;1,100;1,400;1,700&family=IBM+Plex+Serif:ital@0;1&display=swap" rel="stylesheet">
+
+	</head>
+	<body>
+		<script src="/prism.js"></script>
+		
+		<div class="navbar">
+			<div class="nav-left">
+				<a href="">Introducing OSPGL</a>
+			</div>
+			<div class="nav-right">
+				<a href="/index.html">Home</a>
+				<a href=/category-OSP.html>OSP</a>
+				<a href="" title="Previous: (None)">&#9664</a>
+				<a href="/OSP/models-and-vehicles.html" title="Next: Models and Vehicles">&#9654</a>
+			</div>
+		</div>
+
+		<div class = "intro">
+			<h1>Introducing OSPGL</h1>
+			<p>OSPGL (OSP + OpenGL) is an ongoing attempt at creating a game similar to Squad's Kerbal Space Program, focusing on perfomance and moddability<br>2019-11-30</p>
+		</div>
+
+		<div id = page>
+			<div class = "main">
+				<p>OSPGL (OSP + OpenGL) is an ongoing attempt at creating a game similar to Squad&#39;s Kerbal Space Program, focusing
+on perfomance and moddability. It&#39;s written in C++, and uses OpenGL for rendering.</p>
+
+<p>It will feature a gameplay similar to KSP, but probably becoming harder (N-body physics) and more realistic.</p>
+
+<hr>
+
+<h2>Engine</h2>
+
+<p>I don&#39;t know if OSP could be said to run &quot;on an engine&quot;, it instead is built &quot;alongside&quot; a framework containing lots
+of utility code. It doesn&#39;t really make sense to clone one of the known game engines (Unity, Unreal) when the game is so
+special, so, instead of writing an engine and then the game, I have decided to write the game, and when some code can be
+shared, I will write an utility class for it. A big problem is code organization, but the project will see some progress on
+this area over time, for now code files are placed on a folder structure that makes little sense.</p>
+
+<p>As the game grows more and more complete, gameplay code will start to be written in lua. Only then will the code be considered
+a game engine for the lua written gameplay. For now lua is used only for planet generation, but this will change in the future.</p>
+
+<hr>
+
+<h2>Progress so far</h2>
+
+<p>The game features multiple systems:</p>
+
+<h3>Asset Manager</h3>
+
+<p>The asset manager simplifies the loading, decoding and unloading of Assets from packages.</p>
+
+<p>A package is any folder inside the &#39;&#39;./res&#39;&#39; folder which contains a &#39;&#39;package.toml&#39;&#39; inside.
+Packages can define metadata alongside dependencies, allowing mod developers to easily implement
+their code and assets into the game.</p>
+
+<p>So far four packages exist, &quot;core&quot;, &quot;navball&quot;, &quot;rss&quot; and &quot;rss_textures&quot;. Every package is neccesary
+for the game to run as it&#39;s in very early development, but they showcase some of the cool features that the
+package system implements.</p>
+
+<p>A package folder is a &quot;base&quot; name for any package that &quot;implements&quot; it. For example, any package could go into
+the <code>navball</code> folder, so modders could easily change the navball.
+To &quot;implement&quot; a folder you simply set <code>folder=&quot;wathever&quot;</code> on the <code>package.toml</code> file</p>
+
+<p><code>core</code>, the basic assets required to run the game, depends on this <code>navball</code> package. This allows a navball modder
+to change the navball without changing the <code>core</code> package.</p>
+
+<p>More will be written on this subsystem as it&#39;s developed, here&#39;s an example of the current <code>package.toml</code> for core:</p>
+
+<pre><code class="language-toml">id = &quot;core&quot;
+name = &quot;OSP Core&quot;
+description = &quot;All files needed to run the most bare-bones OSP&quot;
+author = &quot;Tatjam&quot;
+version = &quot;0.0.1&quot;
+dependencies = [&quot;navball&quot;]
+</code></pre>
+
+<h3>Planet Renderer</h3>
+
+<p>I have been writing this for many months now, it has been rewritten from my first attempt which failed due to perfomance reasons.</p>
+
+<p>The new planetary renderer is pretty fast, using lua to source the planet geometry (instead of the node system in the failed attempt),
+and generating tiles on non-main threads. It still requires some work to hide the occasional gaps that appear, but it works pretty good,
+even on my low-end GPU.</p>
+
+<p>To subdivide the planet six quad trees are used, one for each side of a cube (which is then mapped to a sphere, a CubeSphere!).
+The planet tile server then obtains leaf nodes from these quad trees and gives the worker threads the order to start generating the vertices.</p>
+
+<p>This seemingly simple task proved itself to be actually quite complicated.</p>
+
+<p>Another big challenge was rendering the generated triangles, GPUs are not really meant to work with doubles, so some hacks have to be done
+in order to get the planet looking nice on the screen. I decided to implement a logarithmic depth-buffer, as detailed by the guys behind
+<a href="https://outerra.blogspot.com/2009/08/logarithmic-z-buffer.html">Outerra</a>.</p>
+
+<p>Everything is kept as doubles in the engine, and the data gets converted to floats when sent to the GPU. We keep the camera at the origin so precision issues are hard to notice (you have to set the FoV really small and only then you will see some Z-fighting on far away planets).</p>
+
+<p>The atmospheric shader is written out of frustration with the bad perfomance of other shaders, it may change in the future but it looks
+quite good, and performs really fast compared to other solutions. It&#39;s sadly not physically accurate at all.</p>
+
+<h3>Physics</h3>
+
+<p>Physics are just starting to take shape, so far I have implemented keplerian orbits for the solar system planets, and an N-body integrator for vessels.
+The combination works pretty good, and performs decently, but I don&#39;t know if it will prove itself.</p>
+
+<p>Vessel physics are the current development target, I&#39;m using bullet3 compiled to use <code>double</code>s instead of <code>float</code>s, allowing the
+physics engine to run very far from the origin (Up to around 200AU), while moving really fast (100 thousand m/s and upwards work perfectly).
+This means that we won&#39;t need any &quot;Krakensbane&quot; or similar. Oh, the good parts of rolling your own engine!</p>
+
+<p>I guess that that&#39;s about it for the introduction, more blog posts while come as stuff gets developed. I will try to keep this updated whenever
+something significant happens!</p>
+
+<hr>
+
+<h3>Some screenshots:</h3>
+
+<p>A view of the Earth from space, with a lot of debug stuff visible, and part of the navball on the bottom.</p>
+
+<p>The velocity is 0 as the reference frame is set to &quot;Earth-Rotating&quot; and the vessel is on a geostationary orbit.</p>
+
+<p><img src="img/osp0.png" alt="The Earth, The Debug Drawers, The Navball"></p>
+
+<p>A view high on the Earth&#39;s atmosphere, the Moon is visible.
+<img src="img/osp1.png" alt="View of the moon from high atmosphere"></p>
+
+<p>A view of Mars from space, you can see its thin atmosphere.
+<img src="img/osp2.png" alt="View of the mars from space"></p>
+
+			</div>
+			
+			<div class="disqus">
+				<div id="disqus_thread"></div>
+			</div>
+
+			<script>
+				var disqus_config = function () {
+					this.page.url = tatjam.github.io;  
+					
+					// Replace PAGE_IDENTIFIER with your page's unique identifier variable
+					this.page.identifier = PAGE_IDENTIFIER; 
+				};
+				
+				(function() {  // REQUIRED CONFIGURATION VARIABLE: EDIT THE SHORTNAME BELOW
+					var d = document, s = d.createElement('script');
+					
+					// IMPORTANT: Replace EXAMPLE with your forum shortname!
+					s.src = 'https://tatjam-blog.disqus.com/embed.js';
+					
+					s.setAttribute('data-timestamp', +new Date());
+					(d.head || d.body).appendChild(s);
+				})();
+			</script>
+			<noscript>
+				Please enable JavaScript to view the 
+				<a href="https://disqus.com/?ref_noscript" rel="nofollow">
+					comments powered by Disqus.
+				</a>
+			</noscript>
+
+		</div>
+
+	</body>
+</html>

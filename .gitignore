@@ -1,0 +1,10 @@
+CMakeFiles/
+.vimrc
+*.cmake
+CMakeCache.txt
+.clangd
+compile_commands.json
+Makefile
+sweb
+nohup.out
+

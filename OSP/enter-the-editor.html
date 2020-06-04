@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<meta charset="UTF-8">
+<html>
+	<head>
+		<title>Enter the Editor</title>
+		<script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+		<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+		<link href="/prism.css" rel="stylesheet" />
+		<link rel="stylesheet" type="text/css" href="/theme.css">
+
+		<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:ital@0;1&family=IBM+Plex+Sans+Condensed:ital@0;1&family=IBM+Plex+Sans:ital,wght@0,100;0,400;0,700;1,100;1,400;1,700&family=IBM+Plex+Serif:ital@0;1&display=swap" rel="stylesheet">
+
+	</head>
+	<body>
+		<script src="/prism.js"></script>
+		
+		<div class="navbar">
+			<div class="nav-left">
+				<a href="">Enter the Editor</a>
+			</div>
+			<div class="nav-right">
+				<a href="/index.html">Home</a>
+				<a href=/category-OSP.html>OSP</a>
+				<a href="/OSP/ospgl-progress.html" title="Previous: Early 2020 progress">&#9664</a>
+				<a href="" title="Next: (None)">&#9654</a>
+			</div>
+		</div>
+
+		<div class = "intro">
+			<h1>Enter the Editor</h1>
+			<p>The last two months of progress feature the beginnings of the editor, among other changes<br>2020-06-03</p>
+		</div>
+
+		<div id = page>
+			<div class = "main">
+				<p>Since the last blogpost a lot of stuff has happened, the quarantine has given me a lot of free time, which has been reflected on a lot of work on OSPGL. Over 50 commits have been pushed since the last post. </p>
+
+<hr>
+
+<h1>The Editor</h1>
+
+<p>The most important feature written in the past few days is the editor scene. It requires both a GUI and some vehicle metadata to work.</p>
+
+<h2>GUI System</h2>
+
+<p>After searching for an appropiate GUI toolkit, I decided to roll my own. We only need relatively simple GUI, so something as big as QT was overkill, and lightweight OpenGL GUI libraries such as GiGi (Used in <a href="https://github.com/freeorion/freeorion">FreeOrion</a>) were complicated to integrate. We already have ImGui in the project, but customizing it for our purposes is too complicated, too. I decided to roll my own GUI library at the end of the day, here&#39;s how it works:</p>
+
+<p>GUIs are built by attaching <code>GUIWidgets</code> to a <code>GUILayout</code>. Layouts are responsible for placing the widgets in the correct position. For example, as of now we have a <code>GUIListLayout</code>, which simply puts widgets left-to-right, top-to-bottom (used in the part list) and a <code>GUIVerticalLayout</code>, which puts widgets top-to-bottom (used in the part category list). Layouts are also responsible for drawing scrollbars.</p>
+
+<p><code>GUILayouts</code> are then placed inside a <code>GUICanvas</code>, which is simply a binary partition of a rectangular region, allowing for complex window designs which are correctly displayed at all screen sizes.</p>
+
+<h2>Vehicle Editing</h2>
+
+<p>In order for the editor to be &quot;LEGO-like&quot;, attachment points are needed. I have decided to make it a bit more complex than KSP to fix a few of the big issues that users face when editing vehicles. </p>
+
+<p>There are three attachment types, <code>stack</code> (a ball), <code>radial</code> (a spike) and <code>stack_radial</code> (a ball with a spike). A piece may have any ammount of attachment points, and can toggle whether parts can attach radially to it or not.
+These attachment points are defined with a marker (A Blender empty) on the model file, and a small entry on the part config file.</p>
+
+<p>While placing pieces, the user can decide which attachment point to use, and also change which piece to use for attachment, allowing very easy building of relatively complex structures. It&#39;s easier to understand by watching a video (or trying it yourself by downloading and building the code):</p>
+
+<div style="text-align: center">
+<video width="50%" style="margin: 0 auto" controls>
+    <source src="img/editor.webm" type="video/webm">
+    Your browser does not support the video tag
+</video>
+</div>
+
+<p>The keybindings used are placeholders, the final editor will probably have some kind of visual interface for selecting attachment pieces and points.</p>
+
+<p>The next objectives are creating new parts, removing existing parts, and starting to work on wiring or some way to connect machines together.
+Also, we certainly need some way to keep parts aligned after messing with them. On the video you can clearly see that, after having messed a lot with the vehicle, one fuel tank is slightly rotated relative to the other fuel tank.</p>
+
+<h1>Package Manager</h1>
+
+<p>Another feature which is really important for a game like OSP is some kind of way to obtain content for the game. KSP has CKAN, which completely changed the modding scene by automating the mod installing process. Inspired by CKAN is the OSPM, the OSP Manager, which will handle download and installing of resource packages from a public repository.</p>
+
+<p>Currently only the code to obtain a package from a URL and install it is present, it does not only download a file over HTTPS, but it also extracts the package and checks the package meta-data. This will be used later on by the more advanced and smart <code>install</code> command, which can check meta-data before downloading a mod, but it needs a remote repository. </p>
+
+<p>Currently, to run the game you need two packages, <code>debug_system</code> and <code>test_parts</code>, which contain some data required by the engine during its development. Later on only <code>core</code> will be needed to start the game, but some content packages will be neccesary to play it (otherwise you would have no parts, no planetary system, etc...).</p>
+
+<p>Here are the commands used to install the packages as of now, we are using github releases to host these files:</p>
+
+<pre><code>./ospm fetch https://github.com/TheOpenSpaceProgram/new-ospgl/releases/download/ospm-test/debug_system.zip
+./ospm fetch https://github.com/TheOpenSpaceProgram/new-ospgl/releases/download/ospm-test/test_parts.zip
+</code></pre>
+
+<p>Only the <code>fetch</code> and <code>help</code> commands are implemented, but the usage of the final package manager could look like this:</p>
+
+<pre><code>./ospm connect https://github.com/TheOpenSpaceProgram/new-ospgl-pkg/packages.toml
+./ospm update
+./ospm install real-solar-system
+...
+</code></pre>
+
+<p>The repository is nothing more than a toml file which contains all the <code>package.toml</code> files for all versions of all packages. These files will contain an extra field (not read at all by OSP, but used by the package manager) which is the link to where the package is hosted, so the package manager can download them automatically.</p>
+
+<h1>Input System</h1>
+
+<p>Another big feature which is still on progress is the input system. It&#39;s meant to be used by Machines during flight, and it does not neccesarly handle input from the player, but it could come from a replay file, or even multiplayer commands.</p>
+
+<p>Machines which can be controlled need to expose an <code>InputContext</code>, which defines the axes and actions that can be used to control said machine. Then, these inputs can be updated externally.</p>
+
+<p>As of now it supports both keyboard and joystick input.</p>
+
+<p>Keybindings / Joystick bindings can be changed by modifying a text file, but it will later on get a dedicated GUI where the <code>InputContext</code>s can define descriptions for the inputs, allowing all keybindings for all mods to be accessed from a single interface.</p>
+
+<p>Stuff like the editor and GUIs don&#39;t use this system, as they cannot be controlled by anything other than a real player. If a GUI needs to interact with a real vehicle, it needs to be linked to a machine, with which it can interact. Some thought needs to go into how to make these GUIs work nicely with replays / multiplayer, maybe we could force them to interact with machines via an <code>InputContext</code>. </p>
+
+<h1>Other Changes</h1>
+
+<p>A small shader preprocessor was written, it allows sharing code between shaders in the same way that C++ handles it, using the #include directive. It works fine, but needs some kind of way to fix the line numbers.</p>
+
+<p>Also, a screen door transparency effect was written:</p>
+
+<p><video width="30%" controls>
+    <source src="img/sdoor.webm" type="video/webm">
+    Your browser does not support the video tag
+</video></p>
+
+<p>It allows easy and correct transparency on the deferred pass for stuff like fairing look-through, but it&#39;s not appropiate for more realistic effects, where a forward transparency pass is required (stuff like engine exhaust and capsule windows).</p>
+
+<p>A small CI (Continuous Integration) script was also written, but it requires more work. As of now it simply checks if the program compiles on linux.</p>
+
+<h2>Bugfixes</h2>
+
+<p>Barycenters were totally broken, but, due to the relatively small scale of the error, I had not been able to notice it until the vehicles actually were placed in the world. Unexpectedly, when they collided with the terrain, they bounced all over the place. Thanksfully it was as easy to fix as properly calculating the velocity of the primary in the barycenter pair!</p>
+
+<p>We also had precision errors related to time. Turns out that even a double is too small for storing a date! The planet orbit calculator was being too imprecise, which showed up as jittering while on the surface. It&#39;s now fixed by storing an epoch date and a relative date, so the potentially huge floating point number of the epoch date does not reduce the precision of the small time-steps.<sup id="fnref1"><a href="#fn1" rel="footnote">1</a></sup> </p>
+
+<p>The model loader also had plenty of bugs related to matrix multiplications... The order is always tricky to get right. </p>
+
+<h2>Planet generator perfomance improvements</h2>
+
+<p>Some changes have been done to the planet rendering system to make it slightly faster.
+First of all, a badly written mutex lock was blocking the generator threads, allowing only one to work at a time. Now all threads can work at the same time, allowing really fast terrain generation.</p>
+
+<p>A few changes were done too to the PlanetTile code, instead of allocating stack arrays on every tile they are now allocated only once per thread, and, in order to exploit the high speed of the LuaJIT trace compiler, the <code>generate</code> function is called only once per tile. It&#39;s now the responsability of the script to loop over all the vertices.</p>
+
+<p>Sadly, the perfomance improvement is not that spectacular (on my PC, from 0.12s per tile to 0.11s with optimizations disabled, once optimizations are enabled the difference is very small), but it paves the way for further improvement. For example, rewriting <code>FreeNoise</code> (the noise library we are using) in C and calling it directly from lua using LuaJIT&#39;s <code>ffi</code> module could really speed up the generation, as the <code>ffi</code> function calls have almost zero overhead.</p>
+
+<div style="text-align: center">
+<video width="50%" style="margin: 0 auto" controls>
+    <source src="img/fly.webm" type="video/webm">
+    Your browser does not support the video tag
+</video>
+<br>
+(Footage is spedup by a factor of 2)
+</div>
+
+<div class="footnotes">
+<hr>
+<ol>
+
+<li id="fn1">
+<p>Keep in mind, the year 2020 is roughly 31536000 seconds after J2000, our epoch date. That number is big enough as for some jittering to start becoming apparent, but stuff really started breaking around the year 2060 (or 1940). It may seem really far away but it could easily be reached on interplanetary missions.&nbsp;<a href="#fnref1" rev="footnote">&#8617;</a></p>
+
+<p>The reason for this jittering is that the orbit calculator amplifies floating point errors really easily, so the planets end up jittering a few meters back and forward. Nothing on the planetary scale, but enough as to fully ruin your day on a more human scale.</p>
+
+<p>The jittering is now impossible to notice even as far away as Pluto, but you will certainly meet floating point errors if you go really far away. Stuff like interstellar travel needs to change the origin of coordinates. </p>
+</li>
+
+</ol>
+</div>
+
+			</div>
+			
+			<div class="disqus">
+				<div id="disqus_thread"></div>
+			</div>
+
+			<script>
+				var disqus_config = function () {
+					this.page.url = tatjam.github.io;  
+					
+					// Replace PAGE_IDENTIFIER with your page's unique identifier variable
+					this.page.identifier = PAGE_IDENTIFIER; 
+				};
+				
+				(function() {  // REQUIRED CONFIGURATION VARIABLE: EDIT THE SHORTNAME BELOW
+					var d = document, s = d.createElement('script');
+					
+					// IMPORTANT: Replace EXAMPLE with your forum shortname!
+					s.src = 'https://tatjam-blog.disqus.com/embed.js';
+					
+					s.setAttribute('data-timestamp', +new Date());
+					(d.head || d.body).appendChild(s);
+				})();
+			</script>
+			<noscript>
+				Please enable JavaScript to view the 
+				<a href="https://disqus.com/?ref_noscript" rel="nofollow">
+					comments powered by Disqus.
+				</a>
+			</noscript>
+
+		</div>
+
+	</body>
+</html>

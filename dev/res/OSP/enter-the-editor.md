@@ -30,7 +30,7 @@ While placing pieces, the user can decide which attachment point to use, and als
 
 <div style="text-align: center">
 <video width="50%" style="margin: 0 auto" controls>
-	<source src="img/editor.webm" type="video/webm">
+	<source src="img/editor.mp4" type="video/mp4">
 	Your browser does not support the video tag
 </video>
 </div>
@@ -86,7 +86,7 @@ A small shader preprocessor was written, it allows sharing code between shaders 
 Also, a screen door transparency effect was written:
 
 <video width="30%" controls>
-	<source src="img/sdoor.webm" type="video/webm">
+	<source src="img/sdoor.mp4" type="video/mp4">
 	Your browser does not support the video tag
 </video>
 
@@ -121,7 +121,7 @@ Sadly, the perfomance improvement is not that spectacular (on my PC, from 0.12s 
 
 <div style="text-align: center">
 <video width="50%" style="margin: 0 auto" controls>
-	<source src="img/fly.webm" type="video/webm">
+	<source src="img/fly.mp4" type="video/mp4">
 	Your browser does not support the video tag
 </video>
 <br>

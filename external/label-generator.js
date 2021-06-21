@@ -69,6 +69,7 @@ function hide_all_ghs()
     $("ghs-harmful").style.display = "none";
     $("ghs-hazard").style.display = "none";
     $("ghs-oxidizer").style.display = "none";
+    $("ghs-flammable").style.display = "none";
     $("ghs-toxic").style.display = "none";
     $("ghs-unknown").style.display = "none";
 }
@@ -363,7 +364,7 @@ function load_classif(obj)
         else
         {
             hide_all_ghs();
-            var explosive = ["H200", "H201", "H202", "H203", "H204", "H240", "H241"];
+            var explosive = ["H201", "H202", "H203", "H204", "H240", "H241"];
             var flammable = ["H206", "H207", "H208", "H220", "H221", "H222", "H223",
                 "H224", "H225", "H226", "H228", "H229", "H230", "H231", "H232", "H241",
                 "H242", "H250", "H251", "H252", "H260", "H261"];
@@ -386,6 +387,7 @@ function load_classif(obj)
             set_ghs_shown("ghs-harmful", find_ghs(harmful, ghs_node));
             set_ghs_shown("ghs-hazard", find_ghs(hazard, ghs_node));
             set_ghs_shown("ghs-oxidizer", find_ghs(oxidizer, ghs_node));
+            set_ghs_shown("ghs-flammable", find_ghs(flammable, ghs_node));
             set_ghs_shown("ghs-toxic", find_ghs(toxic, ghs_node));
 
             if($("hazard_type").value == "ghs")

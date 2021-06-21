@@ -219,11 +219,12 @@ You may only enter one of the options.<br>
     <div id="ghs">
         <img id="ghs-corrosive" style="width:64px;" src="/external/ghs/corrosive.svg"></img>
         <img id="ghs-environment" style="width:64px;" src="/external/ghs/environment.svg"></img>
-        <img id="ghs-explosive" style="width:64px;" src="/external/ghs/explosive.svg"></img>
         <img id="ghs-gas" style="width:64px;" src="/external/ghs/gas.svg"></img>
         <img id="ghs-harmful" style="width:64px;" src="/external/ghs/harmful.svg"></img>
         <img id="ghs-hazard" style="width:64px;" src="/external/ghs/hazard.svg"></img>
         <img id="ghs-oxidizer" style="width:64px;" src="/external/ghs/oxidizer.svg"></img>
+        <img id="ghs-explosive" style="width:64px;" src="/external/ghs/explosive.svg"></img>
+        <img id="ghs-flammable" style="width:64px;" src="/external/ghs/flammable.svg"></img>
         <img id="ghs-toxic" style="width:64px;" src="/external/ghs/toxic.svg"></img>
         <img id="ghs-unknown" style="width:64px;" src="/external/ghs/unknown.svg"></img>
         <p id="ghs-string"></p>

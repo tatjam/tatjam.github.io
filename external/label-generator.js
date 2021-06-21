@@ -84,6 +84,7 @@ function set_ghs_size(sizepx)
     $("ghs-harmful").style.width = size;
     $("ghs-hazard").style.width = size;
     $("ghs-oxidizer").style.width = size;
+    $("ghs-flammable").style.width = size;
     $("ghs-toxic").style.width = size;
     $("ghs-unknown").style.width = size;
 }

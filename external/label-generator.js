@@ -327,6 +327,7 @@ function load_classif(obj)
     {
         hide_all_ghs();
         $("ghs-harmful").style.display = "inline";
+        $("ghs-string").style.display = "none";
     }
     else
     {

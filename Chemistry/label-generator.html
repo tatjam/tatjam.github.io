@@ -92,7 +92,7 @@ input[type=number] {
 
 You may only enter one of the options.<br>
 
-<label for="smiles">CID: </label>
+<label for="smiles">PubChem's CID: </label>
 <input type="text" id="cid" name="cid" value="276350" onchange="change_name('cid')">
 
 <br>
@@ -121,8 +121,11 @@ You may only enter one of the options.<br>
 
 <h3>Renderer Settings</h3>
 
+This setting may be useful if the generated image is buggy or you are working with coordination complexes which
+are not very well supported.
+<br>
 <input type="checkbox" id="use-pubchem" name="use-pubchem" value="Use Pubchem" onchange="generate()">
-<label for="use-pubchem">Use PubChem image instead of generated one. <b>NOT DOWNLOADABLE!</b></label><br>
+<label for="use-pubchem">Use PubChem image instead of generated one. <b>Download by screenshot!</b></label><br>
 
 <br>
 
@@ -236,6 +239,10 @@ You may only enter one of the options.<br>
 </div>
 
 <h1>Results</h1>
+
+<p>Use this button if the molecule is badly rendered or atoms are clumped up, as there&#39;s an element of chance in the
+molecule geometry engine.
+<button onclick="generate()">Regenerate</button></p>
 
 <div id="generated" style="background-color:#ffffff;padding-top:0px;overflow:visible;">
 <div id="margin-holder" style="border:solid 1px;display:inline-block;padding-top:0px;">

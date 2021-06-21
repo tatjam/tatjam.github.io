@@ -11,6 +11,7 @@ OpenBabel.onRuntimeInitialized = function()
 // Set element colors
 ChemDoodle.ELEMENT["H"].jmolColor = "#4f7474";
 ChemDoodle.ELEMENT["Cl"].jmolColor = "#34c334";
+ChemDoodle.ELEMENT["Cl"].addH = true;
 ChemDoodle.ELEMENT["S"].jmolColor = "#b09d45";
 ChemDoodle.ELEMENT["F"].jmolColor = "#bd2183";
 
@@ -286,6 +287,66 @@ function render(smiles)
         // And render it!
         let chem_mol = ChemDoodle.readMOL(outData);
 
+        console.log(chem_mol);
+        // We convert implicit hydrogens into real hydrogens to prevent some bugs
+        var length0 = chem_mol.atoms.length;
+        var bondlength0 = chem_mol.bonds.length;
+        var water_num = 0;
+
+        for(var i = 0; i < length0; i++)
+        {
+            var atom = chem_mol.atoms[i];
+            var hcount = atom.getImplicitHydrogenCount();
+
+            var bond_count = 0;
+            for(var j = 0; j < bondlength0; j++)
+            {
+                if(chem_mol.bonds[j].a1 == atom || chem_mol.bonds[j].a2 == atom)
+                {
+                    bond_count++;
+                }
+            }
+
+            console.log("[" + i + "]" + atom.label + ": " + bond_count + ", " + hcount);
+
+            // We assume everything has the geometry of H-Cl and H-O-H
+            if(bond_count == 0 && hcount > 0)
+            {
+                if(hcount > 2)
+                {
+                    console.warn("Unhandled ammount of implicit lone hydrogens");
+                    continue;
+                }
+
+                var xoffsets = [[-1.0], [-0.968, 0.968]]
+                var yoffsets = [[0.0], [0.24,  0.24]];
+
+                if(hcount == 1)
+                {
+                    atom.x += $("atom-radius").value * 4.0;
+                }
+                else
+                {
+                    // We add a bit of random offsets to prevent clumping up
+                    atom.y += water_num * $("atom-radius").value * 3.0 * Math.sin(water_num * Math.random() * 4.0);
+                    water_num++;
+                }
+
+                for(var j = 0; j < hcount; j++)
+                {
+                    atom.implicitH = 0;
+
+                    var x = atom.x + xoffsets[hcount-1][j] * $("atom-radius").value * 3.5;
+                    var y = atom.y + yoffsets[hcount-1][j] * $("atom-radius").value * 3.5;
+                    var hydrogen = new ChemDoodle.structures.Atom("H", x, y, 0);
+                    chem_mol.atoms.push(hydrogen);
+                    var bond = new ChemDoodle.structures.Bond(atom, hydrogen, 1);
+                    chem_mol.bonds.push(bond);
+                    console.log("Cycle hcount = " + hcount);
+                }
+            }
+
+        }
 
         let canvas = new ChemDoodle.ViewerCanvas('chem-doodle-canvas', $("iwidth").value, $("iheight").value);
         canvas.styles.atoms_useJMOLColors = $("use-colors").checked;
@@ -534,15 +595,16 @@ function generate_image()
      {
          $("generated").style.backgroundColor="#ffffff";
          $("chem-doodle-canvas").style.display="inline";
-         var scroll0 = getScroll();
+
 
          // For some reason if we don't do this the image shows blank
-         window.scrollTo(0, 0);
 
          $("generated").style.display="inline-block";
          $("generated").style.position="absolute";
          $("generated").style.top = 0;
+         var scroll0 = getScroll();
 
+         window.scrollTo(0, 0);
          html2canvas($("generated")).then(function(canvas) {
              $("holder").innerHTML="";
              url = canvas.toDataURL(),
@@ -550,11 +612,13 @@ function generate_image()
              img.src = url;
              img.style.width="auto";
              $("holder").appendChild(img);
+
+             window.scrollTo(scroll0[0], scroll0[1]);
          });
+
 
          $("generated").style.display="none";
 
-         window.scrollTo(scroll0[0], scroll0[1]);
      }
 }
 

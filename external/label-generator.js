@@ -406,6 +406,7 @@ function load_classif(obj)
     }
     else if($("hazard_type").value == "ghs-custom")
     {
+        hide_all_ghs();
         set_ghs_shown("ghs-corrosive", $("custom-ghs-corrosive").checked);
         set_ghs_shown("ghs-environment", $("custom-ghs-environment").checked);
         set_ghs_shown("ghs-explosive", $("custom-ghs-explosive").checked);

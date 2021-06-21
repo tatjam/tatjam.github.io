@@ -95,6 +95,11 @@ void Generator::generate(const std::string& dir, const std::string& out_dir)
 					+ entry.path().filename().string();
 
 				std::string filename = entry.path().filename().string();
+				std::string extension = filename.substr(filename.find_last_of('.'));
+				if(extension != ".md")
+				{
+					continue;
+				}
 				filename = filename.substr(0, filename.find_last_of('.'));
 				std::string url = cat + "/" + filename + ".html";
 				

@@ -6,5 +6,7 @@ dev/.clangd/
 dev/compile_commands.json
 dev/Makefile
 dev/sweb
+dev/.idea
+dev/cmake-build-debug
 nohup.out
 

@@ -185,7 +185,7 @@ function get_real_iwidth()
 
 function get_real_iheight()
 {
-    return $("iwidth").value * $("density").value;
+    return $("iheight").value * $("density").value;
 }
 
 

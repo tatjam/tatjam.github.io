@@ -415,7 +415,7 @@ function load_classif(obj)
         set_ghs_shown("ghs-oxidizer", $("custom-ghs-oxidizer").checked);
         set_ghs_shown("ghs-flammable", $("custom-ghs-flammable").checked);
         set_ghs_shown("ghs-toxic", $("custom-ghs-toxic").checked);
-        $("ghs-string").style.display = "none";
+        $("ghs-string").innerHTML = "";
     }
     else
     {

@@ -36,7 +36,8 @@ function find_ghs(strings, node)
     {
         for(var j = 0; j < strings.length; j++)
         {
-            if (node[i]["Information"].Name.startsWith(strings[j]))
+            var str = node[i]["Information"].Name;
+            if (str.startsWith(strings[j]))
             {
                 return true;
             }
@@ -177,9 +178,21 @@ function change_preset(value)
     generate()
 }
 
+function get_real_iwidth()
+{
+    return $("iwidth").value * $("density").value;
+}
+
+function get_real_iheight()
+{
+    return $("iwidth").value * $("density").value;
+}
+
 
 function generate()
 {
+    show_correct_divs();
+
     $("margin-holder").style.padding = $("margins").value + "px";
     $("generated").style.padding = "10px";
     position_elements();
@@ -287,7 +300,6 @@ function render(smiles)
         // And render it!
         let chem_mol = ChemDoodle.readMOL(outData);
 
-        console.log(chem_mol);
         // We convert implicit hydrogens into real hydrogens to prevent some bugs
         var length0 = chem_mol.atoms.length;
         var bondlength0 = chem_mol.bonds.length;
@@ -307,7 +319,6 @@ function render(smiles)
                 }
             }
 
-            console.log("[" + i + "]" + atom.label + ": " + bond_count + ", " + hcount);
 
             // We assume everything has the geometry of H-Cl and H-O-H
             if(bond_count == 0 && hcount > 0)
@@ -342,13 +353,12 @@ function render(smiles)
                     chem_mol.atoms.push(hydrogen);
                     var bond = new ChemDoodle.structures.Bond(atom, hydrogen, 1);
                     chem_mol.bonds.push(bond);
-                    console.log("Cycle hcount = " + hcount);
                 }
             }
 
         }
 
-        let canvas = new ChemDoodle.ViewerCanvas('chem-doodle-canvas', $("iwidth").value, $("iheight").value);
+        let canvas = new ChemDoodle.ViewerCanvas('chem-doodle-canvas', get_real_iwidth(), get_real_iheight());
         canvas.styles.atoms_useJMOLColors = $("use-colors").checked;
         canvas.styles.atoms_circles_2D = $("circle-atoms").checked;
         canvas.styles.atoms_circleDiameter_2D = $("atom-radius").value * 2;
@@ -359,9 +369,11 @@ function render(smiles)
         canvas.styles.atoms_font_bold_2D = true;
 
         $("chem-doodle-canvas").style.border = "none";
+        $('chem-doodle-canvas').style.width = $("iwidth").value + "px";
+        $('chem-doodle-canvas').style.height = "auto";
 
         canvas.loadMolecule(chem_mol);
-        canvas.styles.scale = $("bond-length").value;
+        canvas.styles.scale = $("bond-length").value * $("density").value;
         canvas.repaint();
     }
     finally
@@ -390,6 +402,19 @@ function load_classif(obj)
     {
         hide_all_ghs();
         $("ghs-harmful").style.display = "inline";
+        $("ghs-string").style.display = "none";
+    }
+    else if($("hazard_type").value == "ghs-custom")
+    {
+        set_ghs_shown("ghs-corrosive", $("custom-ghs-corrosive").checked);
+        set_ghs_shown("ghs-environment", $("custom-ghs-environment").checked);
+        set_ghs_shown("ghs-explosive", $("custom-ghs-explosive").checked);
+        set_ghs_shown("ghs-gas", $("custom-ghs-gas").checked);
+        set_ghs_shown("ghs-harmful", $("custom-ghs-harmful").checked);
+        set_ghs_shown("ghs-hazard", $("custom-ghs-hazard").checked);
+        set_ghs_shown("ghs-oxidizer", $("custom-ghs-oxidizer").checked);
+        set_ghs_shown("ghs-flammable", $("custom-ghs-flammable").checked);
+        set_ghs_shown("ghs-toxic", $("custom-ghs-toxic").checked);
         $("ghs-string").style.display = "none";
     }
     else
@@ -605,12 +630,12 @@ function generate_image()
          var scroll0 = getScroll();
 
          window.scrollTo(0, 0);
-         html2canvas($("generated")).then(function(canvas) {
+         html2canvas($("generated"), {scale: $("density").value}).then(function(canvas) {
              $("holder").innerHTML="";
              url = canvas.toDataURL(),
              img = document.createElement('img');
              img.src = url;
-             img.style.width="auto";
+             img.style.width= (1.0 / $("density").value) * canvas.width + "px";
              $("holder").appendChild(img);
 
              window.scrollTo(scroll0[0], scroll0[1]);
@@ -682,4 +707,25 @@ function reset_positions()
     $("ghs").style.padding = "5px";
     $("images").style.float = "none";
 
+}
+
+function show_correct_divs()
+{
+    if($("use-pubchem").checked)
+    {
+        $("image-settings").style.display = "none";
+    }
+    else
+    {
+        $("image-settings").style.display = "block";
+    }
+
+    if($("hazard_type").value == "ghs-custom")
+    {
+        $("custom-ghs").style.display = "block";
+    }
+    else
+    {
+        $("custom-ghs").style.display = "none";
+    }
 }

@@ -46,7 +46,13 @@ that could be quickly used to generate beautiful labels, a must have in any lab.
 /* Create two equal columns that floats next to each other */
 .column {
   float: left;
-  width: 50%;
+  width: 33%;
+  padding: 10px;
+}
+
+.columncheck { 
+  float: left;
+  width: 11%;
   padding: 10px;
 }
 
@@ -129,6 +135,8 @@ are not very well supported.
 
 <br>
 
+<div id="image-settings">
+
 <label for="bond-length">Image Scale: </label>
 <input type="number" id="bond-length" value=1.5 name="bond-length" onchange="generate()" min="0" max="5">
 
@@ -156,87 +164,100 @@ are not very well supported.
 <label for="circle-atoms">Draw atoms as a circle<br>
 
 </div>
-<div class="column">
+
+<p></div>
+<div class="column"></p>
 
 <h3>Customization</h3>
 
-<label for="layout_type">Layout type: </label>
+<p><label for="layout_type">Layout type: </label>
 <select name="layout_type" id="layout_type" onchange="generate()">
     <option value="hor">Horizontal</option>
     <option value="ver">Vertical</option>
     <option value="corners" selected="selected">Corners</option>
-</select>
+</select></p>
 
-<br>
+<p><label for="custom_name">Custom Name: </label>
+<input type="text" id="custom_name" placeholder="Default (Allows HTML)" name="custom_name" onchange="generate()"></p>
 
-<label for="custom_name">Custom Name: </label>
-<input type="text" id="custom_name" placeholder="Default (Allows HTML)" name="custom_name" onchange="generate()">
+<p><label for="custom_text">Custom Text: </label>
+<textarea type="text" id="custom_text" placeholder="None (Allows HTML)" name="custom_text" onchange="generate()"></textarea></p>
 
-<br>
+<p><label for="custom_text">Custom Formula: </label>
+<input type="text" id="custom_formula" placeholder="Example: CuSO4*5H2O" name="custom_formula" onchange="generate()"></input></p>
 
-<label for="custom_text">Custom Text: </label>
-<textarea type="text" id="custom_text" placeholder="None (Allows HTML)" name="custom_text" onchange="generate()"></textarea>
+<p><label for="iwidth">Image Width: </label>
+<input type="number" id="iwidth" value=300 name="iwidth" onchange="generate()"></p>
 
-<br>
+<p><label for="iheight">Image Height: </label>
+<input type="number" id="iheight" value=300 name="iheight" onchange="generate()"></p>
 
-<label for="custom_text">Custom Formula: </label>
-<input type="text" id="custom_formula" placeholder="Example: CuSO4*5H2O" name="custom_formula" onchange="generate()"></input>
+<p><label for="margins">Margins: </label>
+<input type="number" id="margins" value=3 name="margins" onchange="generate()"></p>
 
-<br>
+<p></div>
+<div class="column"></p>
 
-<label for="iwidth">Image Width: </label>
-<input type="number" id="iwidth" value=300 name="iwidth" onchange="generate()">
+<h3>Hazard Configuration</h3>
 
-<br>
-
-<label for="iheight">Image Height: </label>
-<input type="number" id="iheight" value=300 name="iheight" onchange="generate()">
-
-<br>
-
-<label for="margins">Margins: </label>
-<input type="number" id="margins" value=3 name="margins" onchange="generate()">
-
-<br>
-
-<label for="hazard_type">Hazard type:</label>
+<p><label for="hazard_type">Hazard type:</label>
 <select name="hazard_type" id="hazard_type" onchange="generate()">
     <option value="none">No Hazards Shown</option>
     <option value="danger">GHS Danger (Force)</option>
     <option value="ghs" selected="selected">GHS Hazards</option>
+    <option value="ghs-custom">Custom GHS Hazards</option>
     <option value="ghs-nt">GHS Hazards (No Text)</option>
-</select>
+</select></p>
 
+<div id="custom-ghs" class="row">
+You may toggle the icons manually. Insert the appropriate text into Extra Hazard Text.
 <br>
 
-<label for="ghs_size">Hazard Icon Size: </label>
-<input type="number" id="ghs_size" value=64 name="ghs_size" onchange="generate()">
+<div class="columncheck"><input type="checkbox" id="custom-ghs-explosive" onchange="generate()" class="columncheck">
+<label for="custom-ghs-explosive"><img style="width:32px;" src="/external/ghs/explosive.svg"></img></label></div>
+<div class="columncheck"><input type="checkbox" id="custom-ghs-flammable" onchange="generate()" class="columncheck">
+<label for="custom-ghs-flammable"><img style="width:32px;" src="/external/ghs/flammable.svg"></img></label></div>
+<div class="columncheck"><input type="checkbox" id="custom-ghs-oxidizer" onchange="generate()" class="columncheck">
+<label for="custom-ghs-oxidizer"><img style="width:32px;" src="/external/ghs/oxidizer.svg"></img></label></div>
+<div class="columncheck"><input type="checkbox" id="custom-ghs-gas" onchange="generate()" class="columncheck">
+<label for="custom-ghs-gas"><img style="width:32px;" src="/external/ghs/gas.svg"></img></label></div>
+<div class="columncheck"><input type="checkbox" id="custom-ghs-corrosive" onchange="generate()" class="columncheck">
+<label for="custom-ghs-corrosive"><img style="width:32px;" src="/external/ghs/corrosive.svg"></img></label></div>
+<div class="columncheck"><input type="checkbox" id="custom-ghs-toxic" onchange="generate()" class="columncheck">
+<label for="custom-ghs-toxic"><img style="width:32px;" src="/external/ghs/toxic.svg"></img></label></div>
+<div class="columncheck"><input type="checkbox" id="custom-ghs-harmful" onchange="generate()" class="columncheck">
+<label for="custom-ghs-harmful"><img style="width:32px;" src="/external/ghs/harmful.svg"></img></label></div>
+<div class="columncheck"><input type="checkbox" id="custom-ghs-hazard" onchange="generate()" class="columncheck">
+<label for="custom-ghs-hazard"><img style="width:32px;" src="/external/ghs/hazard.svg"></img></label></div>
+<div class="columncheck"><input type="checkbox" id="custom-ghs-environment" onchange="generate()" class="columncheck">
+<label for="custom-ghs-environment"><img style="width:32px;" src="/external/ghs/environment.svg"></img></label></div>
 
-<br>
+<p></div></p>
 
-<label for="custom_text">Extra Hazard Text: </label>
-<textarea type="text" id="hazard_text" placeholder="None (Allows HTML)" name="hazard_text" onchange="generate()"></textarea>
+<p><label for="ghs_size">Hazard Icon Size: </label>
+<input type="number" id="ghs_size" value=64 name="ghs_size" onchange="generate()"></p>
 
-<br>
-<br>
+<p><label for="custom_text">Extra Hazard Text: </label>
+<textarea type="text" id="hazard_text" placeholder="None (Allows HTML)" name="hazard_text" onchange="generate()"></textarea></p>
 
-<input type="checkbox" id="unknown-hazard" name="unknown-hazard" value="Unknown Hazard" checked onchange="generate()">
-<label for="unknown-hazard">Use Unknown Hazard Symbol</label><br>
+<p><input type="checkbox" id="unknown-hazard" name="unknown-hazard" value="Unknown Hazard" checked onchange="generate()">
+<label for="unknown-hazard">Use Unknown Hazard Symbol</label><br></p>
 
-<br>
+<h3>Other Configurations</h3>
 
-<input type="checkbox" id="formula" name="formula" value="Formula" checked onchange="generate()">
-<label for="formula">Formula</label><br>
+<p><input type="checkbox" id="formula" name="formula" value="Formula" checked onchange="generate()">
+<label for="formula">Show Formula</label><br></p>
 
-<br>
+<p><input type="checkbox" id="molar-mass" name="molar-mass" value="Molar Mass" checked onchange="generate()">
+<label for="molar-mass">Show Molar Mass</label><br></p>
 
-<input type="checkbox" id="molar-mass" name="molar-mass" value="Molar Mass" checked onchange="generate()">
-<label for="molar-mass">Molar Mass</label><br>
+<p><label for="density">Pixel Density: </label>
+<input type="number" id="density" value=2.5 min="0.5" max="8.0" name="density" onchange="generate()">
+High values may slow down your browser, but very low values will be very pixelated once you save them. The default
+value should be more than enough for printing.</p>
 
-<br>
-
-</div>
-</div>
+<p></div>
+</div></p>
 
 <h1>Results</h1>
 

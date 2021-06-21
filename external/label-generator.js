@@ -158,7 +158,7 @@ function change_preset(value)
         $("bond-length").value = 2.0;
         $("ghs_size").value = 100;
         $("margins").value = 10;
-        $("hazard_type").value = "ghs";
+        $("hazard_type").value = "ghs-nt";
         $("formula").checked = true;
         $("molar-mass").checked = true;
     }

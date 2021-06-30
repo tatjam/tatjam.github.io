@@ -691,6 +691,11 @@ function position_elements()
         $("custom-prop").style.padding = "5px";
     }
 
+    if(!$("show-image").checked)
+    {
+        $("images").style.display = "none";
+    }
+
 }
 
 function reset_positions()
@@ -710,7 +715,8 @@ function reset_positions()
     $("custom-prop").style.float = "right";
     $("custom-prop").style.width = "auto";
     $("custom-prop").style.padding = "5px";
-    $("custom-prop").style.paddingTop = $("margins").value * 2.0 + "px";
+    $("custom-prop").style.marginRight = "3px";
+    $("custom-prop").style.marginTop = $("margins").value * 1.5 + "px";
 
 }
 

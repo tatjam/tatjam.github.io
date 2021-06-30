@@ -60,6 +60,9 @@ input[type=number] {
 
 # Inputs
 
+In the inputs that allow HTML you can use ``<br>`` to input a line break. You can also use any other HTML tags!
+For example, ``<b>Text</b>`` shows bold text and ``<i>Wathever</i>`` shows italic text.
+
 <div class="row">
 <div class="column">
 
@@ -139,6 +142,7 @@ are not very well supported.
 
 <h3>Customization</h3>
 
+
 <label for="layout_type">Layout type: </label>
 <select name="layout_type" id="layout_type" onchange="generate()">
     <option value="hor">Horizontal</option>
@@ -157,6 +161,9 @@ are not very well supported.
 
 <label for="custom_text">Custom Formula: </label>
 <input type="text" id="custom_formula" placeholder="Example: CuSO4*5H2O" name="custom_formula" onchange="generate()"></input>
+
+<input type="checkbox" id="show-image" name="show-image" value="Image" checked onchange="generate()">
+<label for="show-image">Show Image</label><br>
 
 <label for="iwidth">Image Width: </label>
 <input type="number" id="iwidth" value=300 name="iwidth" onchange="generate()">

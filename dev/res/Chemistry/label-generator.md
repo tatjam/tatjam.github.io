@@ -152,6 +152,9 @@ are not very well supported.
 <label for="custom_text">Custom Text: </label>
 <textarea type="text" id="custom_text" placeholder="None (Allows HTML)" name="custom_text" onchange="generate()"></textarea>
 
+<label for="custom_prop">Custom Properties: </label>
+<textarea type="text" id="custom_prop" placeholder="None (Allows HTML)" name="custom_prop" onchange="generate()"></textarea>
+
 <label for="custom_text">Custom Formula: </label>
 <input type="text" id="custom_formula" placeholder="Example: CuSO4*5H2O" name="custom_formula" onchange="generate()"></input>
 
@@ -241,10 +244,14 @@ molecule geometry engine.
 <div id="generated" style="background-color:#ffffff;padding-top:0px;overflow:visible;">
 <div id="margin-holder" style="border:solid 1px;display:inline-block;padding-top:0px;">
     <div id="base-text">
-    <h3 id="cname"></h3>
-    <p id="ctext"></p>
-    <p id="cformula"></p>
-    <p id="mmass"></p>
+        <h3 id="cname"></h3>
+        <p id="ctext"></p>
+        <p id="cformula"></p>
+        <p id="mmass"></p>
+    </div>
+    
+    <div id="custom-prop">
+        <p id="cprop"></p>
     </div>
 
     <div id="ghs">

@@ -512,6 +512,7 @@ function load_data(obj)
     }
 
     $("ctext").innerHTML = $("custom_text").value;
+    $("cprop").innerHTML = $("custom_prop").value;
     $("ghs-extra").innerHTML = $("hazard_text").value;
 
     if(!$("formula").checked)
@@ -656,15 +657,15 @@ function position_elements()
     if($("layout_type").value == "hor")
     {
         $("base-text").style.display = "inline-block";
+        $("custom-prop").style.display = "inline-block";
         $("ghs").style.display = "inline-block";
         $("images").style.display = "inline-block";
-
         $("base-text").style.float = "left";
-        $("base-text").style.width = $("iwidth") * 0.75 + "px";
         $("base-text").style.height = "auto";
         $("base-text").style.padding = "5px";
+        $("custom-prop").style.float = "left";
+        $("custom-prop").style.padding = "5px";
         $("ghs").style.float = "left";
-        $("ghs").style.width = $("iwidth") * 0.75 + "px";
         $("ghs").style.height = "auto";
         $("ghs").style.padding = "5px";
         $("images").style.float = "left";
@@ -680,14 +681,14 @@ function position_elements()
         $("images").style.display = "inline-block";
 
         $("base-text").style.float = "top";
-        $("base-text").style.width = $("iwidth") * 0.75 + "px";
         $("base-text").style.height = "auto";
         $("base-text").style.padding = "5px";
         $("ghs").style.float = "top";
-        $("ghs").style.width = $("iwidth") * 0.85 + "px";
         $("ghs").style.height = "auto";
         $("ghs").style.padding = "5px";
         $("images").style.float = "top";
+        $("custom-prop").style.float = "right";
+        $("custom-prop").style.padding = "5px";
     }
 
 }
@@ -699,14 +700,17 @@ function reset_positions()
     $("images").style.display = "block";
 
     $("base-text").style.float = "none";
-    $("base-text").style.height = $("iheight") * 0.75 + "px";
     $("base-text").style.width = "auto";
     $("base-text").style.padding = "5px";
     $("ghs").style.float = "none";
-    $("ghs").style.height = $("iheight") * 0.75 + "px";
     $("ghs").style.width = "auto";
     $("ghs").style.padding = "5px";
     $("images").style.float = "none";
+
+    $("custom-prop").style.float = "right";
+    $("custom-prop").style.width = "auto";
+    $("custom-prop").style.padding = "5px";
+    $("custom-prop").style.paddingTop = $("margins").value * 2.0 + "px";
 
 }
 

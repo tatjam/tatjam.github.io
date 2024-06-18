@@ -49,6 +49,13 @@ void Generator::generate_misc(const std::string& out_file,
 		{
 			insert = cur_cat;
 		}
+		else if(repl.value == "ALL_CATEGORIES")
+		{
+			for(const auto pair : by_category)
+			{
+				insert += "<a href=\"/category-" + pair.first + ".html\">" + pair.first + "</a>";
+			}
+		}
 
 		if(insert != "")
 		{
@@ -106,10 +113,11 @@ void Generator::generate(const std::string& dir, const std::string& out_dir)
 				std::string final_path = out_dir + "/" + url; 
 				fs::create_directories(out_dir + "/" + cat);
 
-				Post post = Post(file, cat, final_path, url);	
-
-				
-				posts.push_back(post);
+				Post post = Post(file, cat, final_path, url);
+				if(post.title[0] != '#')
+				{
+					posts.push_back(post);
+				}
 			}
 
 		}

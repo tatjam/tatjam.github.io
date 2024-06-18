@@ -8,5 +8,9 @@ dev/Makefile
 dev/sweb
 dev/.idea
 dev/cmake-build-debug
+dev/.cmake/
 nohup.out
-
+dev/.ninja_log
+dev/.ninja_deps
+dev/Testing/*
+dev/build.ninja

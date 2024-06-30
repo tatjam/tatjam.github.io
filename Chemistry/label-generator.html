@@ -87,6 +87,28 @@ input[type=number] {
   -moz-appearance: textfield;
 }
 
+.nfpa {
+  transform: rotate(45deg);
+  border-collapse:collapse;
+  border: 4px solid;
+}
+
+.nfpatab {
+  transform: rotate(-45deg);
+  position:relative;
+  width:100px;
+  height:100px;
+
+
+}
+
+.nfpatext {
+  position:absolute;
+  text-align:right;
+  top:-30px;
+}
+
+
 </style>
 
 <h1>Inputs</h1>
@@ -215,6 +237,7 @@ are not very well supported.
     <option value="danger">GHS Danger (Force)</option>
     <option value="ghs">GHS Hazards</option>
     <option value="ghs-custom">Custom GHS Hazards</option>
+    <option value="nfpa-custom">NFPA diamond (Manual input)</option>
     <option value="ghs-nt" selected="selected">GHS Hazards (No Text)</option>
 </select></p>
 
@@ -241,7 +264,50 @@ You may toggle the icons manually. Insert the appropriate text into Extra Hazard
 <div class="columncheck"><input type="checkbox" id="custom-ghs-environment" onchange="generate()" class="columncheck">
 <label for="custom-ghs-environment"><img style="width:32px;" src="/external/ghs/environment.svg"></img></label></div>
 
-<p></div></p>
+</div>
+
+<div id="custom-nfpa">
+  <div class="row">
+    Fire:
+    <input name="fire" id="fire-0" type="radio" onchange="generate()">0</input>
+    <input name="fire" id="fire-1" type="radio" onchange="generate()">1</input>
+    <input name="fire" id="fire-2" type="radio" onchange="generate()">2</input>
+    <input name="fire" id="fire-3" type="radio" onchange="generate()">3</input>
+    <input name="fire" id="fire-4" type="radio" onchange="generate()">4</input>
+    <input name="fire" selected="selected" id="fire-u" type="radio" onchange="generate()">?</input>
+  </div>
+  <div class="row">
+    Health:
+    <input name="health" id="health-0" type="radio" onchange="generate()">0</input>
+    <input name="health" id="health-1" type="radio" onchange="generate()">1</input>
+    <input name="health" id="health-2" type="radio" onchange="generate()">2</input>
+    <input name="health" id="health-3" type="radio" onchange="generate()">3</input>
+    <input name="health" id="health-4" type="radio" onchange="generate()">4</input>
+    <input name="health" selected="selected" id="health-u" type="radio" onchange="generate()">?</input>
+  </div>
+  <div class="row">
+    Reactivity:
+    <input name="react" id="react-0" type="radio" onchange="generate()">0</input>
+    <input name="react" id="react-1" type="radio" onchange="generate()">1</input>
+    <input name="react" id="react-2" type="radio" onchange="generate()">2</input>
+    <input name="react" id="react-3" type="radio" onchange="generate()">3</input>
+    <input name="react" id="react-4" type="radio" onchange="generate()">4</input>
+    <input name="react" selected="selected" id="react-u" type="radio" onchange="generate()">?</input>
+  </div>
+  <div class="row">
+    Other:
+    <input name="special" id="special-ox" type="radio" onchange="generate()">OX</input>
+    <input name="special" id="special-w" type="radio" onchange="generate()"><s>W</s></input>
+    <input name="special" id="special-sa" type="radio" onchange="generate()">SA</input>
+    <input name="special" id="special-cor" type="radio" onchange="generate()">COR</input>
+    <input name="special" id="special-acid" type="radio" onchange="generate()">ACID</input>
+    <input name="special" id="special-alk" type="radio" onchange="generate()">ALK</input>
+    <input name="special" id="special-bio" type="radio" onchange="generate()">☣</input>
+    <input name="special" id="special-rad" type="radio" onchange="generate()">☢</input>
+    <input name="special" id="special-cry" type="radio" onchange="generate()">CRY</input>
+    <input name="special" selected="selected" id="special-u" type="radio" onchange="generate()">None</input>
+  </div>
+</div>
 
 <p><label for="ghs_size">Hazard Icon Size: </label>
 <input type="number" id="ghs_size" value=64 name="ghs_size" onchange="generate()"></p>
@@ -253,12 +319,38 @@ You may toggle the icons manually. Insert the appropriate text into Extra Hazard
 <label for="unknown-hazard">Use Unknown Hazard Symbol</label><br></p>
 
 <h3>Other Configurations</h3>
+<p>(Warning: Some may not be available, or not correctly extracted!)</p>
 
-<p><input type="checkbox" id="formula" name="formula" value="Formula" checked onchange="generate()">
-<label for="formula">Show Formula</label><br></p>
+<div class="row">
+  <div class="column">
+  <p><input type="checkbox" id="formula" name="formula" value="Formula" checked onchange="generate()">
+  <label for="formula">Formula</label><br></p>
 
-<p><input type="checkbox" id="molar-mass" name="molar-mass" value="Molar Mass" checked onchange="generate()">
-<label for="molar-mass">Show Molar Mass</label><br></p>
+  <p><input type="checkbox" id="molar-mass" name="molar-mass" value="Molar Mass" checked onchange="generate()">
+  <label for="molar-mass">Molar Mass</label><br></p>
+
+  <p><input type="checkbox" id="melting" name="melting" value="Melting" checked onchange="generate()">
+  <label for="formula">Density</label><br></p>
+
+  <p><input type="checkbox" id="melting" name="melting" value="Melting" checked onchange="generate()">
+  <label for="formula">Melting Point</label><br></p>
+
+  </div>
+
+  <div class="column">
+
+  <p><input type="checkbox" id="boiling" name="boiling" value="Boiling" checked onchange="generate()">
+  <label for="formula">Boiling Point</label><br></p>
+
+  <p><input type="checkbox" id="flash" name="flash" value="flash" checked onchange="generate()">
+  <label for="formula">Flash Point</label><br></p>
+
+  <p><input type="checkbox" id="vapor" name="vapor" value="Vapor" checked onchange="generate()">
+  <label for="formula">Vapor Pressure</label><br></p>
+
+  </div>
+
+</div>
 
 <p><label for="density">Pixel Density: </label>
 <input type="number" id="density" value=2.5 min="0.5" max="8.0" name="density" onchange="generate()">
@@ -284,6 +376,10 @@ molecule geometry engine.
     </div>
     
     <div id="custom-prop">
+        <p id="dens"></p>
+        <p id="temps"></p>
+        <p id="vap"></p>
+        <p id="expl"></p>
         <p id="cprop"></p>
     </div>
 
@@ -300,6 +396,37 @@ molecule geometry engine.
         <img id="ghs-unknown" style="width:64px;" src="/external/ghs/unknown.svg"></img>
         <p id="ghs-string"></p>
         <p id="ghs-extra"></p>
+    </div>
+
+    <div id="nfpa-float" style="float:left; margin-left:-5rem">
+    <div id="nfpa-diamond" style="scale:0.5;">
+        <table border="1" class="nfpa">
+        <tr>
+          <td style="background:#ff0030; width=100px; height=100px;">
+            <div class ="nfpatab"> 
+              <p id="nfpa-fire" class="nfpatext" style="top:-10px; right:0px; font-size:35px;">1</p>
+              </div>
+          </td>
+          <td style="background:#ffdc45; width=100px; height=100px;">
+            <div class ="nfpatab"> 
+              <p id="nfpa-react" class="nfpatext" style="top:-10px; right:0px; font-size:35px;">2</p>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td style="background:#008aca; width=100px; height=100px;">
+            <div class ="nfpatab">
+                <p id="nfpa-health" class="nfpatext" style="top:-10px; right:0px; font-size:35px;">3</p>
+            </div>
+          </td>
+          <td style="background:white; width=100px; height=100px;">
+            <div class ="nfpatab">
+              <p id="nfpa-special" class="nfpatext" style="right:0px; font-size:35px; top:-10px;"></p>
+            </div>
+          </td>
+        </tr>
+        </table>
+    </div>
     </div>
 
     <div id="images">

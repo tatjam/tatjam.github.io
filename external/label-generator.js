@@ -103,6 +103,102 @@ function set_ghs_shown(id, value)
     }
 }
 
+function set_nfpa_numbers(name)
+{
+    if($(name + "-0").checked)
+    {
+        $("nfpa-" + name).innerHTML = "0";
+    }
+    else if($(name + "-1").checked)
+    {
+        $("nfpa-" + name).innerHTML = "1";
+    }
+    else if($(name + "-2").checked)
+    {
+        $("nfpa-" + name).innerHTML = "2";
+    }
+    else if($(name + "-3").checked)
+    {
+        $("nfpa-" + name).innerHTML = "3";
+    }
+    else if($(name + "-4").checked)
+    {
+        $("nfpa-" + name).innerHTML = "4";
+    }
+    else if($(name + "-u").checked)
+    {
+        $("nfpa-" + name).innerHTML = "?";
+    }
+}
+
+function set_nfpa_special(name)
+{
+    $("nfpa-" + name).style.fontSize = "28px";
+    $("nfpa-" + name).style.top = "-4px";
+    $("nfpa-" + name).style.right = "2px";
+    if($(name + "-ox").checked)
+    {
+        $("nfpa-" + name).innerHTML = "OX";
+    }
+    else if($(name + "-w").checked)
+    {
+        $("nfpa-" + name).style.fontSize = "38px";
+        $("nfpa-" + name).style.top = "-12px";
+        $("nfpa-" + name).style.right = "0px";
+        $("nfpa-" + name).innerHTML = "w̶";
+    }
+    else if($(name + "-sa").checked)
+    {
+        $("nfpa-" + name).innerHTML = "SA";
+    }
+    else if($(name + "-cor").checked)
+    {
+        $("nfpa-" + name).innerHTML = "COR";
+        $("nfpa-" + name).style.fontSize = "24px";
+        $("nfpa-" + name).style.top = "5px";
+        $("nfpa-" + name).style.right = "2px";
+    }
+    else if($(name + "-acid").checked)
+    {
+        $("nfpa-" + name).innerHTML = "ACID";
+        $("nfpa-" + name).style.fontSize = "20px";
+        $("nfpa-" + name).style.top = "8px";
+        $("nfpa-" + name).style.right = "2px";
+    }
+    else if($(name + "-alk").checked)
+    {
+        $("nfpa-" + name).innerHTML = "ALK";
+        $("nfpa-" + name).style.fontSize = "24px";
+        $("nfpa-" + name).style.top = "5px";
+        $("nfpa-" + name).style.right = "2px";
+    }
+    else if($(name + "-bio").checked)
+    {
+        $("nfpa-" + name).innerHTML = "☣";
+        $("nfpa-" + name).style.fontSize = "45px";
+        $("nfpa-" + name).style.top = "-24px";
+        $("nfpa-" + name).style.right = "0px";
+    }
+    else if($(name + "-rad").checked)
+    {
+        $("nfpa-" + name).innerHTML = "☢";
+        $("nfpa-" + name).style.fontSize = "45px";
+        $("nfpa-" + name).style.top = "-24px";
+        $("nfpa-" + name).style.right = "0px";
+    }
+    else if($(name + "-cry").checked)
+    {
+        $("nfpa-" + name).innerHTML = "CRY";
+        $("nfpa-" + name).style.fontSize = "24px";
+        $("nfpa-" + name).style.top = "5px";
+        $("nfpa-" + name).style.right = "2px";
+    }
+    else if($(name + "-u").checked)
+    {
+        $("nfpa-" + name).innerHTML = " ";
+    }
+}
+
 function change_name(type)
 {
     if(type == "smiles")
@@ -212,6 +308,7 @@ function generate()
     }
 
     var img_url = "https://pubchem.ncbi.nlm.nih.gov/rest/pug/compound/";
+https://pubchem.ncbi.nlm.nih.gov/rest/pug/compound/
     if(type == "smiles")
     {
         img_url += "smiles/";
@@ -229,6 +326,7 @@ function generate()
     }
 
     var data_url = img_url;
+    var prop_url = img_url.slice(0, 41) + "_view" + img_url.slice(41) + "/JSON";
 
     img_url += "/png?image_size=";
     img_url += $("iwidth").value + "x" + $("iheight").value;
@@ -270,6 +368,16 @@ function generate()
     xmlhttp2.open("GET", classif_url, true);
     xmlhttp2.send();
 
+    var xmlhttp3 = new XMLHttpRequest();
+    xmlhttp3.onreadystatechange = function() {
+        if(this.readyState == 4 && this.status == 200)
+        {
+            var obj = JSON.parse(this.responseText).Hierarchies.Hierarchy;
+            load_props(obj);
+        }
+    };
+    xmlhttp3.open("GET", prop_url, true);
+    xmlhttp3.send();
 
 }
 
@@ -386,10 +494,39 @@ function render(smiles)
 
 function load_classif(obj)
 {
-
     set_ghs_size($("ghs_size").value);
+    
+    if($("hazard_type").value == "nfpa-custom")
+    {
+        $("nfpa-diamond").style.display = "grid";
+        if($("layout_type").value == "corners")
+        {
+            $("nfpa-float").style.float="right";
+            $("nfpa-float").style.marginLeft="-5rem";
+            $("nfpa-float").style.marginRight="2rem";
+            $("nfpa-float").style.marginBottom="-5rem";
+        }
+        else if($("layout_type").value == "ver")
+        {
+            $("nfpa-float").style.float = "left";
+            $("nfpa-float").style.marginLeft="-1rem";
+            $("nfpa-float").style.marginRight="-2rem";
+            $("nfpa-float").style.marginBottom="-5rem";
+        }
+        else
+        {
+            $("nfpa-float").style.float = "left";
+            $("nfpa-float").style.marginLeft="-5rem";
+            $("nfpa-float").style.marginRight="-2rem";
+            $("nfpa-float").style.marginBottom="-5rem";
+        }
+    }
+    else
+    {
+        $("nfpa-diamond").style.display = "none";
+    }
 
-    if($("hazard_type").value == "none")
+    if($("hazard_type").value == "none" || $("hazard_type").value == "nfpa-custom")
     {
         $("ghs").style.display = "none";
     }
@@ -417,6 +554,13 @@ function load_classif(obj)
         set_ghs_shown("ghs-flammable", $("custom-ghs-flammable").checked);
         set_ghs_shown("ghs-toxic", $("custom-ghs-toxic").checked);
         $("ghs-string").innerHTML = "";
+    }
+    else if($("hazard_type").value == "nfpa-custom")
+    {
+        set_nfpa_numbers("fire");
+        set_nfpa_numbers("health");
+        set_nfpa_numbers("react");
+        set_nfpa_special("special");
     }
     else
     {
@@ -548,6 +692,11 @@ function load_data(obj)
     {
         generate_image();
     }
+}
+
+function load_props(obj)
+{
+
 }
 
 function make_formula(text)
@@ -738,5 +887,14 @@ function show_correct_divs()
     else
     {
         $("custom-ghs").style.display = "none";
+    }
+
+    if($("hazard_type").value == "nfpa-custom")
+    {
+        $("custom-nfpa").style.display = "block";
+    }
+    else
+    {
+        $("custom-nfpa").style.display = "none";
     }
 }

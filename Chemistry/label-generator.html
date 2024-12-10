@@ -3,7 +3,6 @@
 <html>
 	<head>
 		<title>Label Generator</title>
-		<script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
 		<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
 		<link href="/prism.css" rel="stylesheet" />
 		<link rel="stylesheet" type="text/css" href="/theme.css">
@@ -264,7 +263,7 @@ You may toggle the icons manually. Insert the appropriate text into Extra Hazard
 <div class="columncheck"><input type="checkbox" id="custom-ghs-environment" onchange="generate()" class="columncheck">
 <label for="custom-ghs-environment"><img style="width:32px;" src="/external/ghs/environment.svg"></img></label></div>
 
-</div>
+<p></div></p>
 
 <div id="custom-nfpa">
   <div class="row">
@@ -319,6 +318,7 @@ You may toggle the icons manually. Insert the appropriate text into Extra Hazard
 <label for="unknown-hazard">Use Unknown Hazard Symbol</label><br></p>
 
 <h3>Other Configurations</h3>
+
 <p>(Warning: Some may not be available, or not correctly extracted!)</p>
 
 <div class="row">
@@ -363,8 +363,9 @@ value should be more than enough for printing.</p>
 <h1>Results</h1>
 
 <p>Use this button if the molecule is badly rendered or atoms are clumped up, as there&#39;s an element of chance in the
-molecule geometry engine.
-<button onclick="generate()">Regenerate</button></p>
+molecule geometry engine.</p>
+
+<p><button onclick="generate()">Regenerate</button></p></p>
 
 <div id="generated" style="background-color:#ffffff;padding-top:0px;overflow:visible;">
 <div id="margin-holder" style="border:solid 1px;display:inline-block;padding-top:0px;">

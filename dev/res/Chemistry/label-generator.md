@@ -6,7 +6,6 @@ This is a very valuable tool that's surprisingly not available online. I decided
 that could be quickly used to generate beautiful labels, a must have in any lab.
 
 ---
-
 <style>
 * {
   box-sizing: border-box;
@@ -55,6 +54,28 @@ input::-webkit-inner-spin-button {
 input[type=number] {
   -moz-appearance: textfield;
 }
+
+.nfpa {
+  transform: rotate(45deg);
+  border-collapse:collapse;
+  border: 4px solid;
+}
+
+.nfpatab {
+  transform: rotate(-45deg);
+  position:relative;
+  width:100px;
+  height:100px;
+
+
+}
+
+.nfpatext {
+  position:absolute;
+  text-align:right;
+  top:-30px;
+}
+
 
 </style>
 
@@ -137,56 +158,56 @@ are not very well supported.
 
 </div>
 
-</div>
-<div class="column">
+<p></div>
+<div class="column"></p>
 
 <h3>Customization</h3>
 
-
-<label for="layout_type">Layout type: </label>
+<p><label for="layout_type">Layout type: </label>
 <select name="layout_type" id="layout_type" onchange="generate()">
     <option value="hor">Horizontal</option>
     <option value="ver">Vertical</option>
     <option value="corners" selected="selected">Corners</option>
-</select>
+</select></p>
 
-<label for="custom_name">Custom Name: </label>
-<input type="text" id="custom_name" placeholder="Default (Allows HTML)" name="custom_name" onchange="generate()">
+<p><label for="custom_name">Custom Name: </label>
+<input type="text" id="custom_name" placeholder="Default (Allows HTML)" name="custom_name" onchange="generate()"></p>
 
-<label for="custom_text">Custom Text: </label>
-<textarea type="text" id="custom_text" placeholder="None (Allows HTML)" name="custom_text" onchange="generate()"></textarea>
+<p><label for="custom_text">Custom Text: </label>
+<textarea type="text" id="custom_text" placeholder="None (Allows HTML)" name="custom_text" onchange="generate()"></textarea></p>
 
-<label for="custom_prop">Custom Properties: </label>
-<textarea type="text" id="custom_prop" placeholder="None (Allows HTML)" name="custom_prop" onchange="generate()"></textarea>
+<p><label for="custom_prop">Custom Properties: </label>
+<textarea type="text" id="custom_prop" placeholder="None (Allows HTML)" name="custom_prop" onchange="generate()"></textarea></p>
 
-<label for="custom_text">Custom Formula: </label>
-<input type="text" id="custom_formula" placeholder="Example: CuSO4*5H2O" name="custom_formula" onchange="generate()"></input>
+<p><label for="custom_text">Custom Formula: </label>
+<input type="text" id="custom_formula" placeholder="Example: CuSO4*5H2O" name="custom_formula" onchange="generate()"></input></p>
 
-<input type="checkbox" id="show-image" name="show-image" value="Image" checked onchange="generate()">
-<label for="show-image">Show Image</label><br>
+<p><input type="checkbox" id="show-image" name="show-image" value="Image" checked onchange="generate()">
+<label for="show-image">Show Image</label><br></p>
 
-<label for="iwidth">Image Width: </label>
-<input type="number" id="iwidth" value=300 name="iwidth" onchange="generate()">
+<p><label for="iwidth">Image Width: </label>
+<input type="number" id="iwidth" value=300 name="iwidth" onchange="generate()"></p>
 
-<label for="iheight">Image Height: </label>
-<input type="number" id="iheight" value=300 name="iheight" onchange="generate()">
+<p><label for="iheight">Image Height: </label>
+<input type="number" id="iheight" value=300 name="iheight" onchange="generate()"></p>
 
-<label for="margins">Margins: </label>
-<input type="number" id="margins" value=3 name="margins" onchange="generate()">
+<p><label for="margins">Margins: </label>
+<input type="number" id="margins" value=3 name="margins" onchange="generate()"></p>
 
-</div>
-<div class="column">
+<p></div>
+<div class="column"></p>
 
 <h3>Hazard Configuration</h3>
 
-<label for="hazard_type">Hazard type:</label>
+<p><label for="hazard_type">Hazard type:</label>
 <select name="hazard_type" id="hazard_type" onchange="generate()">
     <option value="none">No Hazards Shown</option>
     <option value="danger">GHS Danger (Force)</option>
     <option value="ghs">GHS Hazards</option>
     <option value="ghs-custom">Custom GHS Hazards</option>
+    <option value="nfpa-custom">NFPA diamond (Manual input)</option>
     <option value="ghs-nt" selected="selected">GHS Hazards (No Text)</option>
-</select>
+</select></p>
 
 <div id="custom-ghs" class="row">
 You may toggle the icons manually. Insert the appropriate text into Extra Hazard Text.
@@ -211,42 +232,108 @@ You may toggle the icons manually. Insert the appropriate text into Extra Hazard
 <div class="columncheck"><input type="checkbox" id="custom-ghs-environment" onchange="generate()" class="columncheck">
 <label for="custom-ghs-environment"><img style="width:32px;" src="/external/ghs/environment.svg"></img></label></div>
 
-
 </div>
 
+<div id="custom-nfpa">
+  <div class="row">
+    Fire:
+    <input name="fire" id="fire-0" type="radio" onchange="generate()">0</input>
+    <input name="fire" id="fire-1" type="radio" onchange="generate()">1</input>
+    <input name="fire" id="fire-2" type="radio" onchange="generate()">2</input>
+    <input name="fire" id="fire-3" type="radio" onchange="generate()">3</input>
+    <input name="fire" id="fire-4" type="radio" onchange="generate()">4</input>
+    <input name="fire" selected="selected" id="fire-u" type="radio" onchange="generate()">?</input>
+  </div>
+  <div class="row">
+    Health:
+    <input name="health" id="health-0" type="radio" onchange="generate()">0</input>
+    <input name="health" id="health-1" type="radio" onchange="generate()">1</input>
+    <input name="health" id="health-2" type="radio" onchange="generate()">2</input>
+    <input name="health" id="health-3" type="radio" onchange="generate()">3</input>
+    <input name="health" id="health-4" type="radio" onchange="generate()">4</input>
+    <input name="health" selected="selected" id="health-u" type="radio" onchange="generate()">?</input>
+  </div>
+  <div class="row">
+    Reactivity:
+    <input name="react" id="react-0" type="radio" onchange="generate()">0</input>
+    <input name="react" id="react-1" type="radio" onchange="generate()">1</input>
+    <input name="react" id="react-2" type="radio" onchange="generate()">2</input>
+    <input name="react" id="react-3" type="radio" onchange="generate()">3</input>
+    <input name="react" id="react-4" type="radio" onchange="generate()">4</input>
+    <input name="react" selected="selected" id="react-u" type="radio" onchange="generate()">?</input>
+  </div>
+  <div class="row">
+    Other:
+    <input name="special" id="special-ox" type="radio" onchange="generate()">OX</input>
+    <input name="special" id="special-w" type="radio" onchange="generate()"><s>W</s></input>
+    <input name="special" id="special-sa" type="radio" onchange="generate()">SA</input>
+    <input name="special" id="special-cor" type="radio" onchange="generate()">COR</input>
+    <input name="special" id="special-acid" type="radio" onchange="generate()">ACID</input>
+    <input name="special" id="special-alk" type="radio" onchange="generate()">ALK</input>
+    <input name="special" id="special-bio" type="radio" onchange="generate()">☣</input>
+    <input name="special" id="special-rad" type="radio" onchange="generate()">☢</input>
+    <input name="special" id="special-cry" type="radio" onchange="generate()">CRY</input>
+    <input name="special" selected="selected" id="special-u" type="radio" onchange="generate()">None</input>
+  </div>
+</div>
 
+<p><label for="ghs_size">Hazard Icon Size: </label>
+<input type="number" id="ghs_size" value=64 name="ghs_size" onchange="generate()"></p>
 
-<label for="ghs_size">Hazard Icon Size: </label>
-<input type="number" id="ghs_size" value=64 name="ghs_size" onchange="generate()">
+<p><label for="custom_text">Extra Hazard Text: </label>
+<textarea type="text" id="hazard_text" placeholder="None (Allows HTML)" name="hazard_text" onchange="generate()"></textarea></p>
 
-<label for="custom_text">Extra Hazard Text: </label>
-<textarea type="text" id="hazard_text" placeholder="None (Allows HTML)" name="hazard_text" onchange="generate()"></textarea>
-
-<input type="checkbox" id="unknown-hazard" name="unknown-hazard" value="Unknown Hazard" checked onchange="generate()">
-<label for="unknown-hazard">Use Unknown Hazard Symbol</label><br>
+<p><input type="checkbox" id="unknown-hazard" name="unknown-hazard" value="Unknown Hazard" checked onchange="generate()">
+<label for="unknown-hazard">Use Unknown Hazard Symbol</label><br></p>
 
 <h3>Other Configurations</h3>
+<p>(Warning: Some may not be available, or not correctly extracted!)</p>
 
-<input type="checkbox" id="formula" name="formula" value="Formula" checked onchange="generate()">
-<label for="formula">Show Formula</label><br>
+<div class="row">
+  <div class="column">
+  <p><input type="checkbox" id="formula" name="formula" value="Formula" checked onchange="generate()">
+  <label for="formula">Formula</label><br></p>
 
-<input type="checkbox" id="molar-mass" name="molar-mass" value="Molar Mass" checked onchange="generate()">
-<label for="molar-mass">Show Molar Mass</label><br>
+  <p><input type="checkbox" id="molar-mass" name="molar-mass" value="Molar Mass" checked onchange="generate()">
+  <label for="molar-mass">Molar Mass</label><br></p>
 
-<label for="density">Pixel Density: </label>
+  <p><input type="checkbox" id="melting" name="melting" value="Melting" checked onchange="generate()">
+  <label for="formula">Density</label><br></p>
+
+  <p><input type="checkbox" id="melting" name="melting" value="Melting" checked onchange="generate()">
+  <label for="formula">Melting Point</label><br></p>
+
+  </div>
+
+  <div class="column">
+
+  <p><input type="checkbox" id="boiling" name="boiling" value="Boiling" checked onchange="generate()">
+  <label for="formula">Boiling Point</label><br></p>
+
+  <p><input type="checkbox" id="flash" name="flash" value="flash" checked onchange="generate()">
+  <label for="formula">Flash Point</label><br></p>
+
+  <p><input type="checkbox" id="vapor" name="vapor" value="Vapor" checked onchange="generate()">
+  <label for="formula">Vapor Pressure</label><br></p>
+
+  </div>
+
+</div>
+
+<p><label for="density">Pixel Density: </label>
 <input type="number" id="density" value=2.5 min="0.5" max="8.0" name="density" onchange="generate()">
 High values may slow down your browser, but very low values will be very pixelated once you save them. The default
-value should be more than enough for printing.
+value should be more than enough for printing.</p>
 
-</div>
-</div>
-
+<p></div>
+</div></p>
 
 # Results
 
 Use this button if the molecule is badly rendered or atoms are clumped up, as there's an element of chance in the
 molecule geometry engine.
-<button onclick="generate()">Regenerate</button>
+
+<button onclick="generate()">Regenerate</button></p>
 
 <div id="generated" style="background-color:#ffffff;padding-top:0px;overflow:visible;">
 <div id="margin-holder" style="border:solid 1px;display:inline-block;padding-top:0px;">
@@ -258,6 +345,10 @@ molecule geometry engine.
     </div>
     
     <div id="custom-prop">
+        <p id="dens"></p>
+        <p id="temps"></p>
+        <p id="vap"></p>
+        <p id="expl"></p>
         <p id="cprop"></p>
     </div>
 
@@ -274,6 +365,37 @@ molecule geometry engine.
         <img id="ghs-unknown" style="width:64px;" src="/external/ghs/unknown.svg"></img>
         <p id="ghs-string"></p>
         <p id="ghs-extra"></p>
+    </div>
+
+    <div id="nfpa-float" style="float:left; margin-left:-5rem">
+    <div id="nfpa-diamond" style="scale:0.5;">
+        <table border="1" class="nfpa">
+        <tr>
+          <td style="background:#ff0030; width=100px; height=100px;">
+            <div class ="nfpatab"> 
+              <p id="nfpa-fire" class="nfpatext" style="top:-10px; right:0px; font-size:35px;">1</p>
+              </div>
+          </td>
+          <td style="background:#ffdc45; width=100px; height=100px;">
+            <div class ="nfpatab"> 
+              <p id="nfpa-react" class="nfpatext" style="top:-10px; right:0px; font-size:35px;">2</p>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td style="background:#008aca; width=100px; height=100px;">
+            <div class ="nfpatab">
+                <p id="nfpa-health" class="nfpatext" style="top:-10px; right:0px; font-size:35px;">3</p>
+            </div>
+          </td>
+          <td style="background:white; width=100px; height=100px;">
+            <div class ="nfpatab">
+              <p id="nfpa-special" class="nfpatext" style="right:0px; font-size:35px; top:-10px;"></p>
+            </div>
+          </td>
+        </tr>
+        </table>
+    </div>
     </div>
 
     <div id="images">

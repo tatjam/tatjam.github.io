@@ -6,6 +6,10 @@ In this post I showcase
 
 ---
 
-$
-	x = 10 sin(x)
-$
+
+\begin{equation}
+x = \vb{x} 10 sin(x)
+\label{test}
+\end{equation}
+
+wow \ref{test}

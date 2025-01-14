@@ -22,13 +22,13 @@ $$
 		\frac
 			{\Gamma_j \left( \begin{smallmatrix}
 				0 & 1 \\ 
-				1 & 0
+				-1 & 0
 			\end{smallmatrix} \right) (\vb{x}_i - \vb{x}_j)}
 			{\norm{\vb{x}_i - \vb{x}_j}}.
 $$
 
 Each 2D vector $ \vb{x}_i $ represents the position of a vortex and $ \Gamma_j $ each strength. 
-The anti-diagonal matrix has the job of "interchanging" the x and y coordinates of the vectors used.
+The anti-diagonal matrix has the job of rotating the vector by 90 degrees.
 
 It's important to note that, unlike Newton's law of gravity, this equation directly relates 
 the velocity of the vortices with the system configuration (position of the vortices). 
@@ -37,10 +37,8 @@ the velocity of the vortices with the system configuration (position of the vort
 
 Intuitively, a single vortex point induces around itself a kind of "rotating flow":
 
-<div id="vis1" style="width:100%; height:200px; border:2px solid #000000"></div>
-<script id="csviz1tick">
-
-</script>
+<div id="viz1">
+</div>
 
 Regardless of appearances,
 the vector field induced is irrotational everywhere, except precisely at the location of the 
@@ -73,3 +71,7 @@ possible orbits, but we must remember that in this vortex-problem, we are induci
 and not accelerations!
 
 The situation changes if more vortices are added:
+
+<script src="/external/p5.min.js"></script>
+<script src="/visualizations/vortex-dynamics/base.js"></script>
+<script src="/visualizations/vortex-dynamics/viz1.js"></script>

@@ -71,7 +71,7 @@ body {
 	position: relative;
 	width: 100%;
 	margin: 40px 0px;
-	background-color: #555;
+	background-color: #333333;
 	color: #dfdfdf;
 	text-align: center;
 }
@@ -132,3 +132,12 @@ body {
 }
 
 
+.intro a {
+	color: #CCCCFF;
+	text-decoration: none;
+}
+
+.intro p {
+	margin: 25px 10% 25px;
+	font-size:large;
+}

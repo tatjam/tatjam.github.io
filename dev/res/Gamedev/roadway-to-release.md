@@ -41,7 +41,7 @@ The results are fairly satisfactory, both in the performance side, and on the vi
 Here's an example of crater distribution on a moon-sized planet, with exaggerated craters. Note that only one pass of craters is done,
 in a real use case, there would be many layers of differently sized craters, down to tiny craters only a few meters in diameter. 
 
-![Crater genration](img/roadway/craters.png)
+![Crater genereation](img/roadway/craters.png)
 
 
 ## Lua take-over

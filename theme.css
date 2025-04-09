@@ -95,7 +95,7 @@ body {
 .main h1 {
 	position: relative;
 	padding: 6px 20px 6px 100px;
-	width: 50%;
+	width: 70%;
 	box-shadow: 0px 4px 8px #888;
 	margin: 30px 10px 10px -100px;
 	background-color: #555;
@@ -111,13 +111,13 @@ body {
 	text-decoration: underline;
 }
 
-
 #page {
   background-color: #DEDEDE;
-  width: 90%;
+  width: 60em;
   height: 200%;
   margin: 0 auto;
   border: 1px solid #222f;
+  font-size: 17px;
 }
 
 .main img {
@@ -139,5 +139,5 @@ body {
 
 .intro p {
 	margin: 25px 10% 25px;
-	font-size:large;
+	font-size:17px;
 }

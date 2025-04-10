@@ -1,4 +1,4 @@
-Understanding undersampling
+Understanding undersampling I
 2025-04-15
 Using the Laplace transform to intuitively understand undersampling transmitters
 
@@ -8,41 +8,72 @@ It's possible to generate nearly arbitrarily high frequency signals using a rela
 
 I found this [fascinating video](https://www.youtube.com/watch?v=eIdHBDSQHyw), which showcases the emission of LORA signals using nothing more than a GPIO on a microcontroller. Of course, the microcontroller cannot directly synthesize the radio frequency signal (at around 900MHz), so instead high harmonics of the GPIO square wave output are used. The mechanism to actually synthesize the signal is remarkable: sample the signal you want to emit at your desired GPIO frequency, and use that sampled data to drive your pin.
 
-As a prerequisite for this article you must be atleast a bit familiar with the Fourier transform, but I've tried to make it relatively self-contained! I'm by no means an expert in the mathematics of the Fourier transform, and this article tries to give some intuition behind the mathematics. Of course, rigour is thrown out of the window with the objective of transmitting the core concepts as clearly as possible.
+As a prerequisite for this article, you will need to know to have some familiarity with the Fourier transform and convolutions.
 
-# Sampling signals: the Dirac delta
+# Sampling our signal
 
-
-What does it mean to sample a signal? Usually, we define signals as a function over the real numbers, denoting by \\( g(t) \\) the value of the signal at every \\(t ∈ ℝ\\). The simplest version of sampling involves taking regularly-spaced values of \\(g\\) and storing them in an array. The resulting sampled signal can be represented as zero everywhere, except at the points where we took samples:
-
-$$
-    g_s(t) = \begin{cases} 
-        g(t) & \text{if} \quad t = n T \quad \text{for} \quad n ∈ ℤ \\
-        0 & \text{otherwise}
-    \end{cases}
-$$
-
-This function has the following graph:
-
-
-A mathematical tool that's useful to write these kind of functions which are zero everywhere except at some points is the Dirac delta \\( δ(t) \\). This function is defined by being zero everywhere, except at \\( t = 0 \\), where it takes on the value 1. This allows us to write:
+We will consider a really simple signal \\( g(t) = \sin (ω_0 t) = \frac{1}{2} e^{ω_0 t i} + \frac{1}{2} e^{-ω_0 t i} \\), which is the signal we want to emit from our device. An ideal sampling device would capture infinitely thin slices of the signal. Such slices have a vanishingly small quantity of energy, so the sampler needs greater and greater gain as we thin the slice. The mathematical symbol to represent such behavior is the Dirac delta \\(δ\\), which allows us to write the sampled signal as:
 
 $$
-    g_s(t) = \sum_{n = -∞}^∞ g(t) δ(t - n T)
+    g_s(t) = g(t) \sum_{n=-∞}^{∞} δ(t - n T)
 $$
 
-To obtain some intuition, I recommend the reader to write a few of the terms of this infinite sum, such as those near zero, and check that they are indeed equal to the previous definition of \\( g_s(t) \\) by substituting different values of \\( t \\).
+Where \\( T \\) is the time between each sample being taken. 
 
-## The fourier transform
+If we take the Fourier transform of \\( g(t) \\) we find its spectrum \\( G(ω) \\). We can write out the integral:
 
-### The convolution theorem
+$$
+    \begin{align}
+    &G(ω) = ∫_{-∞}^{∞} g(t) e^{-ω t i} \mathop{d t} = \\
+    &= \frac{1}{2} ∫_{-∞}^{∞} e^{ω_0 t i} e^{-ω t i} \mathop{d t} + \frac{1}{2} ∫_{-∞}^{∞} e^{-ω_0 t i} e^{-ω t i} \mathop{d t} = \\
+    &= \frac{1}{2} ∫_{-∞}^{∞} e^{(ω_0 - ω) t i} \mathop{d t} + \frac{1}{2} ∫_{-∞}^{∞} e^{-(ω_0 + ω) t i} \mathop{d t}
+    \end{align}
+$$
 
-### Effect of sampling in the frequency-domain
+The two integrals converge to the Delta function, as can be seen in the graph:
 
-# Outputting signals: the zero-order hold
+We can thus write:
 
-# Finding an optimum
+$$
+    G(ω) = δ(ω - ω_0) + δ(ω + ω_0)
+$$
 
-# Future improvements
+Which can be represented as follows:
 
-The astute reader will have noticed a great difference
+## The spectrum of the sampled signal
+
+To compute the spectrum of the sampled signal, we can apply the convolution theorem, which states that the Fourier transform of the product of two functions is the convolution of their respective Fourier transforms (the converse is also true). It can be shown by expanding the Fourier series for the function that:
+
+$$
+    ∫_{-∞}^{∞} \sum_{n=-∞}^{∞} δ(t - n T) e^{-ω t i} \mathop{d t} = \frac{1}{T} \sum_{n=-∞}^{∞} δ\left(ω - \frac{n}{T}\right)
+$$
+
+Now, we need to convolve the previous expression with \\(G(ω)\\). 
+
+# The zero-order hold
+
+Our ideal sampling process can be easily achieved within a computer by sampling a mathematical representation of a signal. But, outputting such a signal from a microcontroller would prove impossible, as it would require generating infinitely fast pulses. A more realistic approximation is to state that we may generate a square-wave. For simplicity, we will assume that its edges are instantaneous. Mathematically, this is referred to as a zero-order hold:
+
+We can represent such a device as a convolution in the time domain between our sampled signal and the "boxcar" function:
+
+Applying the convolution theorem, we can obtain the spectrum of the resulting signal as the product of the spectrum of the original samples, and of the spectrum of the "boxcar" function. So, lets write down its spectrum:
+
+$$
+
+$$
+
+Victory, among the many elements of the spectrum, we find our desired output frequency!
+
+# Optimum sampling frequency
+
+We will consider the problem of finding the optimum sampling frequency to best represent \\( g(t) \\) with our sample-zero-order-hold system, given a lower limit on \\( T \\). This limit is usually imposed by the clock of the microcontroller GPIO (General Purpose I/O). By "best represent", we mean:
+
+- Generating an output signal that contains as much power as possible in its spectrum at frequency \\( ω_0 \\)
+- Having the least possible cluttering signals around \\( ω_0 \\) so we can use a wide band-pass filter to isolate our desired signal
+
+Of course, if our \\( T \\) is small enough that it satisfies the Nyquist criterion, we can just output the signal "as-is", and apply a low-pass filter to eliminate higher order harmonics. We are instead interested in the case where \\( T \\) is relatively big.
+
+
+# Further non-idealities
+
+During the whole text, we have considered that we can output any power level, but in reality we will be limited to outputting either zero power or maximum power. In the next post I will try to derive the effect of such a "distortion" on our signal. Indeed, this quantization will imply the appearance of a lot of distortion in the output signal, but our fundamental frequency will remain. Finally, I will present a real-life experiment where we put to test all of these mathematics in a device, and try to emit some meaningful radio waves.

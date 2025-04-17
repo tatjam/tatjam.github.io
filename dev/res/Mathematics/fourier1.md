@@ -1,6 +1,6 @@
 Understanding undersampling I
 2025-04-15
-Using the Laplace transform to intuitively understand undersampling transmitters
+Using the Fourier transform to intuitively understand undersampling transmitters
 
 It's possible to generate nearly arbitrarily high frequency signals using a relatively slow transmitter by exploiting undersampling. In this post I will try to give an intuitive explanation of the mechanism, and try to find the optimum sample frequency to emit a given signal.
 
@@ -30,25 +30,40 @@ $$
     \end{align}
 $$
 
-The two integrals converge to the Delta function, as can be seen in the graph:
+To understand the previous integrals, consider what happens when we substitute the integration limits with a variable \\( a \\) and make it grow towards infinity. Values of \\( ω \\) close to \\( ω_0 \\) will result in a slow oscillation of the resulting integral as \\( a \\) grows. Meanwhile, values of \\( ω \\) further away from \\( ω_0 \\) will oscillate faster. Because we are integrating, faster oscillations result in lesser deviations from 0. In the extreme cases, for \\( ω = ω_0 \\) we obtain a steadily growing function, and for \\( ω \\) very far away from \\( ω_0 \\) we obtain an imperceptibly small oscillation.
 
-We can thus write:
+![Argument to justify the Dirac delta](./fourier1img/1.svg)
+
+
+A rigorous form of the previous argument is known as the Cauchy principal value of the integral, and allows us to write:
 
 $$
-    G(ω) = δ(ω - ω_0) + δ(ω + ω_0)
+    G(ω) = \frac{1}{2} δ(ω - ω_0) - \frac{1}{2} δ(ω + ω_0)
 $$
-
-Which can be represented as follows:
 
 ## The spectrum of the sampled signal
 
-To compute the spectrum of the sampled signal, we can apply the convolution theorem, which states that the Fourier transform of the product of two functions is the convolution of their respective Fourier transforms (the converse is also true). It can be shown by expanding the Fourier series for the function that:
+To compute the spectrum of the sampled signal, we can apply the convolution theorem. It states that the Fourier transform of the product of two functions is the convolution of their respective Fourier transforms (the converse is also true). It can be shown by expanding the Fourier series for the "sampling function" that:
 
 $$
     ∫_{-∞}^{∞} \sum_{n=-∞}^{∞} δ(t - n T) e^{-ω t i} \mathop{d t} = \frac{1}{T} \sum_{n=-∞}^{∞} δ\left(ω - \frac{n}{T}\right)
 $$
 
-Now, we need to convolve the previous expression with \\(G(ω)\\). 
+Now, we need to convolve the previous expression with \\(G(ω)\\). The convolution of a Dirac delta with another obeys the following law, which can be proven by using, once again, the convolution theorem:
+
+$$
+    δ(t - a) ⊛ δ(t - b) = δ(t - (a + b)) 
+$$
+
+Thus we may write the spectrum of the sampled signal by applying the previous "law" linearly:
+
+$$
+    G_s(ω) = \sum_{n=-∞}^{∞} δ\left(ω - \left(\frac{n}{T} ± ω_0\right) \right) 
+$$
+
+We may represent this as follows:
+
+Sure enough, our original frequency is one of the components of the sampled signal.
 
 # The zero-order hold
 
@@ -62,18 +77,18 @@ $$
 
 $$
 
-Victory, among the many elements of the spectrum, we find our desired output frequency!
+Due to the denominator, the bigger \\( ω_0 \\) is, the more attenuation we have. Furthermore, if \\( ω_0 \\) is badly placed it may be completely attenuated. 
 
 # Optimum sampling frequency
 
-We will consider the problem of finding the optimum sampling frequency to best represent \\( g(t) \\) with our sample-zero-order-hold system, given a lower limit on \\( T \\). This limit is usually imposed by the clock of the microcontroller GPIO (General Purpose I/O). By "best represent", we mean:
+We will consider the problem of finding the optimum sampling frequency to best represent \\( g(t) \\) with our sample-zero-order-hold system, given a lower limit on \\( T \\). This limit is usually imposed by the clock of the microcontroller's GPIO (General Purpose Input Output). By "best represent", we mean:
 
 - Generating an output signal that contains as much power as possible in its spectrum at frequency \\( ω_0 \\)
 - Having the least possible cluttering signals around \\( ω_0 \\) so we can use a wide band-pass filter to isolate our desired signal
 
 Of course, if our \\( T \\) is small enough that it satisfies the Nyquist criterion, we can just output the signal "as-is", and apply a low-pass filter to eliminate higher order harmonics. We are instead interested in the case where \\( T \\) is relatively big.
 
-
 # Further non-idealities
 
 During the whole text, we have considered that we can output any power level, but in reality we will be limited to outputting either zero power or maximum power. In the next post I will try to derive the effect of such a "distortion" on our signal. Indeed, this quantization will imply the appearance of a lot of distortion in the output signal, but our fundamental frequency will remain. Finally, I will present a real-life experiment where we put to test all of these mathematics in a device, and try to emit some meaningful radio waves.
+

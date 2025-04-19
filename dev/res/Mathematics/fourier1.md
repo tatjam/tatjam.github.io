@@ -51,12 +51,14 @@ $$
     G_s(f) = \sum_{n=-∞}^{∞} δ\left(f - \left(\frac{n}{T} ± f_0\right) \right) 
 $$
 
-The following graph allows you to play around with the values and get a feel for the results.
+The following graph allows you to play around with the values and get a feel for the results. Note that the vertical scale of the graph represents the intensity of each term of the Fourier series in a logarithmic scale [^2], and the horizontal scale is the frequency in Hz. The shaded area represents the Nyquist area, where the signal frequency is less than half the sampling frequency.
 
-<p id="freq_elem">
-    Consider \( f_0 \) = <input data-var="f0" class="DraggableNumber">Hz</input> 
-    and \( \frac{1}{T} = f_s \) = <input data-var="fs" class="DraggableNumber">Hz</input>. We obtain the spectrum:
-</p>
+[^2]: Actually, the signals are divided by the would-be intensity of the "DC" signal of \\( f = 0 \\) before taking logarithms, such that the graph scale remains consistent.
+
+Consider \\( f_0 \\) = <input data-var="f0" class="DraggableNumber">Hz</input> 
+and \\( \frac{1}{T} = f_s \\) = <input data-var="fs" class="DraggableNumber">Hz</input>. We obtain the spectrum:
+
+<input data-var="zoh" class="Checkbox">(Enable zero-order hold in graph)</input>.
 
 
 <div class="canvas-container" style="height: 10em">
@@ -78,7 +80,12 @@ $$
 
 $$
 
-Due to the denominator, the bigger \\( ω_0 \\) is, the more attenuation we have. Furthermore, if \\( ω_0 \\) is badly placed it may be completely attenuated. 
+Due to the denominator, the bigger \\( ω_0 \\) is, the more attenuation we have. Furthermore, if \\( ω_0 \\) is badly placed it may be completely attenuated. You can use the following button to enable this attenuation in the previous graph:
+
+<input data-var="zoh" class="Checkbox">(Enable zero-order hold in graph)</input>.
+
+Note that, even with a properly sampled signal (i.e. sampling frequency more than twice the signal frequency), some attenuation will take place for signals relatively close to the Nyquistfrequency (half the sampling frequency). This is commonly known as "sinc roll-off", and is present in pretty much all DACs that use a simple zero-order hold.
+
 
 # Optimum sampling frequency
 
@@ -99,7 +106,7 @@ During the whole text, we have considered that we can output any power level, bu
 
     function setUpTangle () {
 
-        var freq_elem = document.getElementById("freq_elem");
+        var freq_elem = document.getElementsByClassName("main")[0];
         var canvas = document.getElementById("graph0");
         const ctx = canvas.getContext("2d");
 
@@ -108,8 +115,9 @@ During the whole text, we have considered that we can output any power level, bu
 
         var tangle = new Tangle(freq_elem, {
             initialize: function () {
-                this.f0 = 150.0
-                this.fs = 50.0
+                this.f0 = 135.0;
+                this.fs = 50.0;
+                this.zoh = false;
             },
             update: function () {
                 const zeroff = 0.8;
@@ -147,6 +155,8 @@ During the whole text, we have considered that we can output any power level, bu
                 ctx.strokeStyle = "#666666";
                 ctx.font = "10px sans"
 
+                const sincmax = (20 * Math.log10(1.0 / this.fs) + 100.0);
+
                 for(var f = -span; f < span; f += step) 
                 {
                     x = f / scale + canvas.width * 0.5;
@@ -167,18 +177,27 @@ During the whole text, we have considered that we can output any power level, bu
                 ctx.strokeStyle = "#6666ff";
                 ctx.beginPath();
                 const maxn = 50;
-                console.log(typeof this.fs)
-                console.log(this.f0)
                 for(var n = -maxn; n < maxn; n++) 
                 {
+                    var fac1 = 1.0;
+                    var fac2 = 1.0;
                     var f1 = n * this.fs + this.f0;
                     var f2 = n * this.fs - this.f0;
                     var x1 = f1 / scale + canvas.width * 0.5;
                     var x2 = f2 / scale + canvas.width * 0.5;
+
+                    if(this.zoh) {
+                       fac1 = Math.abs(Math.sin(f1 * Math.PI * 1.0 / this.fs) / (Math.PI * f1));
+                       fac2 = Math.abs(Math.sin(f2 * Math.PI * 1.0 / this.fs) / (Math.PI * f2));
+
+                       fac1 = Math.max(20 * Math.log10(fac1) + 100.0, 0) / sincmax;
+                       fac2 = Math.max(20 * Math.log10(fac2) + 100.0, 0) / sincmax;
+                    }
+
                     ctx.moveTo(x1, canvas.height * zeroff);
-                    ctx.lineTo(x1, canvas.height * zeroff - linesize);
+                    ctx.lineTo(x1, canvas.height * zeroff - linesize * fac1);
                     ctx.moveTo(x2, canvas.height * zeroff);
-                    ctx.lineTo(x2, canvas.height * zeroff - linesize);
+                    ctx.lineTo(x2, canvas.height * zeroff - linesize * fac2);
                 }
                 
                 ctx.stroke();
@@ -197,6 +216,21 @@ During the whole text, we have considered that we can output any power level, bu
 
                 ctx.fillText(this.f0, x0, canvas.height * zeroff - linesize - marksize);
                 ctx.fillText(-this.f0, x0p, canvas.height * zeroff - linesize - marksize);
+                    
+                ctx.strokeStyle = "#000000aa";
+                ctx.beginPath();
+                if(this.zoh) {
+                    ctx.moveTo(0, 0);
+                    for(var x = 0; x < canvas.width; x++)
+                    {
+                        var f = (x - canvas.width * 0.5) * scale 
+                        var fac = Math.abs(Math.sin(f * Math.PI * 1.0 / this.fs) / (Math.PI * f));
+                        fac = Math.max(20 * Math.log10(fac) + 100.0, 0) / sincmax;
+
+                        ctx.lineTo(x, canvas.height * zeroff - linesize * fac);
+                    }
+                }
+                ctx.stroke();
 
 
             }

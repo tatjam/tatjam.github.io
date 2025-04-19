@@ -65,6 +65,10 @@ and \\( \frac{1}{T} = f_s \\) = <input data-var="fs" class="DraggableNumber">Hz<
 <canvas id="graph0"></canvas>
 </div>
 
+<div class="canvas-container" style="height: 10em">
+<canvas id="graph1"></canvas>
+</div>
+
 
 Sure enough, our original frequency is one of the components of the sampled signal. Note that if you reduce the signal frequency to within the Nyquist zone (grey area), the signal is perfectly reproduced within that area, without any spurious signal appearing.
 
@@ -96,6 +100,21 @@ We will consider the problem of finding the optimum sampling frequency to best r
 
 Of course, if our \\( T \\) is small enough that it satisfies the Nyquist criterion, we can just output the signal "as-is", and apply a low-pass filter to eliminate higher order harmonics. We are instead interested in the case where \\( T \\) is relatively big.
 
+## For emitting symmetric signals
+
+If you play around with the graph, you will find that for signals "dancing" around a multiple of half \\( f_s \\), we get a symmetric signal of maximum gain, and furthest away from the other undesired harmonics. The maximum gain can be explaind intuitively: at a signal of half the sample-frequency, the output signal switches the most, and thus reasonably it contains the most energy at high frequencies [^3]. 
+
+[^3]: Switching the signal is where the "high-frequency" of our output comes to life, as such a fast transition can "excite" arbitrarily high frequency resonant systems. This is precisely why a sampled 0 frequency signal (a constant), after applying the zero-order hold, has absolutely no high frequency content.
+
+Such signals are common in communications. For example, they could be used for FM or carrier-supressed AM transmission, as both signals are symmetric. Emitting a AM signal with carrier would be as simple as adding another signal at a multiple of half our sampling frequency.
+
+## For emitting non-symmetric signals
+
+Non-symmetric signals are a bit more tricky to generate using this method. A good example of such signals are chirp-spread-spectrum methods, such as LORA, Frequency-Shift-Keying (FSK), and many other protocols used for digital data transfer. 
+
+By playing around with the graph for a bit, you may also find that signals at odd multiples of a quarter the sampling frequency are optimally far away from the other harmonics. For example, if you set \\( f_0 = 125 \\)Hz and \\( f_s = 100 \\)Hz, and move around \\( f_0 \\), you will find this frequency maximizes the separation between signals, which are evenly spaced a distance of \\( \frac{f_s}{2} \\)Hz apart.
+
+
 # Further non-idealities
 
 During the whole text, we have considered that we can output any power level, but in reality we will be limited to outputting either zero power or maximum power. In the next post I will try to derive the effect of such a "distortion" on our signal. Indeed, this quantization will imply the appearance of a lot of distortion in the output signal, but our fundamental frequency will remain. Finally, I will present a real-life experiment where we put to test all of these mathematics in a device, and try to emit some meaningful radio waves.
@@ -107,11 +126,16 @@ During the whole text, we have considered that we can output any power level, bu
     function setUpTangle () {
 
         var freq_elem = document.getElementsByClassName("main")[0];
+
         var canvas = document.getElementById("graph0");
         const ctx = canvas.getContext("2d");
-
         canvas.width  = canvas.offsetWidth;
         canvas.height = canvas.offsetHeight;
+        
+        var canvas2 = document.getElementById("graph1");
+        const ctx2 = canvas2.getContext("2d");
+        canvas2.width  = canvas2.offsetWidth;
+        canvas2.height = canvas2.offsetHeight;
 
         var tangle = new Tangle(freq_elem, {
             initialize: function () {
@@ -232,6 +256,66 @@ During the whole text, we have considered that we can output any power level, bu
                 }
                 ctx.stroke();
 
+                // TIME PLOT
+                /////////////////////////
+
+                ctx2.strokeStyle = "#000000";
+                ctx2.fillStyle = "#000000";
+                ctx2.clearRect(0, 0, canvas.width, canvas.height);
+
+                // Axes
+                ctx2.beginPath();
+                ctx2.moveTo(0, canvas2.height * zeroff);
+                ctx2.lineTo(canvas2.width, canvas2.height * zeroff);
+                ctx2.stroke();
+
+                const tscale = 0.0005; // s / pixel
+
+
+                ctx2.strokeStyle = "#000000aa";
+
+                ctx2.beginPath();
+                ctx2.moveTo(0, 0);
+
+                for(var x = 0; x < canvas2.width; x++)
+                {
+                    var t = x * tscale;
+                    var or = (Math.cos(2.0 * Math.PI * this.f0 * t) + 1.0) * 0.5;
+                    ctx2.lineTo(x, canvas2.height * zeroff - or * 100.0);
+                }
+                ctx2.stroke();
+
+                ctx2.strokeStyle = "#0000ffff";
+
+                ctx2.beginPath();
+                if(this.zoh)
+                {
+                    ctx2.moveTo(0, 0);
+                }
+
+                if(this.f0 != 0)
+                {
+                    var prevy = 0.0;
+                    for(var t = 0; t < tscale * canvas2.width + 1.0 / this.fs; t+=(1.0 / this.fs))
+                    {
+                        var x = (t - 0.5 / this.fs) / tscale;
+                        var ors = (Math.cos(2.0 * Math.PI * this.f0 * t) + 1.0) * 0.5;
+                        var y = canvas2.height * zeroff - ors * 100.0;
+
+                        if(this.zoh) 
+                        {
+                            ctx2.lineTo(x, prevy);
+                            ctx2.lineTo(x, y);
+                            prevy = y;
+                        }
+                        else
+                        {
+                            ctx2.moveTo(x, canvas2.height * zeroff);
+                            ctx2.lineTo(x, y);
+                        }
+                    }
+                    ctx2.stroke();
+                }
 
             }
         });

@@ -1,0 +1,42 @@
+(* Content-type: application/vnd.wolfram.mathematica *)
+
+(* Beginning of Notebook Content *)
+Notebook[{
+
+Cell[CellGroupData[{
+Cell[BoxData[
+ RowBox[{"p", "=",
+  RowBox[{"Plot", "[",
+   RowBox[{
+    RowBox[{"DirichletWindow", "[", "x", "]"}], ",",
+    RowBox[{"{",
+     RowBox[{"x", ",",
+      RowBox[{"-", "1"}], ",", "1"}], "}"}], ",",
+    RowBox[{"Ticks", "->",
+     RowBox[{"{",
+      RowBox[{
+       RowBox[{"{",
+        RowBox[{
+         RowBox[{"{",
+          RowBox[{
+           RowBox[{"-", "0.5"}], ",", "\"\<-0.5T\>\""}], "}"}], ",", "0", ",",
+         RowBox[{"{",
+          RowBox[{"0.5", ",", "\"\<0.5T\>\""}], "}"}]}], "}"}], ",", " ",
+       "None"}], "}"}]}], ",",
+    RowBox[{"GridLines", "->", "Automatic"}], ",",
+    RowBox[{"TicksStyle", "->",
+     RowBox[{"Directive", "[",
+      RowBox[{"\"\<Label\>\"", ",", " ", "12"}], "]"}]}], ",",
+    RowBox[{"PlotStyle", "->",
+     RowBox[{"Thickness", "[", "0.01", "]"}]}]}], "]"}]}]], "Input"]
+}]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"Export", "[",
+  RowBox[{"\"\</home/tatjam/code/tatjam.github.io/Mathematics/fourier1img/\
+rect.svg\>\"", ",", "p"}], "]"}]], "Input"]
+}]]
+}]
+(* End of Notebook Content *)

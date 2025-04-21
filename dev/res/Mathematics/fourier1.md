@@ -64,8 +64,8 @@ and \\( \frac{1}{T} = f_s \\) = <input data-var="fs" class="DraggableNumber" siz
 <input data-var="stick" class="Checkbox">(Stick graph to screen)</input>.
 </div>
 
-<div id="stick" class="sticky" style="top:30px;">
-<div id="graph-anchor" class="canvas-container" style="height: 10em">
+<div id="stick" class="sticky" style="top:30px;width:100%;">
+<div id="graph-anchor" class="canvas-container" style="height: 10em;width:100%;">
 <canvas id="graph0"></canvas>
 </div>
 

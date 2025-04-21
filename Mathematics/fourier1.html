@@ -1,0 +1,516 @@
+<!DOCTYPE html>
+<meta charset="UTF-8">
+<html>
+	<head>
+		<title>Understanding undersampling - 1</title>
+
+		<!-- Tangle -->
+		<script type="text/javascript" src="/external/tangle/Tangle.js"></script>
+		<script src="/external/tangle/elements.js"></script>
+
+		<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+
+		<link href="/prism.css" rel="stylesheet" />
+		<link rel="stylesheet" type="text/css" href="/theme.css">
+
+		<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:ital@0;1&family=IBM+Plex+Sans+Condensed:ital@0;1&family=IBM+Plex+Sans:ital,wght@0,100;0,400;0,700;1,100;1,400;1,700&family=IBM+Plex+Serif:ital@0;1&display=swap" rel="stylesheet">
+
+		<script type="text/javascript" src="/external/offsetanchor.js"></script>
+
+	</head>
+	<body>
+		<script src="/prism.js"></script>
+		
+		<div class="navbar">
+			<div class="nav-left">
+				<a href="">Understanding undersampling - 1</a>
+			</div>
+			<div class="nav-right">
+				<a href="/index.html">Home</a>
+				<a href=/category-Mathematics.html>Mathematics</a>
+				<a href="" title="Previous: (None)">&#9664</a>
+				<a href="" title="Next: (None)">&#9654</a>
+			</div>
+		</div>
+
+		<div class = "intro">
+			<h1>Understanding undersampling - 1</h1>
+			<p>Using the Fourier transform and interactive graphics to intuitively understand undersampling transmitters<br>2025-04-15</p>
+		</div>
+
+		<div id = page>
+			<div class = "main">
+				<p>It&#39;s possible to generate nearly arbitrarily high frequency signals using a relatively slow transmitter by exploiting undersampling. In this post I will try to give an intuitive explanation of the mechanism, and try to find the optimum sample frequency to emit a given signal.</p>
+
+<hr>
+
+<p>I found this <a href="https://www.youtube.com/watch?v=eIdHBDSQHyw">fascinating video</a>, which showcases the emission of LORA signals using nothing more than a GPIO on a microcontroller. Of course, the microcontroller cannot directly synthesize the radio frequency signal (at around 900MHz), so instead high harmonics of the GPIO square wave output are used. The mechanism to actually synthesize the signal is remarkable: sample the signal you want to emit at your desired GPIO frequency, and use that sampled data to drive your pin.</p>
+
+<p>As a prerequisite for this article, you will need to know to have some familiarity with the Fourier transform and convolutions. Nonetheless, I&#39;ve tried to make the article as intuitive as possible, of course nearly fully disregarding mathematical rigor.</p>
+
+<h1>Sampling our signal</h1>
+
+<p>We will consider a really simple signal \( g(t) = \cos (2 π f_0 t) = \frac{1}{2} e^{2 π f_0 t i} + \frac{1}{2} e^{-2 π f_0 t i} \), which is the signal we want to emit from our device. An ideal sampling device would capture infinitely thin slices of the signal. Such slices have a vanishingly small quantity of energy, so the sampler needs greater and greater gain as we thin the slice. The mathematical symbol to represent such behavior is the Dirac delta \(δ\), which allows us to write the sampled signal as:</p>
+
+<p>\[
+    g_s(t) = g(t) \sum_{n=-∞}^{∞} δ(t - n T)
+\]</p>
+
+<p>Where \( T \) is the time between each sample being taken. </p>
+
+<p>If we take the Fourier transform <sup id="fnref1"><a href="#fn1" rel="footnote">1</a></sup> of \( g(t) \) we find its spectrum \( G(ω) \), which also uses the Dirac delta:</p>
+
+<p>\[
+    G(f) = \frac{1}{2} δ(f -  f_0) + \frac{1}{2} δ(f + f_0)
+\]</p>
+
+<h2>The spectrum of the sampled signal</h2>
+
+<p>To compute the spectrum of the sampled signal, we can apply the convolution theorem. It states that the Fourier transform of the product of two functions is the convolution of their respective Fourier transforms (the converse is also true). We can obtain the Fourier transform of the &quot;sampling function&quot; (Dirac comb) and find it to be:</p>
+
+<p>\[
+    \frac{1}{T} \sum_{n=-∞}^{∞} δ\left(f - \frac{n}{T}\right)
+\]</p>
+
+<p>Now, we need to convolve the previous expression with \(G(ω)\). The convolution of a Dirac delta with another obeys the following law: </p>
+
+<p>\[
+    δ(t - a) ⊛ δ(t - b) = δ((a + b) - t) 
+\]</p>
+
+<p>Thus we may write the spectrum of the sampled signal by applying the previous &quot;law&quot; linearly:</p>
+
+<p>\[
+    G_s(f) = \frac{1}{2} \sum_{n=-∞}^{∞} δ\left(\left(\frac{n}{T} ± f_0\right) - f \right) 
+\]</p>
+
+<p>The following graph allows you to play around with the values and get a feel for the results. Note that the vertical scale of the graph represents the intensity of each term of the Fourier series in a logarithmic scale <sup id="fnref2"><a href="#fn2" rel="footnote">2</a></sup>, and the horizontal scale is the frequency in Hz. The shaded area represents the Nyquist area, where the signal frequency is less than half the sampling frequency.</p>
+
+<p>Consider \( f_0 \) = <input data-var="f0" class="DraggableNumber" size="4" style="width: 4em">Hz</input> 
+and \( \frac{1}{T} = f_s \) = <input data-var="fs" class="DraggableNumber" size="4" style="width: 4em">Hz</input>. We obtain the spectrum:</p>
+
+<p><input data-var="zoh" class="Checkbox">(Enable zero-order hold in graph)</input>.</p>
+
+<div id="stick-enable" class="sticky">
+<input data-var="stick" class="Checkbox">(Stick graph to screen)</input>.
+</div>
+
+<div id="stick" class="sticky" style="top:30px;">
+<div id="graph-anchor" class="canvas-container" style="height: 10em">
+<canvas id="graph0"></canvas>
+</div>
+
+<div class="canvas-container" style="height: 10em">
+<canvas id="graph1"></canvas>
+</div>
+</div>
+
+<p>Sure enough, our original frequency is one of the components of the sampled signal. Note that if you reduce the signal frequency to within the Nyquist zone (grey area), the signal is perfectly reproduced within that area, without any spurious signal appearing.</p>
+
+<h1>The zero-order hold</h1>
+
+<p>Our ideal sampling process can be easily achieved within a computer by sampling a mathematical representation of a signal. But, outputting such a signal from a microcontroller would prove impossible, as it would require generating infinitely fast pulses. A more realistic approximation is to state that we may generate a square-wave. For simplicity, we will assume that its edges are instantaneous. Mathematically, this is referred to as a zero-order hold. Feel free to play around with the button in the graph to get a feel for how it works.</p>
+
+<p>We can represent such a device as a convolution in the time domain between our sampled signal and the &quot;boxcar&quot; function with the sample period as width:</p>
+
+<p><img src="./fourier1img/rect.svg" alt="Rectangle function" style="width: 40%"/></p>
+
+<p>Applying the convolution theorem, we can obtain the spectrum of the resulting signal as the product of the spectrum of the original samples, and of the spectrum of the &quot;boxcar&quot; function, which is known as the &quot;sinc&quot; function:</p>
+
+<p>\[
+    \frac{1}{π f} \sin \left(π \frac{f}{f_s} \right)
+\]</p>
+
+<p>Due to the denominator, the bigger \( f \) is, the more attenuation we have. Furthermore, if \( f \) is badly placed it may be completely attenuated. Note that, even with a properly sampled signal (i.e. sampling frequency more than twice the signal frequency), some attenuation will take place for signals relatively close to the Nyquist frequency (half the sampling frequency). This is commonly known as &quot;sinc roll-off&quot;.</p>
+
+<p>You can use the following button to enable this attenuation in the interactive graph:</p>
+
+<p><input data-var="zoh" class="Checkbox">(Enable zero-order hold in graph)</input>. <a href="#graph-anchor">Go to graph</a></p>
+
+<p>Each of the areas between two zeros is referred to as a &quot;Nyquist zone&quot;. The zeroes can be found by solving \( π \frac{f}{f_s} = kπ \), which gives \( f = k f_s \), for \( k ≥ 1 \).</p>
+
+<h2>A quick side-note: Extrema of the sinc function</h2>
+
+<p>If we compute the derivative of said function we can find the frequencies at which it&#39;s of maximum amplitude, which requires solving (for non-zero \( f \)):</p>
+
+<p>\[
+    \tan \left( \frac{π f}{f_s} \right) = \frac{π f}{f_s}
+\]</p>
+
+<p>Remarkably, this equation has no closed form solution. Nonetheless, we can infer some properties about its solutions, and cook up a quick numerical method to find them <sup id="fnref3"><a href="#fn3" rel="footnote">3</a></sup>. First of all, note that it&#39;s intuitive to see that infinite solutions exist, as surely the line in the right hand side intersects the tangent (whose image spans all reals over and over) infinitely many times. </p>
+
+<p>Afterwards, note that taking the arc-tangent:</p>
+
+<p>\[
+    \frac{π f}{f_s} = \arctan \left( \frac{π f}{f_s} \right) + 2k π ⟹  f = \frac{f_s}{π} \left( \arctan \left( \frac{π f}{f_s} \right) + 2k π \right)
+\]</p>
+
+<p>Except for small \( k \), the term in the parenthesis is dominated by \( 2k π \). Furthermore, only one solution is located in each Nyquist zone, because the arc-tangent approaches \( \frac{π}{2}  \) as its argument grows, and is positive. In fact, for big enough \( f \) (and thus \( k \) ), the solution is located extremely close to \( \frac{4k + 1}{2} f_s \), at the center of each Nyquist zone. </p>
+
+<p>Thus, we propose a numerical method where start our iterative solution with \( f[0] = 2k f_s \), i.e. one of the zeroes of the sinc function, and iterate by the following recurrence relation:</p>
+
+<p>\[
+    f[n] = \frac{f_s}{π} \left( \arctan \left(\frac{π f[n - 1]}{f_s} \right) + 2 k π \right)
+\]</p>
+
+<p>Intuitively, this converges because \( f[n - 1] \) always underestimates the actual solution (as the arctangent is monotonic), and \(f [n] \) is also monotonically increasing with \( n \). A more detailed proof could be given, as this argument doesn&#39;t really show that the converged value is the actual solution, but goes outside the intent of the blog post. 5 iterations of this method are good enough for pretty much all applications.</p>
+
+<p>Assuming that the maxima are located at the center of the Nyquist zones supposes a maximum error of around 0.5%, and thus for our application we may as well just assume that they are coincident.</p>
+
+<h1>Optimum sampling frequency</h1>
+
+<p>We will consider the problem of finding the optimum sampling frequency to best represent \( g(t) \) with our sample-zero-order-hold system, given an upper limit on \( f_s \). This limit is usually imposed by the clock of the microcontroller&#39;s GPIO (General Purpose Input Output). By &quot;best represent&quot;, we mean:</p>
+
+<ul>
+<li>Generating an output signal that contains as much power as possible in its spectrum at frequency \( f_0 \)</li>
+<li>Having the least possible cluttering signals around \( f_0 \) so we can use a wide band-pass filter to isolate our desired signal</li>
+</ul>
+
+<p>Of course, if our \( f_s \) is large enough that it satisfies the Nyquist criterion, we can just output the signal &quot;as-is&quot;, and apply a low-pass filter to eliminate higher order harmonics. We are instead interested in the case where \( f_s \) is relatively small.</p>
+
+<h2>For emitting symmetric signals</h2>
+
+<p>If you play around with the graph, you will find that for signals &quot;dancing&quot; around a multiple of half \( f_s \), we get a symmetric signal of near-maximum gain, and furthest away from the other undesired harmonics. The maximum gain can be explaind intuitively: at a signal of half the sample-frequency, the output signal switches the most, and thus reasonably it contains the most energy at high frequencies <sup id="fnref4"><a href="#fn4" rel="footnote">4</a></sup>. </p>
+
+<p>Such signals are common in communications. For example, they could be used for carrier-supressed AM transmissions, as this type of signal is symmetric. Emitting a AM signal with carrier would be as simple as adding another signal at a multiple of half our sampling frequency.</p>
+
+<p>Thus, if we want to emit a signal that&#39;s symmetric around a given \( f_c \), we need to set the sampling frequency to \( \frac{2}{(2m - 1)} f_0 \) where \( m \) is as big as needed.</p>
+
+<p>Consider the center frequency of our symmetric signal to be \( f_c \) = <input data-var="f0_symin" class="DraggableNumber" size="4" style="width: 4em">Hz</input> 
+and \( m \) = <input data-var="n_symin" class="DraggableNumber" size="2" style="width: 4em"></input>, the sample rate must be set to \( f_s \) = <a data-var="fs_symin"></a>Hz. 
+<input id="symin-send" type="button" value="Send to graph"></input> <a href="#graph-anchor">Go to graph</a></p>
+
+<h2>For emitting non-symmetric signals</h2>
+
+<p>Non-symmetric signals are a bit more tricky to generate using this method. A good example of such signals are chirp-spread-spectrum methods, such as LORA, Frequency-Shift-Keying (FSK), and many other protocols used for digital data transfer. </p>
+
+<p>By playing around with the graph for a bit, you may also find that signals at odd multiples of a quarter the sampling frequency are optimally far away from the other harmonics. For example, if you set \( f_0 = 125 \)Hz and \( f_s = 100 \)Hz, and move around \( f_0 \), you will find this frequency maximizes the separation between signals, which are evenly spaced a distance of \( \frac{f_s}{2} \)Hz apart. </p>
+
+<p>Thus, if we want to emit a signal that&#39;s asymmetric but centered around a given \( f_c \), we need to set the sampling frqeuency to \( \frac{4}{2m - 1} f_0 \) where \( m \) is as big as needed.</p>
+
+<p>If you only care about having the highest bandwidth without interference from other harmonics, this is the ideal sampling frequency. You could theoretically increase gain by a bit by exploiting the off-center nature of sinc maxima, but this effect is fairly small and for practical applications may as well be ignored.</p>
+
+<p>Consider the center frequency of our non-symmetric signal to be \( f_c \) = <input data-var="f0_symin" class="DraggableNumber" size="4" style="width: 4em">Hz</input> 
+and \( m \) = <input data-var="n_symin" class="DraggableNumber" size="2" style="width: 4em"></input>, the sample rate must be set to \( f_s \) = <a data-var="fs_asymin"></a>Hz. 
+<input id="asymin-send" type="button" value="Send to graph"></input> <a href="#graph-anchor">Go to graph</a></p>
+
+<h1>Further non-idealities</h1>
+
+<p>During the whole text, we have considered that we can output any power level, but in reality we will be limited to outputting either zero power or maximum power. In the next post I will try to derive the effect of such a &quot;distortion&quot; on our signal. Indeed, this quantization will imply the appearance of a lot of distortion in the output signal, but our fundamental frequency will remain. Finally, I will present a real-life experiment where we put to test all of these mathematics in a device, and try to emit some meaningful radio waves.</p>
+
+<script type="text/javascript">
+
+    function setUpTangle () {
+
+        var freq_elem = document.getElementsByClassName("main")[0];
+
+        var canvas = document.getElementById("graph0");
+        const ctx = canvas.getContext("2d");
+        canvas.width  = canvas.offsetWidth;
+        canvas.height = canvas.offsetHeight;
+        
+        var canvas2 = document.getElementById("graph1");
+        const ctx2 = canvas2.getContext("2d");
+        canvas2.width  = canvas2.offsetWidth;
+        canvas2.height = canvas2.offsetHeight;
+
+
+        var tangle = new Tangle(freq_elem, {
+            initialize: function () {
+                this.f0 = 135.0;
+                this.fs = 50.0;
+                this.zoh = false;
+
+                this.fs_symin = 50.0;
+                this.f0_symin = 135.0;
+                this.n_symin = 4;
+                this.stick = false;
+                
+                this.fs_asymin = 50.0;
+        
+                var sendto_btn = document.getElementById("symin-send");
+
+                var click_fun = function() {
+                    tangle.setValue("fs", Number(tangle.getValue("fs_symin")));
+                    tangle.setValue("f0", Number(tangle.getValue("f0_symin")));
+                }
+               
+                sendto_btn.onclick = click_fun.bind(this);
+
+
+                var sendto_btn_asym = document.getElementById("asymin-send");
+
+                var click_fun_asym = function() {
+                    tangle.setValue("fs", Number(tangle.getValue("fs_asymin")));
+                    tangle.setValue("f0", Number(tangle.getValue("f0_symin")));
+                }
+                
+                sendto_btn_asym.onclick = click_fun_asym.bind(this);
+            },
+
+            update: function() {
+                this.f0 = Math.max(this.f0, 1);
+                this.fs = Math.max(this.fs, 1);
+                this.f0_symin = Math.max(this.f0_symin, 1);
+                this.n_symin = Math.max(this.n_symin, 1);
+
+                this.fs_symin = (2.0 / (2.0 * Number(this.n_symin) - 1) * Number(this.f0_symin)).toFixed(2);
+                
+                this.fs_asymin = (4.0 / (2.0 * Number(this.n_symin) - 1) * Number(this.f0_symin)).toFixed(2);
+
+                this.fs_symin = Math.max(this.fs_symin, 1);
+                this.fs_asymin = Math.max(this.fs_asymin, 1);
+
+                if(this.stick) {
+                    document.getElementById("stick").classList.add("sticky");
+                } else {
+                    document.getElementById("stick").classList.remove("sticky");   
+                }
+                
+                this.update_graph();
+            },
+
+            update_graph: function () {
+                const zeroff = 0.8;
+                const linesize = 100.0;
+                const marksize = 10.0;
+
+                ctx.strokeStyle = "#000000";
+                ctx.fillStyle = "#000000";
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                // Axes
+                ctx.beginPath();
+                ctx.moveTo(0, canvas.height * zeroff);
+                ctx.lineTo(canvas.width, canvas.height * zeroff);
+                ctx.moveTo(canvas.width / 2, 0);
+                ctx.lineTo(canvas.width / 2, canvas.height);
+                ctx.stroke();
+
+                // Hz / pixel
+                const scale = 0.5;
+                const step = 50.0;
+                const substep = 10.0
+                const span = Math.ceil(canvas.width / 2 * scale / step) * step;
+
+
+                ctx.fillStyle = "#00000033"
+                nyq0 = -this.fs / scale * 0.5 + canvas.width * 0.5;
+                nyq = this.fs / scale;
+                ctx.beginPath();
+                ctx.rect(nyq0, 0, nyq, canvas.height);
+                ctx.fill();
+                
+                ctx.fillStyle = "#000000";
+
+                ctx.beginPath();
+                ctx.strokeStyle = "#666666";
+                ctx.font = "10px sans"
+
+                const sincmax = (20 * Math.log10(1.0 / this.fs) + 100.0);
+
+                for(var f = -span; f < span; f += step) 
+                {
+                    x = f / scale + canvas.width * 0.5;
+                    ctx.moveTo(x, canvas.height * zeroff - 5.0);
+                    ctx.lineTo(x, canvas.height * zeroff + 5.0);
+                    ctx.fillText(f, x, canvas.height * zeroff + 14.0);
+                }
+                
+                for(var f = -span; f < span; f += substep) 
+                {
+                    x = f / scale + canvas.width * 0.5;
+                    ctx.moveTo(x, canvas.height * zeroff - 3.0);
+                    ctx.lineTo(x, canvas.height * zeroff + 3.0);
+                }
+
+                ctx.stroke();
+
+                ctx.strokeStyle = "#6666ff";
+                ctx.beginPath();
+                const maxn = 50;
+                for(var n = -maxn; n < maxn; n++) 
+                {
+                    var fac1 = 1.0;
+                    var fac2 = 1.0;
+                    var f1 = n * this.fs + this.f0;
+                    var f2 = n * this.fs - this.f0;
+                    var x1 = f1 / scale + canvas.width * 0.5;
+                    var x2 = f2 / scale + canvas.width * 0.5;
+
+                    if(this.zoh) {
+                       fac1 = Math.abs(Math.sin(f1 * Math.PI * 1.0 / this.fs) / (Math.PI * f1));
+                       fac2 = Math.abs(Math.sin(f2 * Math.PI * 1.0 / this.fs) / (Math.PI * f2));
+
+                       fac1 = Math.max(20 * Math.log10(fac1) + 100.0, 0) / sincmax;
+                       fac2 = Math.max(20 * Math.log10(fac2) + 100.0, 0) / sincmax;
+                    }
+
+                    ctx.moveTo(x1, canvas.height * zeroff);
+                    ctx.lineTo(x1, canvas.height * zeroff - linesize * fac1);
+                    ctx.moveTo(x2, canvas.height * zeroff);
+                    ctx.lineTo(x2, canvas.height * zeroff - linesize * fac2);
+                }
+                
+                ctx.stroke();
+                
+                ctx.strokeStyle = "#ff6666";
+                ctx.fillStyle = "#ff6666";
+
+                ctx.beginPath();
+                var x0 = this.f0 / scale + canvas.width * 0.5;
+                var x0p = -this.f0 / scale + canvas.width * 0.5;
+                ctx.moveTo(x0, canvas.height * zeroff - linesize);
+                ctx.lineTo(x0, canvas.height * zeroff - linesize - marksize);
+                ctx.moveTo(x0p, canvas.height * zeroff - linesize);
+                ctx.lineTo(x0p, canvas.height * zeroff - linesize - marksize);
+                ctx.stroke();
+
+                ctx.fillText(this.f0, x0, canvas.height * zeroff - linesize - marksize);
+                ctx.fillText(-this.f0, x0p, canvas.height * zeroff - linesize - marksize);
+                    
+                ctx.strokeStyle = "#000000aa";
+                ctx.beginPath();
+                if(this.zoh) {
+                    ctx.moveTo(0, 0);
+                    for(var x = 0; x < canvas.width; x++)
+                    {
+                        var f = (x - canvas.width * 0.5) * scale 
+                        var fac = Math.abs(Math.sin(f * Math.PI * 1.0 / this.fs) / (Math.PI * f));
+                        fac = Math.max(20 * Math.log10(fac) + 100.0, 0) / sincmax;
+
+                        ctx.lineTo(x, canvas.height * zeroff - linesize * fac);
+                    }
+                }
+                ctx.stroke();
+
+                // TIME PLOT
+                /////////////////////////
+
+                ctx2.strokeStyle = "#000000";
+                ctx2.fillStyle = "#000000";
+                ctx2.clearRect(0, 0, canvas.width, canvas.height);
+
+                // Axes
+                ctx2.beginPath();
+                ctx2.moveTo(0, canvas2.height * zeroff);
+                ctx2.lineTo(canvas2.width, canvas2.height * zeroff);
+                ctx2.stroke();
+
+                const tscale = 0.0005; // s / pixel
+
+
+                ctx2.strokeStyle = "#000000aa";
+
+                ctx2.beginPath();
+                ctx2.moveTo(0, 0);
+
+                for(var x = 0; x < canvas2.width; x++)
+                {
+                    var t = x * tscale;
+                    var or = (Math.cos(2.0 * Math.PI * this.f0 * t) + 1.0) * 0.5;
+                    ctx2.lineTo(x, canvas2.height * zeroff - or * 100.0);
+                }
+                ctx2.stroke();
+
+                ctx2.strokeStyle = "#0000ffff";
+
+                ctx2.beginPath();
+                if(this.zoh)
+                {
+                    ctx2.moveTo(0, 0);
+                }
+
+                if(this.f0 != 0)
+                {
+                    var prevy = 0.0;
+                    for(var t = 0; t < tscale * canvas2.width + 1.0 / this.fs; t+=(1.0 / this.fs))
+                    {
+                        var x = t / tscale;
+                        if(this.zoh) {
+                            x = (t - 0.5 / this.fs) / tscale;
+                        }
+                        var ors = (Math.cos(2.0 * Math.PI * this.f0 * t) + 1.0) * 0.5;
+                        var y = canvas2.height * zeroff - ors * 100.0;
+
+                        if(this.zoh) 
+                        {
+                            ctx2.lineTo(x, prevy);
+                            ctx2.lineTo(x, y);
+                            prevy = y;
+                        }
+                        else
+                        {
+                            ctx2.moveTo(x, canvas2.height * zeroff);
+                            ctx2.lineTo(x, y);
+                        }
+                    }
+                    ctx2.stroke();
+                }
+
+            }
+        });
+    }
+
+    window.onload = setUpTangle
+
+</script>
+
+<div class="footnotes">
+<hr>
+<ol>
+
+<li id="fn1">
+<p>I&#39;m using the unitary Fourier transform, which leads to neater expressions.&nbsp;<a href="#fnref1" rev="footnote">&#8617;</a></p>
+</li>
+
+<li id="fn2">
+<p>Actually, the signals are divided by the would-be intensity of the &quot;DC&quot; signal of \( f = 0 \) before taking logarithms, such that the graph scale remains consistent.&nbsp;<a href="#fnref2" rev="footnote">&#8617;</a></p>
+</li>
+
+<li id="fn3">
+<p>Adapted from <a href="https://math.stackexchange.com/q/18744">leonbloy&#39;s post on Mathematics Stack Exchange</a>.&nbsp;<a href="#fnref3" rev="footnote">&#8617;</a></p>
+</li>
+
+<li id="fn4">
+<p>Switching the signal is where the &quot;high-frequency&quot; of our output comes to life, as such a fast transition can &quot;excite&quot; arbitrarily high frequency resonant systems. This is precisely why a sampled 0 frequency signal (a constant), after applying the zero-order hold, has absolutely no high frequency content: it has no transitions.&nbsp;<a href="#fnref4" rev="footnote">&#8617;</a></p>
+</li>
+
+</ol>
+</div>
+
+			</div>
+			
+			<div class="disqus">
+				<div id="disqus_thread"></div>
+			</div>
+
+			<script>
+				var disqus_config = function () {
+					this.page.url = tatjam.github.io;  
+					
+					// Replace PAGE_IDENTIFIER with your page's unique identifier variable
+					this.page.identifier = PAGE_IDENTIFIER; 
+				};
+				
+				(function() {  // REQUIRED CONFIGURATION VARIABLE: EDIT THE SHORTNAME BELOW
+					var d = document, s = d.createElement('script');
+					
+					// IMPORTANT: Replace EXAMPLE with your forum shortname!
+					s.src = 'https://tatjam-blog.disqus.com/embed.js';
+					
+					s.setAttribute('data-timestamp', +new Date());
+					(d.head || d.body).appendChild(s);
+				})();
+			</script>
+			<noscript>
+				Please enable JavaScript to view the 
+				<a href="https://disqus.com/?ref_noscript" rel="nofollow">
+					comments powered by Disqus.
+				</a>
+			</noscript>
+
+		</div>
+
+	</body>
+</html>

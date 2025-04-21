@@ -1,0 +1,103 @@
+(* Content-type: application/vnd.wolfram.mathematica *)
+
+(* Beginning of Notebook Content *)
+Notebook[{
+
+Cell[CellGroupData[{
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"int", "[",
+   RowBox[{"a_", ",", "\[Omega]_"}], "]"}], "=",
+  RowBox[{
+   RowBox[{"Inactive", "[", "Limit", "]"}], "[",
+   RowBox[{
+    RowBox[{"Integrate", "[",
+     RowBox[{
+      RowBox[{"Exp", "[",
+       RowBox[{
+        RowBox[{"(",
+         RowBox[{"\[Omega]f", "-", "1"}], ")"}], "*", "I", "*", "t"}], "]"}],
+      ",",
+      RowBox[{"{",
+       RowBox[{"t", ",",
+        RowBox[{"-", "a"}], ",", "a"}], "}"}]}], "]"}], ",",
+    RowBox[{"\[Omega]f", "->", "\[Omega]"}]}], "]"}]}]], "Input"]
+}]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"Activate", "[",
+  RowBox[{"int", "[",
+   RowBox[{"a", ",", "1.0"}], "]"}], "]"}]], "Input"]
+}]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"vals", "=",
+  RowBox[{"Activate", "[",
+   RowBox[{"Table", "[",
+    RowBox[{
+     RowBox[{"{",
+      RowBox[{"\[Omega]", ",",
+       RowBox[{"int", "[",
+        RowBox[{"a", ",", "\[Omega]"}], "]"}]}], "}"}], ",",
+     RowBox[{"{",
+      RowBox[{"\[Omega]", ",", "1", ",", "2", ",", "0.25"}], "}"}]}], "]"}],
+   "]"}]}]], "Input"]
+}]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"plots", "=",
+  RowBox[{
+   RowBox[{"Transpose", " ", "[", "vals", "]"}], "[",
+   RowBox[{"[", "2", "]"}], "]"}]}]], "Input"]
+}]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"\[Omega]s", "=",
+  RowBox[{
+   RowBox[{"Transpose", "[", "vals", "]"}], "[",
+   RowBox[{"[", "1", "]"}], "]"}]}]], "Input"]
+}]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"plot", "=",
+  RowBox[{"Plot", "[",
+   RowBox[{"plots", ",",
+    RowBox[{"{",
+     RowBox[{"a", ",", "0", ",", "10"}], "}"}], ",",
+    RowBox[{"PlotLegends", "->",
+     RowBox[{"Map", "[",
+      RowBox[{
+       RowBox[{
+        RowBox[{"\"\<\[Omega]-\!\(\*SubscriptBox[\(\[Omega]\), \(0\)]\)=\>\"",
+          "<>",
+         RowBox[{"ToString", "[",
+          RowBox[{"#", "-", "1"}], "]"}]}], "&"}], ",", "\[Omega]s"}],
+      "]"}]}], ",",
+    RowBox[{"AxesLabel", "->",
+     RowBox[{"{",
+      RowBox[{"\"\<a\>\"",
+       ",", "\"\<\!\(\*SuperscriptBox[SubscriptBox[\(\[Integral]\), \(-a\)], \
+\(a\)]\)  \!\(\*SuperscriptBox[\(e\), \(\((\[Omega] - 1)\)*i*t\)]\)dt\>\""}],
+      "}"}]}], ",",
+    RowBox[{"GridLines", "->", "Automatic"}]}], "]"}]}]], "Input"]
+}]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"Export", "[",
+  RowBox[{"\"\</home/tatjam/code/tatjam.github.io/Mathematics/fourier1img/1.\
+svg\>\"", ",", "plot"}], "]"}]], "Input"]
+}]]
+}]
+(* End of Notebook Content *)

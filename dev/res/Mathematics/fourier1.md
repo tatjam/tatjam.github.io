@@ -42,25 +42,29 @@ $$
 Now, we need to convolve the previous expression with \\(G(ω)\\). The convolution of a Dirac delta with another obeys the following law: 
 
 $$
-    δ(t - a) ⊛ δ(t - b) = δ(t - (a + b)) 
+    δ(t - a) ⊛ δ(t - b) = δ((a + b) - t) 
 $$
 
 Thus we may write the spectrum of the sampled signal by applying the previous "law" linearly:
 
 $$
-    G_s(f) = \sum_{n=-∞}^{∞} δ\left(f - \left(\frac{n}{T} ± f_0\right) \right) 
+    G_s(f) = \frac{1}{2} \sum_{n=-∞}^{∞} δ\left(\left(\frac{n}{T} ± f_0\right) - f \right) 
 $$
 
 The following graph allows you to play around with the values and get a feel for the results. Note that the vertical scale of the graph represents the intensity of each term of the Fourier series in a logarithmic scale [^2], and the horizontal scale is the frequency in Hz. The shaded area represents the Nyquist area, where the signal frequency is less than half the sampling frequency.
 
 [^2]: Actually, the signals are divided by the would-be intensity of the "DC" signal of \\( f = 0 \\) before taking logarithms, such that the graph scale remains consistent.
 
-Consider \\( f_0 \\) = <input data-var="f0" class="DraggableNumber" size="4">Hz</input> 
-and \\( \frac{1}{T} = f_s \\) = <input data-var="fs" class="DraggableNumber" size="4">Hz</input>. We obtain the spectrum:
+Consider \\( f_0 \\) = <input data-var="f0" class="DraggableNumber" size="4" style="width: 4em">Hz</input> 
+and \\( \frac{1}{T} = f_s \\) = <input data-var="fs" class="DraggableNumber" size="4" style="width: 4em">Hz</input>. We obtain the spectrum:
 
 <input data-var="zoh" class="Checkbox">(Enable zero-order hold in graph)</input>.
 
+<div id="stick-enable" class="sticky">
+<input data-var="stick" class="Checkbox">(Stick graph to screen)</input>.
+</div>
 
+<div id="stick" class="sticky" style="top:30px;">
 <div id="graph-anchor" class="canvas-container" style="height: 10em">
 <canvas id="graph0"></canvas>
 </div>
@@ -68,15 +72,18 @@ and \\( \frac{1}{T} = f_s \\) = <input data-var="fs" class="DraggableNumber" siz
 <div class="canvas-container" style="height: 10em">
 <canvas id="graph1"></canvas>
 </div>
+</div>
 
 
 Sure enough, our original frequency is one of the components of the sampled signal. Note that if you reduce the signal frequency to within the Nyquist zone (grey area), the signal is perfectly reproduced within that area, without any spurious signal appearing.
 
 # The zero-order hold
 
-Our ideal sampling process can be easily achieved within a computer by sampling a mathematical representation of a signal. But, outputting such a signal from a microcontroller would prove impossible, as it would require generating infinitely fast pulses. A more realistic approximation is to state that we may generate a square-wave. For simplicity, we will assume that its edges are instantaneous. Mathematically, this is referred to as a zero-order hold:
+Our ideal sampling process can be easily achieved within a computer by sampling a mathematical representation of a signal. But, outputting such a signal from a microcontroller would prove impossible, as it would require generating infinitely fast pulses. A more realistic approximation is to state that we may generate a square-wave. For simplicity, we will assume that its edges are instantaneous. Mathematically, this is referred to as a zero-order hold. Feel free to play around with the button in the graph to get a feel for how it works.
 
 We can represent such a device as a convolution in the time domain between our sampled signal and the "boxcar" function with the sample period as width:
+
+<img src="./fourier1img/rect.svg" alt="Rectangle function" style="width: 40%"/>
 
 Applying the convolution theorem, we can obtain the spectrum of the resulting signal as the product of the spectrum of the original samples, and of the spectrum of the "boxcar" function, which is known as the "sinc" function:
 
@@ -84,13 +91,14 @@ $$
     \frac{1}{π f} \sin \left(π \frac{f}{f_s} \right)
 $$
 
-Due to the denominator, the bigger \\( f \\) is, the more attenuation we have. Furthermore, if \\( f \\) is badly placed it may be completely attenuated. Note that, even with a properly sampled signal (i.e. sampling frequency more than twice the signal frequency), some attenuation will take place for signals relatively close to the Nyquist frequency (half the sampling frequency). This is commonly known as "sinc roll-off", and is present in pretty much all DACs that use a simple zero-order hold.
+Due to the denominator, the bigger \\( f \\) is, the more attenuation we have. Furthermore, if \\( f \\) is badly placed it may be completely attenuated. Note that, even with a properly sampled signal (i.e. sampling frequency more than twice the signal frequency), some attenuation will take place for signals relatively close to the Nyquist frequency (half the sampling frequency). This is commonly known as "sinc roll-off".
 
-You can use the following button to enable this attenuation in the previous graph:
+You can use the following button to enable this attenuation in the interactive graph:
 
-<input data-var="zoh" class="Checkbox">(Enable zero-order hold in graph)</input>.
+<input data-var="zoh" class="Checkbox">(Enable zero-order hold in graph)</input>. <a href="#graph-anchor">Go to graph</a>
 
-Each of the areas between two zeros is referred to as a "Nyquist zone". The zeroes are found by \\( π \frac{f}{f_s} = kπ \\), which gives \\( f = k f_s \\), for \\( k ≥ 1 \\).
+
+Each of the areas between two zeros is referred to as a "Nyquist zone". The zeroes can be found by solving \\( π \frac{f}{f_s} = kπ \\), which gives \\( f = k f_s \\), for \\( k ≥ 1 \\).
 
 ## A quick side-note: Extrema of the sinc function
 
@@ -121,7 +129,7 @@ Intuitively, this converges because \\( f[n - 1] \\) always underestimates the a
 
 [^3]: Adapted from [leonbloy's post on Mathematics Stack Exchange](https://math.stackexchange.com/q/18744).
 
-Assuming that the maxima are located at the center of the Nyquist zones supposes a maximum error of around 0.5%, and thus for our application we may as well just assume that.
+Assuming that the maxima are located at the center of the Nyquist zones supposes a maximum error of around 0.5%, and thus for our application we may as well just assume that they are coincident.
 
 
 # Optimum sampling frequency
@@ -144,8 +152,8 @@ Such signals are common in communications. For example, they could be used for c
 Thus, if we want to emit a signal that's symmetric around a given \\( f_c \\), we need to set the sampling frequency to \\( \frac{2}{(2m - 1)} f_0 \\) where \\( m \\) is as big as needed.
 
 
-Consider the center frequency of our symmetric signal to be \\( f_0 \\) = <input data-var="f0-symin" class="DraggableNumber" size="4">Hz</input> 
-and \\( m \\) = <input data-var="n-symin" class="DraggableNumber" size="2"></input>, the sample rate must be set to \\( f_s \\) = <a data-var="fs-symin">1</a>Hz. 
+Consider the center frequency of our symmetric signal to be \\( f_c \\) = <input data-var="f0_symin" class="DraggableNumber" size="4" style="width: 4em">Hz</input> 
+and \\( m \\) = <input data-var="n_symin" class="DraggableNumber" size="2" style="width: 4em"></input>, the sample rate must be set to \\( f_s \\) = <a data-var="fs_symin"></a>Hz. 
 <input id="symin-send" type="button" value="Send to graph"></input> <a href="#graph-anchor">Go to graph</a>
 
 
@@ -155,7 +163,15 @@ Non-symmetric signals are a bit more tricky to generate using this method. A goo
 
 By playing around with the graph for a bit, you may also find that signals at odd multiples of a quarter the sampling frequency are optimally far away from the other harmonics. For example, if you set \\( f_0 = 125 \\)Hz and \\( f_s = 100 \\)Hz, and move around \\( f_0 \\), you will find this frequency maximizes the separation between signals, which are evenly spaced a distance of \\( \frac{f_s}{2} \\)Hz apart. 
 
+Thus, if we want to emit a signal that's asymmetric but centered around a given \\( f_c \\), we need to set the sampling frqeuency to \\( \frac{4}{2m - 1} f_0 \\) where \\( m \\) is as big as needed.
+
+
 If you only care about having the highest bandwidth without interference from other harmonics, this is the ideal sampling frequency. You could theoretically increase gain by a bit by exploiting the off-center nature of sinc maxima, but this effect is fairly small and for practical applications may as well be ignored.
+
+
+Consider the center frequency of our non-symmetric signal to be \\( f_c \\) = <input data-var="f0_symin" class="DraggableNumber" size="4" style="width: 4em">Hz</input> 
+and \\( m \\) = <input data-var="n_symin" class="DraggableNumber" size="2" style="width: 4em"></input>, the sample rate must be set to \\( f_s \\) = <a data-var="fs_asymin"></a>Hz. 
+<input id="asymin-send" type="button" value="Send to graph"></input> <a href="#graph-anchor">Go to graph</a>
 
 
 # Further non-idealities
@@ -180,13 +196,63 @@ During the whole text, we have considered that we can output any power level, bu
         canvas2.width  = canvas2.offsetWidth;
         canvas2.height = canvas2.offsetHeight;
 
+
         var tangle = new Tangle(freq_elem, {
             initialize: function () {
                 this.f0 = 135.0;
                 this.fs = 50.0;
                 this.zoh = false;
+
+                this.fs_symin = 50.0;
+                this.f0_symin = 135.0;
+                this.n_symin = 4;
+                this.stick = false;
+                
+                this.fs_asymin = 50.0;
+        
+                var sendto_btn = document.getElementById("symin-send");
+
+                var click_fun = function() {
+                    tangle.setValue("fs", Number(tangle.getValue("fs_symin")));
+                    tangle.setValue("f0", Number(tangle.getValue("f0_symin")));
+                }
+               
+                sendto_btn.onclick = click_fun.bind(this);
+
+
+                var sendto_btn_asym = document.getElementById("asymin-send");
+
+                var click_fun_asym = function() {
+                    tangle.setValue("fs", Number(tangle.getValue("fs_asymin")));
+                    tangle.setValue("f0", Number(tangle.getValue("f0_symin")));
+                }
+                
+                sendto_btn_asym.onclick = click_fun_asym.bind(this);
             },
-            update: function () {
+
+            update: function() {
+                this.f0 = Math.max(this.f0, 1);
+                this.fs = Math.max(this.fs, 1);
+                this.f0_symin = Math.max(this.f0_symin, 1);
+                this.n_symin = Math.max(this.n_symin, 1);
+
+                this.fs_symin = (2.0 / (2.0 * Number(this.n_symin) - 1) * Number(this.f0_symin)).toFixed(2);
+                
+                this.fs_asymin = (4.0 / (2.0 * Number(this.n_symin) - 1) * Number(this.f0_symin)).toFixed(2);
+
+                this.fs_symin = Math.max(this.fs_symin, 1);
+                this.fs_asymin = Math.max(this.fs_asymin, 1);
+
+                if(this.stick) {
+                    document.getElementById("stick").classList.add("sticky");
+                } else {
+                    document.getElementById("stick").classList.remove("sticky");   
+                }
+                
+                this.update_graph();
+            },
+
+            update_graph: function () {
                 const zeroff = 0.8;
                 const linesize = 100.0;
                 const marksize = 10.0;

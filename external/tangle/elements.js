@@ -16,7 +16,6 @@ Tangle.classes.Checkbox = {
 	initialize: function(element, options, tangle, variable) {
 		element.type = 'checkbox';
 		element.addEventListener('input', function() {
-			console.log(this.checked);
 			tangle.setValue(variable, Boolean(this.checked));
 		});
 	},

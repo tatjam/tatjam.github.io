@@ -58,7 +58,7 @@ body {
   text-align: center;
   padding: 14px 16px;
   text-decoration: none;
-  font-size: 17px;
+  font-size: medium;
 }
 
 .navbar a:hover {
@@ -117,7 +117,7 @@ body {
   height: 200%;
   margin: 0 auto;
   border: 1px solid #222f;
-  font-size: 17px;
+  font-size: medium;
 }
 
 .main img {
@@ -139,7 +139,7 @@ body {
 
 .intro p {
 	margin: 25px 10% 25px;
-	font-size:17px;
+	font-size: medium;
 }
 
 .canvas-container {
@@ -158,4 +158,25 @@ canvas {
 	background-color: #DEDEDE;
 	position: sticky;
 	top: 0;
+}
+
+
+@media screen and (max-aspect-ratio: 10/9) {
+	#page {
+	  width: 100%;
+	  font-size: medium;
+	  font-size: 1.6em;
+	}
+
+
+	.main h1 {
+		text-align: center;
+		position: relative;
+		padding: 20px;
+		width: 100%;
+		box-shadow: 0px 4px 8px #888;
+		margin: 0px 10px 10px 0px;
+		background-color: #555;
+		color: #dfdfdf;
+	}
 }

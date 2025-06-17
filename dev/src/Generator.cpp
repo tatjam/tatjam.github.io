@@ -147,13 +147,13 @@ void Generator::generate(const std::string& dir, const std::string& out_dir)
 	for(auto& pair : by_category)
 	{
 		std::vector<Post*> post_v = pair.second;
-		for(size_t i = 0; i < post_v.size(); i++)
+		for(int i = 0; i < post_v.size(); i++)
 		{
 			if(i != 0)
 			{
 				post_v[i]->prev = post_v[i - 1];
 			}
-			if(i <= post_v.size() - 2)
+			if(i <= static_cast<int>(post_v.size() - 2))
 			{
 				post_v[i]->next = post_v[i + 1];
 			}

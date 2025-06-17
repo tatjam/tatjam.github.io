@@ -125,10 +125,10 @@ Post::Post(
 
 	// If the next line starts with a {, we will parse until next }, and this is
 	// extra head
-	if (markdown[0] == '{')
+	if (markdown[0] == '#')
 	{
-		this->extra_head = markdown.substr(1, markdown.find_first_of('}') - 1);
-		markdown = markdown.substr(markdown.find_first_of('}') + 1);
+		this->extra_head = markdown.substr(1, markdown.find_first_of('#', 1) - 1);
+		markdown = markdown.substr(markdown.find_first_of('#', 1) + 1);
 	}
 
 

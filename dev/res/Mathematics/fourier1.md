@@ -1,6 +1,11 @@
 Understanding undersampling - 1
 2025-04-21
 Using the Fourier transform and interactive graphics to intuitively understand undersampling transmitters
+{
+		<!-- Tangle -->
+		<script type="text/javascript" src="/external/tangle/Tangle.js"></script>
+		<script src="/external/tangle/elements.js"></script>
+}
 
 It's possible to generate nearly arbitrarily high frequency signals using a relatively slow transmitter by exploiting undersampling. In this post I will try to give an intuitive explanation of the mechanism, and try to find the optimum sample frequency to emit a given signal.
 

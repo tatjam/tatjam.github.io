@@ -23,6 +23,8 @@ public:
 	std::string markdown;
 	std::string path;
 
+	std::string extra_head;
+
 	Post* next;
 	Post* prev;
 

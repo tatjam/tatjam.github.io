@@ -73,6 +73,10 @@ void Post::apply(Theme& theme, std::string& html)
 				insert = "/" + prev->url;
 			}
 		}
+		else if (repl.value == "EXTRA_HEAD")
+		{
+			insert = extra_head;
+		}
 
 		if(insert != "")
 		{
@@ -118,6 +122,15 @@ Post::Post(
 	markdown = markdown.substr(markdown.find_first_of('\n') + 1);
 	this->summary =markdown.substr(0, markdown.find_first_of('\n'));
 	markdown = markdown.substr(markdown.find_first_of('\n') + 1);
+
+	// If the next line starts with a {, we will parse until next }, and this is
+	// extra head
+	if (markdown[0] == '{')
+	{
+		this->extra_head = markdown.substr(1, markdown.find_first_of('}') - 1);
+		markdown = markdown.substr(markdown.find_first_of('}') + 1);
+	}
+
 
 	// Parse the date
 	std::sscanf(this->date.c_str(), "%i-%i-%i", &year, &month, &day);

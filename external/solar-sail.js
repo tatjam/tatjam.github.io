@@ -122,7 +122,7 @@ class KeplerElements {
 }
 
 
-const orbit_mat = new LineMaterial({color: 0xffffff, linewidth: 5.0});
+const orbit_mat = new LineMaterial({linewidth: 5.0, vertexColors: true});
 const nominal_orbit = new KeplerElements(0.1, 10000e3, 0, 0, 0);
 var orbit_geom = create_orbit_geometry(nominal_orbit, orbit_mat);
 
@@ -173,6 +173,11 @@ gui.onChange ( event => {
 	scene.add(orbit_geom);
 })
 
+function is_eclipsed(pos) {
+	// We project on yz plane, and there eclipse check is as simple as r < earth radius
+	const len = Math.sqrt(pos[1]*pos[1] + pos[2] * pos[2]);
+	return len < 6371e3 && pos[0] < 0;
+}
 
 function resize_renderer(renderer) {
 	const canvas = renderer.domElement;
@@ -227,20 +232,32 @@ function create_earth() {
  */
 function create_orbit_geometry(orbit, mat) {
 	const points = [];
+	const colors = [];
 
 	for(var E = 0.0; E < 2.0 * Math.PI; E += 0.01) 
 	{
 		const pos = orbit.get_pos_from_eccentric_anomaly(E);
 		points.push(pos[0] * GRAPHICS_SCALE, pos[1] * GRAPHICS_SCALE, pos[2] * GRAPHICS_SCALE);
+		const eclipsed = is_eclipsed(pos);
+		if(eclipsed) 
+		{
+			colors.push(0.2, 0.2, 0.2);
+		}
+		else 
+		{
+			colors.push(0.7, 0.7, 0.7);
+		}
 	}
 	
 	// Close the orbit
 	points.push(points[0]);
+	colors.push(colors[0]);
 
 	console.log(points);
 
 	const geom = new LineGeometry();
 	geom.setPositions(points);
+	geom.setColors(colors);
 	const line = new Line2(geom, mat);
 	
 

@@ -126,6 +126,8 @@ const orbit_mat = new LineMaterial({linewidth: 5.0, vertexColors: true});
 const nominal_orbit = new KeplerElements(0.1, 10000e3, 0, 0, 0);
 var orbit_geom = create_orbit_geometry(nominal_orbit, orbit_mat);
 
+var orbiter = create_orbiter();
+
 var gui_state = {
 	orbit_e: 0.1,
 	orbit_a: 10000,
@@ -195,8 +197,8 @@ function resize_renderer(renderer) {
 function animate(time) {
 	controls.update();
 
-	const nominal_satellite_pos = nominal_orbit.get_pos_from_t(time);
-
+	const satpos = nominal_orbit.get_pos_from_mean_anomaly(time * 0.001);
+	orbiter.position.set(satpos[0] * GRAPHICS_SCALE, satpos[1] * GRAPHICS_SCALE, satpos[2] * GRAPHICS_SCALE);
 }
 
 function render(time) {
@@ -225,6 +227,19 @@ function create_earth() {
 
 	const mesh = new THREE.Mesh(geometry, material);
 	return mesh;
+}
+
+function create_orbiter() {
+	const colors = new Uint8Array(2);
+	colors[0] = 255;
+	colors[1] = 255;
+
+	const dotGeometry = new THREE.BufferGeometry();
+	dotGeometry.setAttribute('position', new THREE.BufferAttribute(new Float32Array([0,0,0]), 3));
+	const dotMaterial = new THREE.PointsMaterial({ size: 10.0, color: 0xffffff, sizeAttenuation: false });
+	const dot = new THREE.Points(dotGeometry, dotMaterial);
+
+	return dot;
 }
 
 /** 
@@ -267,6 +282,7 @@ function create_orbit_geometry(orbit, mat) {
 function main() {
 	scene.add(earth);
 	scene.add(orbit_geom);
+	scene.add(orbiter);
 
 	requestAnimationFrame(render);
 }

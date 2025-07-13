@@ -19,6 +19,9 @@ public:
 
 	void generate(const std::string& dir, const std::string& out_dir);
 
+	std::string rfc822_month(int month);
+
+	void generate_rss(const std::string& out_file);
 	void generate_misc(const std::string& out_file, 
 			Theme& theme, Theme& list_theme, const std::string& cur_cat);
 

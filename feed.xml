@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+<channel>
+<title>Tatjam's Blog</title>
+<description>Tatjam's Blog</description>
+<link>https://tatjam.github.io</link>
+<atom:link href="https://tatjam.github.io/feed.xml" rel="self" type="application/rss+xml" />
+<item>
+<title>Introducing OSPGL</title>
+<link>https://tatjam.github.io/Gamedev/introducing-ospgl.html</link>
+<guid>https://tatjam.github.io/Gamedev/introducing-ospgl.html</guid>
+<pubDate>2019-11-30 00:00:00 GMT</pubDate>
+</item>
+<item>
+<title>Models and Vehicles</title>
+<link>https://tatjam.github.io/Gamedev/models-and-vehicles.html</link>
+<guid>https://tatjam.github.io/Gamedev/models-and-vehicles.html</guid>
+<pubDate>2019-12-22 00:00:00 GMT</pubDate>
+</item>
+<item>
+<title>Early 2020 progress</title>
+<link>https://tatjam.github.io/Gamedev/ospgl-progress.html</link>
+<guid>https://tatjam.github.io/Gamedev/ospgl-progress.html</guid>
+<pubDate>2020-04-06 00:00:00 GMT</pubDate>
+</item>
+<item>
+<title>Enter the Editor</title>
+<link>https://tatjam.github.io/Gamedev/enter-the-editor.html</link>
+<guid>https://tatjam.github.io/Gamedev/enter-the-editor.html</guid>
+<pubDate>2020-06-03 00:00:00 GMT</pubDate>
+</item>
+<item>
+<title>Label Generator</title>
+<link>https://tatjam.github.io/Chemistry/label-generator.html</link>
+<guid>https://tatjam.github.io/Chemistry/label-generator.html</guid>
+<pubDate>2021-06-21 00:00:00 GMT</pubDate>
+</item>
+<item>
+<title>Two years of progress</title>
+<link>https://tatjam.github.io/Gamedev/two-years-of-progress.html</link>
+<guid>https://tatjam.github.io/Gamedev/two-years-of-progress.html</guid>
+<pubDate>2022-05-15 00:00:00 GMT</pubDate>
+</item>
+<item>
+<title>Roadway to Release</title>
+<link>https://tatjam.github.io/Gamedev/roadway-to-release.html</link>
+<guid>https://tatjam.github.io/Gamedev/roadway-to-release.html</guid>
+<pubDate>2023-02-08 00:00:00 GMT</pubDate>
+</item>
+<item>
+<title>Understanding undersampling - 1</title>
+<link>https://tatjam.github.io/Mathematics/fourier1.html</link>
+<guid>https://tatjam.github.io/Mathematics/fourier1.html</guid>
+<pubDate>2025-04-21 00:00:00 GMT</pubDate>
+</item>
+</channel>
+</rss>

@@ -3,6 +3,7 @@
 #include <iostream>
 #include <vector>
 #include <algorithm>
+#include <assert.h>
 
 #include "util.h"
 
@@ -166,6 +167,8 @@ void Generator::generate(const std::string& dir, const std::string& out_dir)
 	Theme list_theme = Theme(load_file("res/theme/list.html"));
 	Theme cat_theme = Theme(load_file("res/theme/category.html"));
 
+	generate_rss(out_dir + "/feed.xml");
+
 	// Now generate category pages and the index page, and we are done
 	generate_misc(out_dir + "/index.html", index_theme, list_theme, "");
 
@@ -174,4 +177,56 @@ void Generator::generate(const std::string& dir, const std::string& out_dir)
 		generate_misc(out_dir + "/category-" + pair.first + ".html", cat_theme, list_theme, pair.first);
 	}
 
+}
+std::string Generator::rfc822_month(int month)
+{
+	assert(0 < month && month < 13);
+	switch (month)
+	{
+		case 1: return "Jan";
+		case 2: return "Feb";
+		case 3: return "Mar";
+		case 4: return "Apr";
+		case 5: return "May";
+		case 6: return "Jun";
+		case 7: return "Jul";
+		case 8: return "Aug";
+		case 9: return "Sep";
+		case 10: return "Oct";
+		case 11: return "Nov";
+		case 12: return "Dec";
+		default: return "INVALID";
+	}
+}
+
+void Generator::generate_rss(const std::string &out_file)
+{
+	std::string rss;
+
+	rss=
+		"<?xml version=\"1.0\" encoding=\"utf-8\"?>\n"
+		"<rss version=\"2.0\" xmlns:atom=\"http://www.w3.org/2005/Atom\">\n"
+		"<channel>\n"
+		"<title>Tatjam's Blog</title>\n"
+		"<description>Tatjam's Blog</description>\n"
+		"<link>https://tatjam.github.io</link>\n"
+		"<atom:link href=\"https://tatjam.github.io/feed.xml\" rel=\"self\" type=\"application/rss+xml\" />\n";
+
+
+	for (const auto& post : posts)
+	{
+		std::string link = "https://tatjam.github.io/" + post.url;
+		// Simplified RFC 822, probably works
+		std::string date = std::to_string(post.day) + " " + rfc822_month(post.month) + " " + std::to_string(post.year);
+		rss += "<item>\n";
+		rss += "<title>" + post.title + "</title>\n";
+		rss += "<link>" + link + "</link>\n";;
+		rss += "<guid>" + link + "</guid>\n";
+		rss += "<pubDate>" + post.date + " 00:00:00 GMT</pubDate>\n";
+		rss += "</item>\n";
+	}
+
+	rss += "</channel>\n</rss>";
+
+	write_file(out_file, rss);
 }

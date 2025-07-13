@@ -21,7 +21,7 @@ The origin of this force is the fact that light carries momentum. It's useful, b
 - Inelastic (equivalent to a perfectly black surface), where the balls stick to our spacecraft.
 - A mix between the two.
 
-The direction of the reflected balls will be assumed to respect an ideal collision with a flat plane, which is equivalent to assuming fully specular reflections. In reality, solar sail models consider a mixture between diffuse and specular reflections, and also consider transmission and diffraction [^1].
+The direction of the reflected balls will be assumed to obey an ideal collision with a flat plane, which is equivalent to assuming fully specular reflections. In reality, solar sail models consider a mix between diffuse and specular reflections, and also consider transmission and diffraction [^1].
 
 [^1]: Samuel M. Thompson, Nishanth Pushparaj, Chantal Cappelletti, *Reflective and transmissive solar sails: Dynamics, flight regimes and applications*.
 
@@ -29,7 +29,7 @@ The direction of the reflected balls will be assumed to respect an ideal collisi
 
 For simplicity, we may consider our solar sail to be a perfectly flat rectangle of area \\(A\\) with its normal vector pointing in direction \\(𝐧\\). We will assume that only solar radiation is meaningful, and it comes from a fixed direction \\(𝐬\\). The reflectivity of the sail is given by \\( ϵ ∈ [0, 1] \\), with 0 meaning the sail is perfectly black, and 1 meaning it's perfectly reflective.
 
-The first component of the solar radiation force is that given by absorption of the light. The total quantity of light absorbed is 
+The first component of the solar radiation force is that given by absorption of the light. The total quantity of light absorbed is proportional to  
 
 $$
     ϕ_a = A \abs{𝐧 ⋅𝐬}, 
@@ -43,7 +43,7 @@ $$
     ϕ_r = ϵ ϕ_a.
 $$
 
-Now, the momentum transfer is proportional to the quantity of light absorbed / reflected, and the momentum it carries. We may write the quantity of momentum per unit light as \\(p\\). Then, by Newton's second law, the force acting on our body due to absorption is
+Now, the momentum transfer is proportional to the quantity of light absorbed / reflected, and the momentum it carries. We may write the quantity of momentum carried by the light per unit area as \\(p\\). Then, by Newton's second law, the force acting on our body due to absorption is
 
 $$
     𝐅_a = ϕ_a p 𝐬.
@@ -105,9 +105,9 @@ This interesting thrust envelope makes the design of solar sail spacecraft missi
 
 # Optimal control of a solar sail
 
-Now, back to the title of the blogpost. Given a solar sail of reflectivity \\( ϵ \\), which we assume to be freely maneouverable, how far can we maneouver on a given time limit? First of all, we need to more rigorously define what we mean by "far". We will consider the problem of changing the orbit's radius, as it sort of represents a maximal maneouver [^2]. 
+Now, back to the title of the blogpost. Given a solar sail of reflectivity \\( ϵ \\), which we assume to be freely maneouverable, how far can we maneouver on a given time limit? First of all, we need to more rigorously define what we mean by "far". We will consider the problem of changing the orbit's energy, as it sort of represents a maximal maneouver [^2]. 
 
-[^2]: Note that there exist many maneouvers which don't change the radius of the orbit, but are nonetheless very useful. Such an example is a plane change maneouver. For simplicity, we will only consider this simple case of increasing the orbit's radius. 
+[^2]: Note that there exist many maneouvers which don't change the energy of the orbit, but are nonetheless very useful. Such an example is a plane change maneouver. For simplicity, we will only consider this simple case of changing the orbit's energy. 
 
 The specific energy of the orbit (energy per unit mass), which is constant if no maneouvers are applied, is defined as 
 
@@ -181,7 +181,7 @@ $$
     F_t = 𝐅 ⋅ 𝐭 = p A (1 - ϵ) \abs{\cos(α)} \sin(α).
 $$
 
-Note in this last expression that \\(𝐭\\) is formed by rotating \\(𝐧\\) by 90 degrees on the counter-clockwise direction, thus \\(𝐧 ⋅ 𝐭 = 0\\) and \\(𝐭 ⋅ 𝐬 = \cos(α - \frac{π}{2}) = \sin(α) \\). Intuitively, a fully specular reflective sail will only generate a force normal to itself (i.e. a pure pressure force), while a non-fully reflective sail will experience a tangential force on its surface. Note also that a reflective solar sail will always have a component of the force in the direction of the reflected light, instead of on the opposite direction (as one may be led to believe by quick intuition if you forget to consider the incident light), as the reflectivity \\( ϵ \\) may not be greater than 1.
+Note in this last expression that \\(𝐭\\) is formed by rotating \\(𝐧\\) 90 degrees on the counter-clockwise direction, thus \\(𝐧 ⋅ 𝐭 = 0\\) and \\(𝐭 ⋅ 𝐬 = \cos(α - \frac{π}{2}) = \sin(α) \\). Intuitively, a fully specular reflective sail will only generate a force normal to itself (i.e. a pure pressure force), while a non-fully reflective sail will experience a tangential force on its surface. Note also that a reflective solar sail will always have a component of the force in the direction of the reflected light, instead of on the opposite direction (as one may be led to believe by quick intuition if you forget to consider the incident light), as the reflectivity \\( ϵ \\) may not be greater than 1.
 
 We may consider \\( θ = 0 \\) to represent the direction of the sun, which shall remain fixed (this is of course, slightly unrealistic), and the orbit to take place in a counter-clockwise motion. Projecting the different vectors with the help of the diagram, we may write 
 
@@ -195,7 +195,7 @@ $$
 
 ## The Hamiltonian
 
-To find the optimal \\( α \\), we will maximize the energy of the orbit after time \\( t_f \\). We will follow a standard optimization procedure [^5]. To do so, we must introduce a Hamiltonian for the system
+To find the optimal \\( α \\), we will find a extremum of the energy of the orbit after time \\( t_f \\). We will follow a standard optimization procedure [^5]. To do so, we must introduce a Hamiltonian for the system
 
 [^5]: A. E. Bryson, *Applied Optimal Control Optimization, Estimation and Control*, Chapter 2
 
@@ -224,7 +224,7 @@ $$
     .
 $$
 
-Note that, for typical optimization problems, it's not neccesary to include \\( θ \\) in the Hamiltonian <sup>4</sup>, as it doesn't appear in the equations of motion nor is its value of particular importance for the problem. In our case, this angle is neccesary as the solar sail force greatly depends on its value. 
+Note that, for typical optimization problems, it's not neccesary to include \\( θ \\) in the Hamiltonian <sup>4</sup>, as it doesn't appear in the equations of motion nor is of particular importance for common reaction based thrusters. In our case, this angle is neccesary as the solar sail force greatly depends on its value. 
 
 ## Lagrange multipliers
 
@@ -269,7 +269,13 @@ $$
 With this expression, we set the boundary conditons for 𝛌. Now, its evolution equation can be found by obtaining the gradient of the Hamiltonian with respect to the state vector. Using the definition of the Hamiltonian as \\( H = 𝛌 ⋅ 𝐟 \\), we can write
 
 $$
-    \dv{𝛌}{t} = - \begin{pmatrix}
+    \dv{𝛌}{t} = \dv{}{t}\begin{pmatrix}
+        λ_r \\
+        λ_θ \\
+        λ_{v_s} \\
+        λ_{v_r}
+    \end{pmatrix}
+    = - \begin{pmatrix}
         λ_r \\
         λ_θ \\
         λ_{v_s} \\ 
@@ -302,27 +308,37 @@ $$
     \end{pmatrix}.
 $$
 
-We just have to substitute the partial derivatives of \\(F_s\\) and \\(F_r\\), which are
+Note that the evolution equations for 𝛌 are valid for any 2D solar sail problem [^6], regardless of what we want to maximize. By assuming the thrust forces \\(F_s\\) and \\(F_r\\) to be independent of θ, you can check that this system reduces to the one given in <sup>4</sup>.
 
-$$
-
-$$
-
-Note that the evolution equations for 𝛌 are valid for any problem. By ignoring the terms that depend on θ, you can check that this system reduces to the one given in <sup>4</sup>.
+[^6]: Actually, this is only true if the "performance index" function depends only on the final value of the system. Such a function may also depend on the evolution of the system, and then these expressions will not be sufficient.
 
 ## Finding the optimal control law
 
 We can find this control law by setting the partial of the Hamiltonian with respect to the control input equal to zero. As only two terms depend on α, this reduces to 
 
 $$
-    \pdv{H}{α} = \frac{λ_{v_s}}{m} \pdv{F_s}{α} + \frac{λ_{v_r}}{m} \pdv{F_r}{α} = 0 
+    \pdv{H}{α} = \frac{λ_{v_s}}{m} \pdv{F_s}{α} + \frac{λ_{v_r}}{m} \pdv{F_r}{α} = 0.
 $$
 
+Evaluating the partial derivatives, and assuming that \\( α ∈ \left(-\frac{π}{2}, \frac{π}{2}\right)\\), such that \\( \abs{ \cos α } = \cos α \\) (i.e. get rid of the piece-wise defined derivative of the absolute value), we may write the control law as
+
+$$
+    (\cos(α) + 3 \cos(3 α)) ( λ_{v_s} \cos(θ) + λ_{v_r} \sin(θ)) = 2 \sin(α)(2 + ϵ + 3 \cos(2 α))(λ_{v_r} \cos(θ) - λ_{v_s} \sin(θ)) 
+$$
+
+This unwieldy expression, as expected, cannot be solved easily for α, and numerical methods will be used. Alternatively, we could assume small α, and linearize the expressions. Once again, note that this control law is valid for all solar sail maneouvers, regardless of what we want to maximize <sup>6</sup>. It's the values of 𝛌 which determine the actual control law.
+
+## Shooting method
+
+The "dynamic equations" for 𝛌, alongside the control law and the equations of motion may be solved at once. We know the initial conditions for the state of the system, and the ending condition for the 𝛌 equations. This means that the system is not an initial value problem, but instead a more complex, boundary value problem. We will use the shooting method to solve it, as sadly Mathematica is not able to automatically tackle this problem! 
+
+The shooting method consists, in essence, of trial and error. We consider some initial values for 𝛌, solve the system, and then compare the final values for 𝛌 with the desired ones. We can use a root finding algorithm to do so, instead of just trying randomly. Some root finding methods rely on a derivative of the final conditions of the system with respect to the initial values existing and being easily obtainable. One could imagine solving the equations with automatic differentiation, but such a task is hugely complex.
+
+Instead, we are going to use a secant method, where we estimate the derivative by sampling nearby points.
 
 
-## Solving the system
+# Future work
 
-The "dynamic equations" for 𝛌, alongside the 
+With the objective of achieving useful analytical results, it would be interesting to perform a linearized analysis of this system, as the series expansion of the problem with respect to α is relatively simple. This is not as straightforward as it may seem, as linearizing the control law may lead to nonsensical results, unless we constrain the input α to be small. This constraint may induce big nonlinearity, that could lead once more to losing the ability to achieve analytical results.
 
 
-## Linearized solution

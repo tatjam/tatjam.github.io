@@ -10,48 +10,64 @@
 <link>https://tatjam.github.io/Gamedev/introducing-ospgl.html</link>
 <guid>https://tatjam.github.io/Gamedev/introducing-ospgl.html</guid>
 <pubDate>2019-11-30 00:00:00 GMT</pubDate>
+<description>OSPGL (OSP + OpenGL) is an ongoing attempt at creating a game similar to Squad's Kerbal Space Program, focusing on perfomance and moddability</description>
+<category>Gamedev</category>
 </item>
 <item>
 <title>Models and Vehicles</title>
 <link>https://tatjam.github.io/Gamedev/models-and-vehicles.html</link>
 <guid>https://tatjam.github.io/Gamedev/models-and-vehicles.html</guid>
 <pubDate>2019-12-22 00:00:00 GMT</pubDate>
+<description>An introduction to Vehicles and Model loading in OSPGL</description>
+<category>Gamedev</category>
 </item>
 <item>
 <title>Early 2020 progress</title>
 <link>https://tatjam.github.io/Gamedev/ospgl-progress.html</link>
 <guid>https://tatjam.github.io/Gamedev/ospgl-progress.html</guid>
 <pubDate>2020-04-06 00:00:00 GMT</pubDate>
+<description>A summary of the progress that has happened since the last blogpost</description>
+<category>Gamedev</category>
 </item>
 <item>
 <title>Enter the Editor</title>
 <link>https://tatjam.github.io/Gamedev/enter-the-editor.html</link>
 <guid>https://tatjam.github.io/Gamedev/enter-the-editor.html</guid>
 <pubDate>2020-06-03 00:00:00 GMT</pubDate>
+<description>The last two months of progress feature the beginnings of the editor, among other changes</description>
+<category>Gamedev</category>
 </item>
 <item>
 <title>Label Generator</title>
 <link>https://tatjam.github.io/Chemistry/label-generator.html</link>
 <guid>https://tatjam.github.io/Chemistry/label-generator.html</guid>
 <pubDate>2021-06-21 00:00:00 GMT</pubDate>
+<description>A chemical label generator designed with ease of use and beautiful labels in mind</description>
+<category>Chemistry</category>
 </item>
 <item>
 <title>Two years of progress</title>
 <link>https://tatjam.github.io/Gamedev/two-years-of-progress.html</link>
 <guid>https://tatjam.github.io/Gamedev/two-years-of-progress.html</guid>
 <pubDate>2022-05-15 00:00:00 GMT</pubDate>
+<description>Almost 2 years have passed since last blogpost, but the project has kept on going!</description>
+<category>Gamedev</category>
 </item>
 <item>
 <title>Roadway to Release</title>
 <link>https://tatjam.github.io/Gamedev/roadway-to-release.html</link>
 <guid>https://tatjam.github.io/Gamedev/roadway-to-release.html</guid>
 <pubDate>2023-02-08 00:00:00 GMT</pubDate>
+<description>A summary of progress over the last year, and an overview of what's to come</description>
+<category>Gamedev</category>
 </item>
 <item>
 <title>Understanding undersampling - 1</title>
 <link>https://tatjam.github.io/Mathematics/fourier1.html</link>
 <guid>https://tatjam.github.io/Mathematics/fourier1.html</guid>
 <pubDate>2025-04-21 00:00:00 GMT</pubDate>
+<description>Using the Fourier transform and interactive graphics to intuitively understand undersampling transmitters</description>
+<category>Mathematics</category>
 </item>
 </channel>
 </rss>

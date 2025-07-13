@@ -223,6 +223,8 @@ void Generator::generate_rss(const std::string &out_file)
 		rss += "<link>" + link + "</link>\n";;
 		rss += "<guid>" + link + "</guid>\n";
 		rss += "<pubDate>" + post.date + " 00:00:00 GMT</pubDate>\n";
+		rss += "<description>" + post.summary + "</description>\n";
+		rss += "<category>" + post.category + "</category>\n";
 		rss += "</item>\n";
 	}
 

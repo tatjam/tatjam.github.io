@@ -1,6 +1,6 @@
 Where can a solar sail go?
 2025-06-18
-Exploring solar sails and optimal control applied to a simplified case.
+Exploring solar sails and optimal control applied to a simplified case, including an intuitive introduction to the calculus of variations
 #
 <script type="importmap">
 	{
@@ -21,9 +21,8 @@ The origin of this force is the fact that light carries momentum. It's useful, b
 - Inelastic (equivalent to a perfectly black surface), where the balls stick to our spacecraft.
 - A mix between the two.
 
-The direction of the reflected balls will be assumed to obey an ideal collision with a flat plane, which is equivalent to assuming fully specular reflections. In reality, solar sail models consider a mix between diffuse and specular reflections, and also consider transmission and diffraction [^1].
+The direction of the reflected balls will be assumed to obey an ideal collision with a flat plane, which is equivalent to assuming fully specular reflections. In reality, solar sail models consider a mix between diffuse and specular reflections, and also consider transmission and diffraction [1].
 
-[^1]: Samuel M. Thompson, Nishanth Pushparaj, Chantal Cappelletti, *Reflective and transmissive solar sails: Dynamics, flight regimes and applications*.
 
 # A very simple model of a solar sail
 
@@ -105,31 +104,13 @@ This interesting thrust envelope makes the design of solar sail spacecraft missi
 
 # Optimal control of a solar sail
 
-Now, back to the title of the blogpost. Given a solar sail of reflectivity \\( ϵ \\), which we assume to be freely maneouverable, how far can we maneouver on a given time limit? First of all, we need to more rigorously define what we mean by "far". We will consider the problem of changing the orbit's energy, as it sort of represents a maximal maneouver [^2]. 
+Now, back to the title of the blogpost. Given a solar sail of reflectivity \\( ϵ \\), which we assume to be freely maneouverable, how far can we maneouver on a given time limit? First of all, we need to more rigorously define what we mean by "far". We will consider the problem of maximizing the orbit's radius after some given time \\( t_f \\), as it sort of represents a maximal maneouver [^offplane-man]. 
 
-[^2]: Note that there exist many maneouvers which don't change the energy of the orbit, but are nonetheless very useful. Such an example is a plane change maneouver. For simplicity, we will only consider this simple case of changing the orbit's energy. 
-
-The specific energy of the orbit (energy per unit mass), which is constant if no maneouvers are applied, is defined as 
-
-$$
-    E = \frac{1}{2} \norm{𝐯}^2 - \frac{μ}{\norm{𝐫}} = \frac{1}{2} 𝐯 ⋅ 𝐯 - \frac{μ}{\sqrt{𝐫 ⋅ 𝐫}},
-$$
-
-where \\(μ = G M \\) is the gravitational parameter of Earth.
-
-Now consider a small change in velocity \\(\dd{𝐯}\\), the change in energy due to this change will be [^3]
-
-$$
-    \dd{E} = \pdv{E}{𝐯} ⋅\dd{𝐯} = \pdv{(\frac{1}{2} 𝐯 ⋅ 𝐯)}{𝐯} ⋅ \dd{𝐯} = 𝐯 ⋅ \dd{𝐯}. 
-$$
-
-It's thus apparent that a maximal change in energy happens if the thrust is aligned with velocity, and furthermore, the higher the velocity, the higher energy change we impart. This is the Oberth effect, which justifies why maneouvers are preferentially carried out near the periapsis of the central body. 
-
-[^3]: Note that \\( \pdv{E}{𝐯} \\) is really the gradient of \\( E \\) with respect to velocity, but as the gradient is usually taken with respect to space, I've chosen to use this partial derivative notation.
+[^offplane-man]: Note that there exist many maneouvers which don't change the radius of the orbit, but are nonetheless very useful. Such an example is a plane change maneouver. For simplicity, we will only consider this case. 
 
 ## Equations of motion
 
-The problem is that, with our solar sail, we won't always be able to offer maximal thrust in the direction of velocity. For simplicity, we will consider the 2D problem where the solar sail orientation is fully characterized by a single angle. We will consider such angle to be \\(α\\), which represents the angle between the solar sail's normal vector and the spacecraft-sun vector. This will be the "control input" to our problem.
+We will consider the 2D problem where the solar sail orientation is fully characterized by a single angle, as this greatly simplifies the mathematics. We will consider such angle to be \\(α\\), which represents the angle between the solar sail's normal vector and the spacecraft-sun vector. This will be the "control input" to our problem.
 
 This allows us to rewrite the thrust of the solar sail as 
 
@@ -137,22 +118,31 @@ $$
     𝐅 = p A \abs{\cos(α)} (𝐬 - ϵ ( 𝐬 - 2 \cos(α) 𝐧 )) = p A \abs{cos(α)} ( (1 - ϵ) 𝐬 + 2 \cos(α) 𝐧).
 $$
 
-We will write the dynamic equations in the RSW coordinate system [^4]. This is formed by:
+We will write the dynamic equations in the RSW coordinate system [2]. This is formed by:
 
-[^4]: David A. Vallado and Wayne D. McClain, *Fundamentals of Astrodynamics and Applications*.
 
 - The radial (R) component, which points away from the center of the Earth.
 - The in-track (S) component, which points in the direction of velocity, perpendicular to R.
 - The normal (W) component, which is aligned with the normal vector of the plane that contains the orbit.
 
 
-Note that, by considering a 2D orbit, we may disregard the normal component. In such a system, the state variables for the space-craft are the distance to the earth \\(r\\), the angle from a given reference direction \\(θ\\), and the velocities in the radial direction \\(v_r\\) and the in-track direction \\(v_s\\). We can write the dynamic equations as <sup>4</sup>
+Note that, by considering a 2D orbit, we may disregard the normal component. In such a system, the state variables for the space-craft are:
+
+- The distance to the earth \\(r\\).
+- The angle \\( θ \\) formed by the line joining the centre of the earth and the spacecraft, and a line in a given reference direction.
+- The velocity in the radial direction \\(v_r\\).
+- The velocity in the in-track direction \\(v_s\\). 
+
+We will refer to these four quantities as the vector \\( 𝐱 \\), which is known as the state vector.
+
+
+We can write the dynamic equations as [2]
 
 $$
     \dv{r}{t} = v_r, \quad \dv{θ}{t} = \frac{v_s}{r}.
 $$
 
-Newton's second law can be written as <sup>4</sup> 
+Newton's second law can be written as [2] 
 
 $$
     \dv{v_s}{t} = - \frac{v_r v_s}{r} + \frac{F_s}{m},
@@ -162,9 +152,7 @@ $$
     \dv{v_r}{t} = \frac{v_s^2}{r} - \frac{μ}{r^2} + \frac{F_r}{m},
 $$
 
-where \\(m\\) is the mass of the spacecraft, which is assumed to remain constant. 
-
-We have to decompose the solar sail force into the in-track \\(F_s\\) and radial \\(F_r\\) components. To do so, first consider the following decomposition of the thrust:
+where \\(m\\) is the mass of the spacecraft, which is assumed to remain constant. \\( F_s \\) and \\( F_r \\) represent the forces generated by the solar sail, in the in-track and radial components respectively. To expand the force in these two components, first consider the following decomposition in solar-sail relative coordinates:
 
 
 <img src="/Mathematics/solar-sail-img/solar-sail-schematic-1.svg" style="width:60%"></img>
@@ -181,9 +169,11 @@ $$
     F_t = 𝐅 ⋅ 𝐭 = p A (1 - ϵ) \abs{\cos(α)} \sin(α).
 $$
 
-Note in this last expression that \\(𝐭\\) is formed by rotating \\(𝐧\\) 90 degrees on the counter-clockwise direction, thus \\(𝐧 ⋅ 𝐭 = 0\\) and \\(𝐭 ⋅ 𝐬 = \cos(α - \frac{π}{2}) = \sin(α) \\). Intuitively, a fully specular reflective sail will only generate a force normal to itself (i.e. a pure pressure force), while a non-fully reflective sail will experience a tangential force on its surface. Note also that a reflective solar sail will always have a component of the force in the direction of the reflected light, instead of on the opposite direction (as one may be led to believe by quick intuition if you forget to consider the incident light), as the reflectivity \\( ϵ \\) may not be greater than 1.
+Note in this last expression that \\(𝐭\\) is formed by rotating \\(𝐧\\) 90 degrees on the counter-clockwise direction, thus \\(𝐧 ⋅ 𝐭 = 0\\) and \\(𝐭 ⋅ 𝐬 = \cos(α - \frac{π}{2}) = \sin(α) \\). Intuitively, a fully specular reflective sail will only generate a force normal to itself (i.e. a pure pressure force), while a non-fully reflective sail will experience a tangential force on its surface. 
 
-We may consider \\( θ = 0 \\) to represent the direction of the sun, which shall remain fixed (this is of course, slightly unrealistic), and the orbit to take place in a counter-clockwise motion. Projecting the different vectors with the help of the diagram, we may write 
+We may consider \\( θ = 0 \\) to represent the direction of the sun, which shall remain fixed (this is of course, slightly unrealistic), and the orbit to take place in a counter-clockwise motion. With these assumptions, we can draw the following diagram:
+
+Projecting the different vectors with the help of the diagram, we can write 
 
 $$
     F_r = F_n \cos(α - θ) - F_t \cos\left( \frac{π}{2} - (α - θ)\right) = F_n \cos (α - θ) - F_t \sin(α - θ),
@@ -193,15 +183,40 @@ $$
     F_s = F_n \cos\left(\frac{π}{2} - (α - θ)\right) + F_t \cos(α - θ) = F_n \sin(α - θ) + F_t \cos(α - θ).
 $$
 
-## The Hamiltonian
-
-To find the optimal \\( α \\), we will find a extremum of the energy of the orbit after time \\( t_f \\). We will follow a standard optimization procedure [^5]. To do so, we must introduce a Hamiltonian for the system
-
-[^5]: A. E. Bryson, *Applied Optimal Control Optimization, Estimation and Control*, Chapter 2
+Plugging these expressions into Newton's second law yields the system of equations for our problem, in function of the state variables, and also the control variable \\( α \\). This allows us to express the system in state-vector notation as 
 
 $$
-    H(t) = 𝛌(t) ⋅ 𝐟(𝐱(t), α(t), t),
+    \pdv{𝐱}{t} = 𝐟(𝐱(t), α(t), t) = .
 $$
+
+## The Calculus of Variations
+
+To find the optimal \\( α \\), we will find a extremum of the radius of the orbit after time \\( t_f \\). We will follow a standard optimization procedure [3], which is known as the method of Lagrange multipliers. But, before just applying the method, let's try to find some intuition behind its mathematics.
+
+
+First of all, we need to write down what exactly we wish to maximize. This is straight-forward, as the radius of the orbit is one of the state variables, so we simply need to "pick it out" of the state vector: 
+
+$$
+    J(𝐱(t)) = \begin{pmatrix} 1 & 0 & 0 & 0 \end{pmatrix}^T ⋅ 𝐱(t),
+$$
+
+We aim to maximize this \\( J \\), known as the performance index, at \\( t = t_f \\), by varying the control law \\( α(t) \\). This seemingly simple expression hides an integral, as, by the fundamental theorem of calculus,
+
+$$
+    𝐱(t_f) = 𝐱(x_0) + ∫_{t_0}^{t_f} 𝐟\left(𝐱(t), α(t), t\right) \dd{t}.
+$$
+
+So really, the value of our performance index at \\( t = t_f \\) only depends on the initial values for \\( 𝐱 \\) and the control law \\( α(t) \\), and it must be maximized against the later. We will write this dependency of the final value of \\( J \\) on \\( α(t) \\) as \\( J[α] \\). It's implicit that the evaluation of \\( J \\) is done at \\( t_f \\), but do remember that this final value depends on the entire \\( α(t) \\), not only its final value!
+
+What does it mean to maximize a function against another? Here's where the calculus of variations enters the picture. \\( J \\) is not a conventional function, as it maps each possible control law, \\( α(t) \\), to a value, the radius of the orbit at time \\( t_f \\). These type of functions which map other functions to scalar values are known as *functionals*.
+
+Imagine that we have found an \\( α_o(t) \\) which maximizes the performance index. By definition, any small change in the control law will result in a worse performance index, that is, for any \\( α(t) = α_o (t) + ϵ h(t) \\), \\( J[α] ≤ J[α_o] \\) [^lim].
+
+[^lim]: This inequality holds as \\( ϵ → 0 \\), as otherwise we would be stating that \\( α_o(t) \\) is *globally* optimal, while we only care about it being locally optimal.
+
+Maybe this fact allows us to find a way to determine \\( α_o(t) \\)? 
+
+
 
 where \\( 𝛌 \\) is known as the lagrange multiplier vector (which we will explain later), and \\( 𝐟 \\) is the rate of change of the state vector of the system at each of its points. We can write down both vectors and carry out the dot product, to find the Hamiltonian
 
@@ -224,17 +239,17 @@ $$
     .
 $$
 
-Note that, for typical optimization problems, it's not neccesary to include \\( θ \\) in the Hamiltonian <sup>4</sup>, as it doesn't appear in the equations of motion nor is of particular importance for common reaction based thrusters. In our case, this angle is neccesary as the solar sail force greatly depends on its value. 
+Note that, for typical optimization problems, it's not neccesary to include \\( θ \\) in the Hamiltonian [2], as it doesn't appear in the equations of motion nor is of particular importance for common reaction based thrusters. In our case, this angle is neccesary as the solar sail force greatly depends on its value. 
 
 ## Lagrange multipliers
 
-The Hamiltonian defined before is useful, as finding its extremum guarantees that we find an extremum of the "performance index" <sup>5</sup>
+The Hamiltonian defined before is useful, as finding its extremum guarantees that we find an extremum of the "performance index" [3]
 
 $$
     \bar{J} = ϕ(𝐱(t_f), t_f) - 𝛌(t_f) ⋅𝐱(t_f) + 𝛌(t_0) ⋅ 𝐱(t_0) + ∫_{t_0}^{t_f} (H + \dv{𝛌}{t} ⋅ 𝐱) \dd{t}.
 $$
 
-We will demonstrate so, as done in <sup>5</sup>. Consider the variation of this index with a small change in control input, \\( \var{α} \\), and the induced change in state vector \\( \var{𝐱} \\). We assume the state vector at \\( t_0 \\) remains fixed. These variations cause a change in \\( \bar{J} \\) over the same interval of time as before,
+We will demonstrate so, as done in [3]. Consider the variation of this index with a small change in control input, \\( \var{α} \\), and the induced change in state vector \\( \var{𝐱} \\). We assume the state vector at \\( t_0 \\) remains fixed. These variations cause a change in \\( \bar{J} \\) over the same interval of time as before,
 
 $$
     \var{\bar{J}} = \eval{\pdv{ϕ}{𝐱}}_{t_f} ⋅ \var{𝐱} - 𝛌(t_f) ⋅ \var{𝐱} + ∫_{t_0}^{t_f} \left( \pdv{H}{𝐱} ⋅ \var{𝐱} + \pdv{H}{α} \var{α} + \dv{𝛌}{t} ⋅ \var{𝐱} \right)\dd{t}.
@@ -308,9 +323,9 @@ $$
     \end{pmatrix}.
 $$
 
-Note that the evolution equations for 𝛌 are valid for any 2D solar sail problem [^6], regardless of what we want to maximize. By assuming the thrust forces \\(F_s\\) and \\(F_r\\) to be independent of θ, you can check that this system reduces to the one given in <sup>4</sup>.
+Note that the evolution equations for 𝛌 are valid for any 2D solar sail problem [^perf-index], regardless of what we want to maximize. By assuming the thrust forces \\(F_s\\) and \\(F_r\\) to be independent of θ, you can check that this system reduces to the one given in [2].
 
-[^6]: Actually, this is only true if the "performance index" function depends only on the final value of the system. Such a function may also depend on the evolution of the system, and then these expressions will not be sufficient.
+[^perf-index]: Actually, this is only true if the "performance index" function depends only on the final value of the system. Such a function may also depend on the evolution of the system, and then these expressions will not be sufficient.
 
 ## Finding the optimal control law
 
@@ -326,7 +341,7 @@ $$
     (\cos(α) + 3 \cos(3 α)) ( λ_{v_s} \cos(θ) + λ_{v_r} \sin(θ)) = 2 \sin(α)(2 + ϵ + 3 \cos(2 α))(λ_{v_r} \cos(θ) - λ_{v_s} \sin(θ)) 
 $$
 
-This unwieldy expression, as expected, cannot be solved easily for α, and numerical methods will be used. Alternatively, we could assume small α, and linearize the expressions. Once again, note that this control law is valid for all solar sail maneouvers, regardless of what we want to maximize <sup>6</sup>. It's the values of 𝛌 which determine the actual control law.
+This unwieldy expression, as expected, cannot be solved easily for α, and numerical methods will be used. Alternatively, we could assume small α, and linearize the expressions. Once again, note that this control law is valid for all solar sail maneouvers, regardless of what we want to maximize [3]. It's the values of 𝛌 which determine the actual control law.
 
 ## Shooting method
 
@@ -342,3 +357,10 @@ Instead, we are going to use a secant method, where we estimate the derivative b
 With the objective of achieving useful analytical results, it would be interesting to perform a linearized analysis of this system, as the series expansion of the problem with respect to α is relatively simple. This is not as straightforward as it may seem, as linearizing the control law may lead to nonsensical results, unless we constrain the input α to be small. This constraint may induce big nonlinearity, that could lead once more to losing the ability to achieve analytical results.
 
 
+# Bibliography
+
+[1]: Samuel M. Thompson, Nishanth Pushparaj, Chantal Cappelletti, *Reflective and transmissive solar sails: Dynamics, flight regimes and applications*.
+
+[2]: David A. Vallado and Wayne D. McClain, *Fundamentals of Astrodynamics and Applications*.
+
+[3]: A. E. Bryson, *Applied Optimal Control Optimization, Estimation and Control*, Chapter 2

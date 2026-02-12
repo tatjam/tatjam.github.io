@@ -242,6 +242,16 @@ function create_orbiter() {
 	return dot;
 }
 
+function create_sail_envelope(ϵ) {
+	for(var ϕ = 0; ϕ < 2.0 * Math.PI; ϕ+=0.01) 
+	{
+		for(var λ = -Math.PI; λ < Math.PI; λ+=0.01) 
+		{
+			
+		}
+	}
+}
+
 /** 
  * @param {KeplerElements} orbit
  */

@@ -308,7 +308,7 @@ function generate()
     }
 
     var img_url = "https://pubchem.ncbi.nlm.nih.gov/rest/pug/compound/";
-https://pubchem.ncbi.nlm.nih.gov/rest/pug/compound/
+    // https://pubchem.ncbi.nlm.nih.gov/rest/pug/compound/
     if(type == "smiles")
     {
         img_url += "smiles/";

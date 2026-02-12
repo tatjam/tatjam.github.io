@@ -435,4 +435,4 @@ and check the source code at [github](https://github.com/tatjam/tatjam.github.io
 <link rel="stylesheet" href="/external/chemdoodle/ChemDoodleWeb.css" type="text/css">
 <script type="text/javascript" src="/external/chemdoodle/ChemDoodleWeb.js"></script>
 <script src="/external/openbabel/openbabel.js"></script>
-<script src="/external/label-generator.js">
+<script src="/external/label-generator.js"></script>

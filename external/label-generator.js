@@ -36,7 +36,7 @@ function find_ghs(strings, node)
     {
         for(var j = 0; j < strings.length; j++)
         {
-            var str = node[i]["Information"].Name;
+            var str = node[i]["Information"].Name.StringWithMarkup.String;
             if (str.startsWith(strings[j]))
             {
                 return true;
@@ -685,7 +685,7 @@ function load_data(obj)
         $("mmass").innerHTML = "";
     }
 
-    render(obj.IsomericSMILES);
+    render(obj.SMILES);
     data_done = true;
 
     if(clasif_done)

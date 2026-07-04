@@ -30,44 +30,43 @@
 }
 
 @media (prefers-color-scheme: dark) {
-	:root:not([data-theme]) {
-		color-scheme: dark;
-		--paper:      #15171A;
-		--paper-2:    #1C1F23;
-		--ink:        #E9E7DD;
-		--ink-soft:   #C2C4B9;
-		--ink-faint:  #94988F;
-		--amber:      #E3A24B;
-		--amber-dim:  #6B5330;
-		--blue:       #8FBEDD;
-		--rule:       #2B2E32;
-		--code-bg:    #1B1D21;
+    :root:not([data-theme]) {
+        color-scheme: dark;
+        --paper:          #24272c; 
+        --paper-2:        #2d3137; 
+        --ink:            #E4E2D7; 
+        --ink-soft:       #B5B7AC; 
+        --ink-faint:      #868a81; 
+        --amber:          #E9AE5A; 
+        --amber-dim:      #7c623d; 
+        --blue:           #A3CDEB; 
+        --rule:           #3a3e46; 
+        --code-bg:        #2a2e34; 
 
-		--ink-rgb:        233, 231, 221;
-		--ink-faint-rgb:  148, 152, 143;
-		--blue-rgb:       143, 190, 221;
-		--amber-rgb:      227, 162, 75;
-	}
-
+        --ink-rgb:        228, 226, 215;
+        --ink-faint-rgb:  134, 138, 129;
+        --blue-rgb:       163, 205, 235;
+        --amber-rgb:      233, 174, 90;
+    }
 }
 
 :root[data-theme="dark"] {
-	color-scheme: dark;
-	--paper:      #15171A;
-	--paper-2:    #1C1F23;
-	--ink:        #E9E7DD;
-	--ink-soft:   #C2C4B9;
-	--ink-faint:  #94988F;
-	--amber:      #E3A24B;
-	--amber-dim:  #6B5330;
-	--blue:       #8FBEDD;
-	--rule:       #2B2E32;
-	--code-bg:    #1B1D21;
+    color-scheme: dark;
+    --paper:          #24272c;
+    --paper-2:        #2d3137;
+    --ink:            #E4E2D7;
+    --ink-soft:       #B5B7AC;
+    --ink-faint:      #868a81;
+    --amber:          #E9AE5A;
+    --amber-dim:      #7c623d;
+    --blue:           #A3CDEB;
+    --rule:           #3a3e46;
+    --code-bg:        #2a2e34;
 
-	--ink-rgb:        233, 231, 221;
-	--ink-faint-rgb:  148, 152, 143;
-	--blue-rgb:       143, 190, 221;
-	--amber-rgb:      227, 162, 75;
+    --ink-rgb:        228, 226, 215;
+    --ink-faint-rgb:  134, 138, 129;
+    --blue-rgb:       163, 205, 235;
+    --amber-rgb:      233, 174, 90;
 }
 
 * { box-sizing: border-box; }

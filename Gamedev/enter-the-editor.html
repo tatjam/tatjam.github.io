@@ -1,45 +1,46 @@
 <!DOCTYPE html>
-<meta charset="UTF-8">
-<html>
+<html lang="en">
 	<head>
-		<meta name="viewport" content="width=600px, initial-scale=1">
+		<meta charset="UTF-8">
+		<script>
+			(function () {
+				var stored = null;
+				try { stored = localStorage.getItem('theme'); } catch (e) {}
+				if (stored) document.documentElement.setAttribute('data-theme', stored);
+			})();
+		</script>
+		<meta name="viewport" content="width=device-width, initial-scale=1">
 		<title>Enter the Editor</title>
-
-		
-
 		<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
-
-
 		<link href="/prism.css" rel="stylesheet" />
 		<link rel="stylesheet" type="text/css" href="/theme.css">
-
 		<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:ital@0;1&family=IBM+Plex+Sans+Condensed:ital@0;1&family=IBM+Plex+Sans:ital,wght@0,100;0,400;0,700;1,100;1,400;1,700&family=IBM+Plex+Serif:ital@0;1&display=swap" rel="stylesheet">
-
 		<script type="text/javascript" src="/external/offsetanchor.js"></script>
-
+		
 	</head>
 	<body>
 		<script src="/prism.js"></script>
-		
+		<script src="/theme-toggle.js"></script>
+
 		<div class="navbar">
 			<div class="nav-left">
-				<a href="">Enter the Editor</a>
+				<a href="/index.html">Enter the Editor</a>
 			</div>
 			<div class="nav-right">
-				<a href="/index.html">Home</a>
-				<a href=/category-Gamedev.html>Gamedev</a>
-				<a href="/Gamedev/ospgl-progress.html" title="Previous: Early 2020 progress">&#9664</a>
-				<a href="/Gamedev/two-years-of-progress.html" title="Next: Two years of progress">&#9654</a>
+				<a href="/category-Gamedev.html">Gamedev</a>
+				<a href="/Gamedev/ospgl-progress.html" title="Previous: Early 2020 progress" class="nav-arrow">&#9664</a>
+				<a href="/Gamedev/two-years-of-progress.html" title="Next: Two years of progress" class="nav-arrow">&#9654</a>
+				<button id="theme-toggle" class="theme-toggle" type="button" aria-label="Toggle dark mode">
+					<span class="theme-toggle-track"><span class="theme-toggle-thumb"></span></span>
+				</button>
 			</div>
 		</div>
-
-		<div class = "intro">
+		<div class="intro">
 			<h1>Enter the Editor</h1>
 			<p>The last two months of progress feature the beginnings of the editor, among other changes<br>2020-06-03</p>
 		</div>
-
-		<div id = page>
-			<div class = "main">
+		<div id="page">
+			<div class="main">
 				<p>Since the last blogpost a lot of stuff has happened, the quarantine has given me a lot of free time, which has been reflected on a lot of work on OSPGL. Over 50 commits have been pushed since the last post. </p>
 
 <hr>
@@ -171,6 +172,5 @@ First of all, a badly written mutex lock was blocking the generator threads, all
 
 			</div>
 		</div>
-
 	</body>
 </html>

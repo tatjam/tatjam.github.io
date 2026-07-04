@@ -1,45 +1,46 @@
 <!DOCTYPE html>
-<meta charset="UTF-8">
-<html>
+<html lang="en">
 	<head>
-		<meta name="viewport" content="width=600px, initial-scale=1">
+		<meta charset="UTF-8">
+		<script>
+			(function () {
+				var stored = null;
+				try { stored = localStorage.getItem('theme'); } catch (e) {}
+				if (stored) document.documentElement.setAttribute('data-theme', stored);
+			})();
+		</script>
+		<meta name="viewport" content="width=device-width, initial-scale=1">
 		<title>Introducing OSPGL</title>
-
-		
-
 		<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
-
-
 		<link href="/prism.css" rel="stylesheet" />
 		<link rel="stylesheet" type="text/css" href="/theme.css">
-
 		<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:ital@0;1&family=IBM+Plex+Sans+Condensed:ital@0;1&family=IBM+Plex+Sans:ital,wght@0,100;0,400;0,700;1,100;1,400;1,700&family=IBM+Plex+Serif:ital@0;1&display=swap" rel="stylesheet">
-
 		<script type="text/javascript" src="/external/offsetanchor.js"></script>
-
+		
 	</head>
 	<body>
 		<script src="/prism.js"></script>
-		
+		<script src="/theme-toggle.js"></script>
+
 		<div class="navbar">
 			<div class="nav-left">
-				<a href="">Introducing OSPGL</a>
+				<a href="/index.html">Introducing OSPGL</a>
 			</div>
 			<div class="nav-right">
-				<a href="/index.html">Home</a>
-				<a href=/category-Gamedev.html>Gamedev</a>
-				<a href="" title="Previous: (None)">&#9664</a>
-				<a href="/Gamedev/models-and-vehicles.html" title="Next: Models and Vehicles">&#9654</a>
+				<a href="/category-Gamedev.html">Gamedev</a>
+				<a href="" title="Previous: (None)" class="nav-arrow">&#9664</a>
+				<a href="/Gamedev/models-and-vehicles.html" title="Next: Models and Vehicles" class="nav-arrow">&#9654</a>
+				<button id="theme-toggle" class="theme-toggle" type="button" aria-label="Toggle dark mode">
+					<span class="theme-toggle-track"><span class="theme-toggle-thumb"></span></span>
+				</button>
 			</div>
 		</div>
-
-		<div class = "intro">
+		<div class="intro">
 			<h1>Introducing OSPGL</h1>
 			<p>OSPGL (OSP + OpenGL) is an ongoing attempt at creating a game similar to Squad's Kerbal Space Program, focusing on perfomance and moddability<br>2019-11-30</p>
 		</div>
-
-		<div id = page>
-			<div class = "main">
+		<div id="page">
+			<div class="main">
 				<p>OSPGL (OSP + OpenGL) is an ongoing attempt at creating a game similar to Squad&#39;s Kerbal Space Program, focusing
 on perfomance and moddability. It&#39;s written in C++, and uses OpenGL for rendering.</p>
 
@@ -137,14 +138,15 @@ something significant happens!</p>
 
 <p><img src="img/osp0.png" alt="The Earth, The Debug Drawers, The Navball"></p>
 
-<p>A view high on the Earth&#39;s atmosphere, the Moon is visible.
-<img src="img/osp1.png" alt="View of the moon from high atmosphere"></p>
+<p>A view high on the Earth&#39;s atmosphere, the Moon is visible.</p>
 
-<p>A view of Mars from space, you can see its thin atmosphere.
-<img src="img/osp2.png" alt="View of the mars from space"></p>
+<p><img src="img/osp1.png" alt="View of the moon from high atmosphere"></p>
+
+<p>A view of Mars from space, you can see its thin atmosphere.</p>
+
+<p><img src="img/osp2.png" alt="View of the mars from space"></p>
 
 			</div>
 		</div>
-
 	</body>
 </html>

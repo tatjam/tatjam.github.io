@@ -1,45 +1,49 @@
 <!DOCTYPE html>
-<meta charset="UTF-8">
-<html>
+<html lang="en">
 	<head>
-		<meta name="viewport" content="width=600px, initial-scale=1">
+		<meta charset="UTF-8">
+		<script>
+			(function () {
+				var stored = null;
+				try { stored = localStorage.getItem('theme'); } catch (e) {}
+				if (stored) document.documentElement.setAttribute('data-theme', stored);
+			})();
+		</script>
+		<meta name="viewport" content="width=device-width, initial-scale=1">
 		<title>Label Generator</title>
-
-		
-
 		<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
-
-
 		<link href="/prism.css" rel="stylesheet" />
 		<link rel="stylesheet" type="text/css" href="/theme.css">
-
 		<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:ital@0;1&family=IBM+Plex+Sans+Condensed:ital@0;1&family=IBM+Plex+Sans:ital,wght@0,100;0,400;0,700;1,100;1,400;1,700&family=IBM+Plex+Serif:ital@0;1&display=swap" rel="stylesheet">
-
 		<script type="text/javascript" src="/external/offsetanchor.js"></script>
+		
+<style>#page, .intro, .intro.p { max-width: var(--content-width-wide); }</style>
+<style>.main {text-align: left;}</style>
 
 	</head>
 	<body>
 		<script src="/prism.js"></script>
-		
+		<script src="/theme-toggle.js"></script>
+
 		<div class="navbar">
 			<div class="nav-left">
-				<a href="">Label Generator</a>
+				<a href="/index.html">Label Generator</a>
 			</div>
 			<div class="nav-right">
-				<a href="/index.html">Home</a>
-				<a href=/category-Chemistry.html>Chemistry</a>
-				<a href="" title="Previous: (None)">&#9664</a>
-				<a href="" title="Next: (None)">&#9654</a>
+				<a href="/category-Chemistry.html">Chemistry</a>
+				<a href="" title="Previous: (None)" class="nav-arrow">&#9664</a>
+				<a href="" title="Next: (None)" class="nav-arrow">&#9654</a>
+				<button id="theme-toggle" class="theme-toggle" type="button" aria-label="Toggle dark mode">
+					<span class="theme-toggle-track"><span class="theme-toggle-thumb"></span></span>
+				</button>
 			</div>
 		</div>
-
-		<div class = "intro">
+		<div class="intro">
 			<h1>Label Generator</h1>
 			<p>A chemical label generator designed with ease of use and beautiful labels in mind<br>2021-06-21</p>
 		</div>
-
-		<div id = page>
-			<div class = "main">
+		<div id="page">
+			<div class="main">
 				<p>This is a very valuable tool that&#39;s surprisingly not available online. I decided to make a simple solution
 that could be quickly used to generate beautiful labels, a must have in any lab.</p>
 
@@ -479,6 +483,5 @@ and check the source code at <a href="https://github.com/tatjam/tatjam.github.io
 
 			</div>
 		</div>
-
 	</body>
 </html>

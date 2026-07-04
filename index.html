@@ -1,46 +1,52 @@
 <!DOCTYPE html>
-<meta charset="UTF-8">
-<html>
+<html lang="en">
 	<head>
-
-		<meta name="viewport" content="width=600px, initial-scale=1">
+		<meta charset="UTF-8">
+		<script>
+			// Set data-theme before first paint to avoid a flash of the
+			// wrong theme. Pairs with /theme-toggle.js for the button.
+			(function () {
+				var stored = null;
+				try { stored = localStorage.getItem('theme'); } catch (e) {}
+				if (stored) document.documentElement.setAttribute('data-theme', stored);
+			})();
+		</script>
+		<meta name="viewport" content="width=device-width, initial-scale=1">
 		<title>Tatjam's Blog</title>
 		<link rel="stylesheet" type="text/css" href="/theme.css">
-
 		<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:ital@0;1&family=IBM+Plex+Sans+Condensed:ital@0;1&family=IBM+Plex+Sans:ital,wght@0,100;0,400;0,700;1,100;1,400;1,700&family=IBM+Plex+Serif:ital@0;1&display=swap" rel="stylesheet">
-
 	</head>
 	<body>
 		<script src="/prism.js"></script>
-		
+		<script src="/theme-toggle.js"></script>
+
 		<div class="navbar">
 			<div class="nav-left">
 				<a href="">Tatjam's Blog</a>
 			</div>
 			<div class="nav-right">
 				<a href="/category-Mathematics.html">Mathematics</a><a href="/category-Chemistry.html">Chemistry</a><a href="/category-Gamedev.html">Gamedev</a>
+				<button id="theme-toggle" class="theme-toggle" type="button" aria-label="Toggle dark mode">
+					<span class="theme-toggle-track"><span class="theme-toggle-thumb"></span></span>
+				</button>
 			</div>
 		</div>
-
-		<div class = "intro">
+		<div class="intro">
 			<h1>Welcome to Tatjam's Blog</h1>
-			<p>Hello! In this blog you will find posts about my projects and other stuff I find interesting.<br>
-
+			<p>Hello! I'm an aerospace engineer, currently working on Europe's Galileo ground segment.<br>
+			This is my corner of the internet where I write about everything I like, from signal processing to game dev.
+			<br>
+			<br>
 			You can use the categories at the top, or browse by date of publication below.
+			To know when I add new content, use this <a href="/feed.xml">RSS feed</a>.
 			<br>
 			<br>
-			To known when I add new content, use this <a href="/feed.xml">RSS feed</a>.
-			<br>
-			<br>
-
-			You can contact me through e-mail, it should be fairly easy to find on my 
-			<a href="https://github.com/tatjam"> GitHub profile. </a> You will need a GitHub account.<br>
-			Otherwise, you can find my email by appending "02@gmail.com" to my user-name.
+			Feel free to contact me through e-mail, <a href="mailto:blog@tatjam.eu">blog@tatjam.eu</a> or find me in
+			<a href=https://www.linkedin.com/in/josé-antonio-mayo-garcía-6aab4a241>LinkedIn</a>.
 			</p>
 		</div>
-
-		<div id = page>
-			<div class = "main">
+		<div id="page">
+			<div class="main">
 					<a href="Mathematics/fourier1.html" class="post-list">
 		<h2>Understanding undersampling - 1 (2025-04-21 in Mathematics)</h2>
 		<p>Using the Fourier transform and interactive graphics to intuitively understand undersampling transmitters</p>
@@ -84,6 +90,5 @@
 
 			</div>
 		</div>
-
 	</body>
 </html>

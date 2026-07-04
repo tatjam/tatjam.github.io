@@ -1,49 +1,49 @@
 <!DOCTYPE html>
-<meta charset="UTF-8">
-<html>
+<html lang="en">
 	<head>
-		<meta name="viewport" content="width=600px, initial-scale=1">
+		<meta charset="UTF-8">
+		<script>
+			(function () {
+				var stored = null;
+				try { stored = localStorage.getItem('theme'); } catch (e) {}
+				if (stored) document.documentElement.setAttribute('data-theme', stored);
+			})();
+		</script>
+		<meta name="viewport" content="width=device-width, initial-scale=1">
 		<title>Understanding undersampling - 1</title>
-
-		
-		<!-- Tangle -->
-		<script type="text/javascript" src="/external/tangle/Tangle.js"></script>
-		<script src="/external/tangle/elements.js"></script>
-
-
 		<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
-
-
 		<link href="/prism.css" rel="stylesheet" />
 		<link rel="stylesheet" type="text/css" href="/theme.css">
-
 		<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:ital@0;1&family=IBM+Plex+Sans+Condensed:ital@0;1&family=IBM+Plex+Sans:ital,wght@0,100;0,400;0,700;1,100;1,400;1,700&family=IBM+Plex+Serif:ital@0;1&display=swap" rel="stylesheet">
-
 		<script type="text/javascript" src="/external/offsetanchor.js"></script>
+		
+<script type="text/javascript" src="/external/tangle/Tangle.js"></script>
+<script src="/external/tangle/elements.js"></script>
 
 	</head>
 	<body>
 		<script src="/prism.js"></script>
-		
+		<script src="/theme-toggle.js"></script>
+
 		<div class="navbar">
 			<div class="nav-left">
-				<a href="">Understanding undersampling - 1</a>
+				<a href="/index.html">Understanding undersampling - 1</a>
 			</div>
 			<div class="nav-right">
-				<a href="/index.html">Home</a>
-				<a href=/category-Mathematics.html>Mathematics</a>
-				<a href="" title="Previous: (None)">&#9664</a>
-				<a href="" title="Next: (None)">&#9654</a>
+				<a href="/category-Mathematics.html">Mathematics</a>
+				<a href="" title="Previous: (None)" class="nav-arrow">&#9664</a>
+				<a href="" title="Next: (None)" class="nav-arrow">&#9654</a>
+				<button id="theme-toggle" class="theme-toggle" type="button" aria-label="Toggle dark mode">
+					<span class="theme-toggle-track"><span class="theme-toggle-thumb"></span></span>
+				</button>
 			</div>
 		</div>
-
-		<div class = "intro">
+		<div class="intro">
 			<h1>Understanding undersampling - 1</h1>
 			<p>Using the Fourier transform and interactive graphics to intuitively understand undersampling transmitters<br>2025-04-21</p>
 		</div>
-
-		<div id = page>
-			<div class = "main">
+		<div id="page">
+			<div class="main">
 				<p>It&#39;s possible to generate nearly arbitrarily high frequency signals using a relatively slow transmitter by exploiting undersampling. In this post I will try to give an intuitive explanation of the mechanism, and try to find the optimum sample frequency to emit a given signal.</p>
 
 <hr>
@@ -100,7 +100,7 @@ and \( \frac{1}{T} = f_s \) = <input data-var="fs" class="DraggableNumber" size=
 </div>
 
 <div id="stick" class="sticky" style="top:30px;width:100%;">
-<div id="graph-anchor" class="canvas-container" style="height: 10em;width:100%;">
+<div id="graph-anchor" class="canvas-container" style="height: 12em;width:100%;">
 <canvas id="graph0"></canvas>
 </div>
 
@@ -204,6 +204,10 @@ and \( m \) = <input data-var="n_symin" class="DraggableNumber" size="2" style="
 
 <script type="text/javascript">
 
+    function cssVar(name) {
+        return getComputedStyle(document.documentElement).getPropertyValue(name).trim();
+    }
+
     function setUpTangle () {
 
         var freq_elem = document.getElementsByClassName("main")[0];
@@ -250,6 +254,10 @@ and \( m \) = <input data-var="n_symin" class="DraggableNumber" size="2" style="
                 }
                 
                 sendto_btn_asym.onclick = click_fun_asym.bind(this);
+                var self = this;
+                document.addEventListener('themechange', function () {
+                    self.update_graph();
+                });
             },
 
             update: function() {
@@ -279,8 +287,15 @@ and \( m \) = <input data-var="n_symin" class="DraggableNumber" size="2" style="
                 const linesize = 100.0;
                 const marksize = 10.0;
 
-                ctx.strokeStyle = "#000000";
-                ctx.fillStyle = "#000000";
+                const inkColor       = cssVar('--ink');
+                const inkFaintColor  = cssVar('--ink-faint');
+                const blueColor      = cssVar('--blue');
+                const amberColor     = cssVar('--amber');
+                const inkRgb         = cssVar('--ink-rgb');
+                const inkFaintOverlay = 'rgba(' + inkRgb + ', 0.7)';
+
+                ctx.strokeStyle = inkColor;
+                ctx.fillStyle = inkColor;
                 ctx.clearRect(0, 0, canvas.width, canvas.height);
                 // Axes
                 ctx.beginPath();
@@ -297,17 +312,17 @@ and \( m \) = <input data-var="n_symin" class="DraggableNumber" size="2" style="
                 const span = Math.ceil(canvas.width / 2 * scale / step) * step;
 
 
-                ctx.fillStyle = "#00000033"
+                ctx.fillStyle = 'rgba(' + inkRgb + ', 0.08)';
                 nyq0 = -this.fs / scale * 0.5 + canvas.width * 0.5;
                 nyq = this.fs / scale;
                 ctx.beginPath();
                 ctx.rect(nyq0, 0, nyq, canvas.height);
                 ctx.fill();
                 
-                ctx.fillStyle = "#000000";
+                ctx.fillStyle = inkColor;
 
                 ctx.beginPath();
-                ctx.strokeStyle = "#666666";
+                ctx.strokeStyle = inkFaintColor;
                 ctx.font = "10px sans"
 
                 const sincmax = (20 * Math.log10(1.0 / this.fs) + 100.0);
@@ -329,7 +344,7 @@ and \( m \) = <input data-var="n_symin" class="DraggableNumber" size="2" style="
 
                 ctx.stroke();
 
-                ctx.strokeStyle = "#6666ff";
+                ctx.strokeStyle = blueColor;
                 ctx.beginPath();
                 const maxn = 50;
                 for(var n = -maxn; n < maxn; n++) 
@@ -357,8 +372,8 @@ and \( m \) = <input data-var="n_symin" class="DraggableNumber" size="2" style="
                 
                 ctx.stroke();
                 
-                ctx.strokeStyle = "#ff6666";
-                ctx.fillStyle = "#ff6666";
+                ctx.strokeStyle = amberColor;
+                ctx.fillStyle = amberColor;
 
                 ctx.beginPath();
                 var x0 = this.f0 / scale + canvas.width * 0.5;
@@ -372,7 +387,7 @@ and \( m \) = <input data-var="n_symin" class="DraggableNumber" size="2" style="
                 ctx.fillText(this.f0, x0, canvas.height * zeroff - linesize - marksize);
                 ctx.fillText(-this.f0, x0p, canvas.height * zeroff - linesize - marksize);
                     
-                ctx.strokeStyle = "#000000aa";
+                ctx.strokeStyle = inkFaintOverlay;
                 ctx.beginPath();
                 if(this.zoh) {
                     ctx.moveTo(0, 0);
@@ -390,9 +405,9 @@ and \( m \) = <input data-var="n_symin" class="DraggableNumber" size="2" style="
                 // TIME PLOT
                 /////////////////////////
 
-                ctx2.strokeStyle = "#000000";
-                ctx2.fillStyle = "#000000";
-                ctx2.clearRect(0, 0, canvas.width, canvas.height);
+                ctx2.strokeStyle = inkColor;
+                ctx2.fillStyle = inkColor;
+                ctx2.clearRect(0, 0, canvas2.width, canvas2.height);
 
                 // Axes
                 ctx2.beginPath();
@@ -403,7 +418,7 @@ and \( m \) = <input data-var="n_symin" class="DraggableNumber" size="2" style="
                 const tscale = 0.0005; // s / pixel
 
 
-                ctx2.strokeStyle = "#000000aa";
+                ctx2.strokeStyle = inkFaintOverlay;
 
                 ctx2.beginPath();
                 ctx2.moveTo(0, 0);
@@ -416,7 +431,7 @@ and \( m \) = <input data-var="n_symin" class="DraggableNumber" size="2" style="
                 }
                 ctx2.stroke();
 
-                ctx2.strokeStyle = "#0000ffff";
+                ctx2.strokeStyle = blueColor;
 
                 ctx2.beginPath();
                 if(this.zoh)
@@ -484,6 +499,5 @@ and \( m \) = <input data-var="n_symin" class="DraggableNumber" size="2" style="
 
 			</div>
 		</div>
-
 	</body>
 </html>

@@ -1,45 +1,46 @@
 <!DOCTYPE html>
-<meta charset="UTF-8">
-<html>
+<html lang="en">
 	<head>
-		<meta name="viewport" content="width=600px, initial-scale=1">
+		<meta charset="UTF-8">
+		<script>
+			(function () {
+				var stored = null;
+				try { stored = localStorage.getItem('theme'); } catch (e) {}
+				if (stored) document.documentElement.setAttribute('data-theme', stored);
+			})();
+		</script>
+		<meta name="viewport" content="width=device-width, initial-scale=1">
 		<title>Two years of progress</title>
-
-		
-
 		<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
-
-
 		<link href="/prism.css" rel="stylesheet" />
 		<link rel="stylesheet" type="text/css" href="/theme.css">
-
 		<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:ital@0;1&family=IBM+Plex+Sans+Condensed:ital@0;1&family=IBM+Plex+Sans:ital,wght@0,100;0,400;0,700;1,100;1,400;1,700&family=IBM+Plex+Serif:ital@0;1&display=swap" rel="stylesheet">
-
 		<script type="text/javascript" src="/external/offsetanchor.js"></script>
-
+		
 	</head>
 	<body>
 		<script src="/prism.js"></script>
-		
+		<script src="/theme-toggle.js"></script>
+
 		<div class="navbar">
 			<div class="nav-left">
-				<a href="">Two years of progress</a>
+				<a href="/index.html">Two years of progress</a>
 			</div>
 			<div class="nav-right">
-				<a href="/index.html">Home</a>
-				<a href=/category-Gamedev.html>Gamedev</a>
-				<a href="/Gamedev/enter-the-editor.html" title="Previous: Enter the Editor">&#9664</a>
-				<a href="/Gamedev/roadway-to-release.html" title="Next: Roadway to Release">&#9654</a>
+				<a href="/category-Gamedev.html">Gamedev</a>
+				<a href="/Gamedev/enter-the-editor.html" title="Previous: Enter the Editor" class="nav-arrow">&#9664</a>
+				<a href="/Gamedev/roadway-to-release.html" title="Next: Roadway to Release" class="nav-arrow">&#9654</a>
+				<button id="theme-toggle" class="theme-toggle" type="button" aria-label="Toggle dark mode">
+					<span class="theme-toggle-track"><span class="theme-toggle-thumb"></span></span>
+				</button>
 			</div>
 		</div>
-
-		<div class = "intro">
+		<div class="intro">
 			<h1>Two years of progress</h1>
 			<p>Almost 2 years have passed since last blogpost, but the project has kept on going!<br>2022-05-15</p>
 		</div>
-
-		<div id = page>
-			<div class = "main">
+		<div id="page">
+			<div class="main">
 				<p>University has meant that a big portion of the free time I used to have is not there anymore. Still, a lot of very important features have been developed,
 and I believe OSPGL may be playable by the end of this year. In this blogpost the most important changes will be presented, alongside some plans for the future!</p>
 
@@ -229,6 +230,5 @@ beforeEffectslider(
 
 			</div>
 		</div>
-
 	</body>
 </html>

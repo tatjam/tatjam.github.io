@@ -1,45 +1,46 @@
 <!DOCTYPE html>
-<meta charset="UTF-8">
-<html>
+<html lang="en">
 	<head>
-		<meta name="viewport" content="width=600px, initial-scale=1">
+		<meta charset="UTF-8">
+		<script>
+			(function () {
+				var stored = null;
+				try { stored = localStorage.getItem('theme'); } catch (e) {}
+				if (stored) document.documentElement.setAttribute('data-theme', stored);
+			})();
+		</script>
+		<meta name="viewport" content="width=device-width, initial-scale=1">
 		<title>Early 2020 progress</title>
-
-		
-
 		<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
-
-
 		<link href="/prism.css" rel="stylesheet" />
 		<link rel="stylesheet" type="text/css" href="/theme.css">
-
 		<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:ital@0;1&family=IBM+Plex+Sans+Condensed:ital@0;1&family=IBM+Plex+Sans:ital,wght@0,100;0,400;0,700;1,100;1,400;1,700&family=IBM+Plex+Serif:ital@0;1&display=swap" rel="stylesheet">
-
 		<script type="text/javascript" src="/external/offsetanchor.js"></script>
-
+		
 	</head>
 	<body>
 		<script src="/prism.js"></script>
-		
+		<script src="/theme-toggle.js"></script>
+
 		<div class="navbar">
 			<div class="nav-left">
-				<a href="">Early 2020 progress</a>
+				<a href="/index.html">Early 2020 progress</a>
 			</div>
 			<div class="nav-right">
-				<a href="/index.html">Home</a>
-				<a href=/category-Gamedev.html>Gamedev</a>
-				<a href="/Gamedev/models-and-vehicles.html" title="Previous: Models and Vehicles">&#9664</a>
-				<a href="/Gamedev/enter-the-editor.html" title="Next: Enter the Editor">&#9654</a>
+				<a href="/category-Gamedev.html">Gamedev</a>
+				<a href="/Gamedev/models-and-vehicles.html" title="Previous: Models and Vehicles" class="nav-arrow">&#9664</a>
+				<a href="/Gamedev/enter-the-editor.html" title="Next: Enter the Editor" class="nav-arrow">&#9654</a>
+				<button id="theme-toggle" class="theme-toggle" type="button" aria-label="Toggle dark mode">
+					<span class="theme-toggle-track"><span class="theme-toggle-thumb"></span></span>
+				</button>
 			</div>
 		</div>
-
-		<div class = "intro">
+		<div class="intro">
 			<h1>Early 2020 progress</h1>
 			<p>A summary of the progress that has happened since the last blogpost<br>2020-04-06</p>
 		</div>
-
-		<div id = page>
-			<div class = "main">
+		<div id="page">
+			<div class="main">
 				<p>Since the last blogpost OSPGL has received quite a lot of changes, the repo has received almost 80 commits! (Some of them are relatively small though).</p>
 
 <p>Here are the new features, sorted by time of introduction (But changes have happened uniformly through time to almost all these features):</p>
@@ -158,6 +159,5 @@ to avoid perfomance issues.</p>
 
 			</div>
 		</div>
-
 	</body>
 </html>

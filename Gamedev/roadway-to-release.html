@@ -1,45 +1,46 @@
 <!DOCTYPE html>
-<meta charset="UTF-8">
-<html>
+<html lang="en">
 	<head>
-		<meta name="viewport" content="width=600px, initial-scale=1">
+		<meta charset="UTF-8">
+		<script>
+			(function () {
+				var stored = null;
+				try { stored = localStorage.getItem('theme'); } catch (e) {}
+				if (stored) document.documentElement.setAttribute('data-theme', stored);
+			})();
+		</script>
+		<meta name="viewport" content="width=device-width, initial-scale=1">
 		<title>Roadway to Release</title>
-
-		
-
 		<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
-
-
 		<link href="/prism.css" rel="stylesheet" />
 		<link rel="stylesheet" type="text/css" href="/theme.css">
-
 		<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:ital@0;1&family=IBM+Plex+Sans+Condensed:ital@0;1&family=IBM+Plex+Sans:ital,wght@0,100;0,400;0,700;1,100;1,400;1,700&family=IBM+Plex+Serif:ital@0;1&display=swap" rel="stylesheet">
-
 		<script type="text/javascript" src="/external/offsetanchor.js"></script>
-
+		
 	</head>
 	<body>
 		<script src="/prism.js"></script>
-		
+		<script src="/theme-toggle.js"></script>
+
 		<div class="navbar">
 			<div class="nav-left">
-				<a href="">Roadway to Release</a>
+				<a href="/index.html">Roadway to Release</a>
 			</div>
 			<div class="nav-right">
-				<a href="/index.html">Home</a>
-				<a href=/category-Gamedev.html>Gamedev</a>
-				<a href="/Gamedev/two-years-of-progress.html" title="Previous: Two years of progress">&#9664</a>
-				<a href="" title="Next: (None)">&#9654</a>
+				<a href="/category-Gamedev.html">Gamedev</a>
+				<a href="/Gamedev/two-years-of-progress.html" title="Previous: Two years of progress" class="nav-arrow">&#9664</a>
+				<a href="" title="Next: (None)" class="nav-arrow">&#9654</a>
+				<button id="theme-toggle" class="theme-toggle" type="button" aria-label="Toggle dark mode">
+					<span class="theme-toggle-track"><span class="theme-toggle-thumb"></span></span>
+				</button>
 			</div>
 		</div>
-
-		<div class = "intro">
+		<div class="intro">
 			<h1>Roadway to Release</h1>
 			<p>A summary of progress over the last year, and an overview of what's to come<br>2023-02-08</p>
 		</div>
-
-		<div id = page>
-			<div class = "main">
+		<div id="page">
+			<div class="main">
 				<p>On the last blogpost I stated that OSPGL could be playable by the end of 2022. I was wrong! Nevertheless,
 I&#39;ve made a lot of progress, and a first release should not be too far away.</p>
 
@@ -352,6 +353,5 @@ realistic radio, realistic electrical systems, in-game computers, etc...</p>
 
 			</div>
 		</div>
-
 	</body>
 </html>

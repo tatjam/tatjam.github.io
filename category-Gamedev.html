@@ -1,18 +1,23 @@
 <!DOCTYPE html>
-<meta charset="UTF-8">
-<html>
+<html lang="en">
 	<head>
-
-		<meta name="viewport" content="width=600px, initial-scale=1">
+		<meta charset="UTF-8">
+		<script>
+			(function () {
+				var stored = null;
+				try { stored = localStorage.getItem('theme'); } catch (e) {}
+				if (stored) document.documentElement.setAttribute('data-theme', stored);
+			})();
+		</script>
+		<meta name="viewport" content="width=device-width, initial-scale=1">
 		<title>Tatjam's Blog</title>
 		<link rel="stylesheet" type="text/css" href="/theme.css">
-
 		<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:ital@0;1&family=IBM+Plex+Sans+Condensed:ital@0;1&family=IBM+Plex+Sans:ital,wght@0,100;0,400;0,700;1,100;1,400;1,700&family=IBM+Plex+Serif:ital@0;1&display=swap" rel="stylesheet">
-
 	</head>
 	<body>
 		<script src="/prism.js"></script>
-		
+		<script src="/theme-toggle.js"></script>
+
 		<div class="navbar">
 			<div class="nav-left">
 				<a href="">Category: Gamedev</a>
@@ -20,15 +25,16 @@
 			<div class="nav-right">
 				<a href="/index.html">Home</a>
 				<a href="/category-Mathematics.html">Mathematics</a><a href="/category-Chemistry.html">Chemistry</a><a href="/category-Gamedev.html">Gamedev</a>
+				<button id="theme-toggle" class="theme-toggle" type="button" aria-label="Toggle dark mode">
+					<span class="theme-toggle-track"><span class="theme-toggle-thumb"></span></span>
+				</button>
 			</div>
 		</div>
-
-		<div class = "intro">
+		<div class="intro">
 			<h1>Gamedev</h1>
 		</div>
-
-		<div id = page>
-			<div class = "main">
+		<div id="page">
+			<div class="main">
 					<a href="Gamedev/roadway-to-release.html" class="post-list">
 		<h2>Roadway to Release (2023-02-08 in Gamedev)</h2>
 		<p>A summary of progress over the last year, and an overview of what's to come</p>
@@ -62,6 +68,5 @@
 
 			</div>
 		</div>
-
 	</body>
 </html>

@@ -16,5 +16,7 @@ document.addEventListener('DOMContentLoaded', function () {
 			localStorage.setItem('theme', next);
 		} catch (e) {
 		}
+
+		document.dispatchEvent(new CustomEvent('themechange', { detail: { theme: next } }));
 	});
 });

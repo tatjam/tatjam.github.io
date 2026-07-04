@@ -14,3 +14,4 @@ dev/.ninja_log
 dev/.ninja_deps
 dev/Testing/*
 dev/build.ninja
+build/

@@ -1,6 +1,10 @@
 Label Generator
 2021-06-21
 A chemical label generator designed with ease of use and beautiful labels in mind
+~
+<style>#page, .intro, .intro.p { max-width: var(--content-width-wide); }</style>
+<style>.main {text-align: left;}</style>
+~
 
 This is a very valuable tool that's surprisingly not available online. I decided to make a simple solution
 that could be quickly used to generate beautiful labels, a must have in any lab.

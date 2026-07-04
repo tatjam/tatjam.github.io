@@ -104,8 +104,10 @@ The velocity is 0 as the reference frame is set to "Earth-Rotating" and the vess
 ![The Earth, The Debug Drawers, The Navball](img/osp0.png)
 
 A view high on the Earth's atmosphere, the Moon is visible.
+
 ![View of the moon from high atmosphere](img/osp1.png)
 
 A view of Mars from space, you can see its thin atmosphere.
+
 ![View of the mars from space](img/osp2.png)
 

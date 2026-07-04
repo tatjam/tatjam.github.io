@@ -123,12 +123,12 @@ Post::Post(
 	this->summary =markdown.substr(0, markdown.find_first_of('\n'));
 	markdown = markdown.substr(markdown.find_first_of('\n') + 1);
 
-	// If the next line starts with a {, we will parse until next }, and this is
+	// If the next line starts with a ~, we will parse until next ~, and this is
 	// extra head
-	if (markdown[0] == '#')
+	if (markdown[0] == '~')
 	{
-		this->extra_head = markdown.substr(1, markdown.find_first_of('#', 1) - 1);
-		markdown = markdown.substr(markdown.find_first_of('#', 1) + 1);
+		this->extra_head = markdown.substr(1, markdown.find_first_of('~', 1) - 1);
+		markdown = markdown.substr(markdown.find_first_of('~', 1) + 1);
 	}
 
 

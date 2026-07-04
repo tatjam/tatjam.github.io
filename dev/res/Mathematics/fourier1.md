@@ -1,11 +1,10 @@
 Understanding undersampling - 1
 2025-04-21
 Using the Fourier transform and interactive graphics to intuitively understand undersampling transmitters
-{
-		<!-- Tangle -->
-		<script type="text/javascript" src="/external/tangle/Tangle.js"></script>
-		<script src="/external/tangle/elements.js"></script>
-}
+~
+<script type="text/javascript" src="/external/tangle/Tangle.js"></script>
+<script src="/external/tangle/elements.js"></script>
+~
 
 It's possible to generate nearly arbitrarily high frequency signals using a relatively slow transmitter by exploiting undersampling. In this post I will try to give an intuitive explanation of the mechanism, and try to find the optimum sample frequency to emit a given signal.
 
@@ -70,7 +69,7 @@ and \\( \frac{1}{T} = f_s \\) = <input data-var="fs" class="DraggableNumber" siz
 </div>
 
 <div id="stick" class="sticky" style="top:30px;width:100%;">
-<div id="graph-anchor" class="canvas-container" style="height: 10em;width:100%;">
+<div id="graph-anchor" class="canvas-container" style="height: 12em;width:100%;">
 <canvas id="graph0"></canvas>
 </div>
 
@@ -187,6 +186,10 @@ During the whole text, we have considered that we can output any power level, bu
 
 <script type="text/javascript">
 
+    function cssVar(name) {
+        return getComputedStyle(document.documentElement).getPropertyValue(name).trim();
+    }
+
     function setUpTangle () {
 
         var freq_elem = document.getElementsByClassName("main")[0];
@@ -233,6 +236,10 @@ During the whole text, we have considered that we can output any power level, bu
                 }
                 
                 sendto_btn_asym.onclick = click_fun_asym.bind(this);
+                var self = this;
+                document.addEventListener('themechange', function () {
+                    self.update_graph();
+                });
             },
 
             update: function() {
@@ -262,8 +269,15 @@ During the whole text, we have considered that we can output any power level, bu
                 const linesize = 100.0;
                 const marksize = 10.0;
 
-                ctx.strokeStyle = "#000000";
-                ctx.fillStyle = "#000000";
+                const inkColor       = cssVar('--ink');
+                const inkFaintColor  = cssVar('--ink-faint');
+                const blueColor      = cssVar('--blue');
+                const amberColor     = cssVar('--amber');
+                const inkRgb         = cssVar('--ink-rgb');
+                const inkFaintOverlay = 'rgba(' + inkRgb + ', 0.7)';
+
+                ctx.strokeStyle = inkColor;
+                ctx.fillStyle = inkColor;
                 ctx.clearRect(0, 0, canvas.width, canvas.height);
                 // Axes
                 ctx.beginPath();
@@ -280,17 +294,17 @@ During the whole text, we have considered that we can output any power level, bu
                 const span = Math.ceil(canvas.width / 2 * scale / step) * step;
 
 
-                ctx.fillStyle = "#00000033"
+                ctx.fillStyle = 'rgba(' + inkRgb + ', 0.08)';
                 nyq0 = -this.fs / scale * 0.5 + canvas.width * 0.5;
                 nyq = this.fs / scale;
                 ctx.beginPath();
                 ctx.rect(nyq0, 0, nyq, canvas.height);
                 ctx.fill();
                 
-                ctx.fillStyle = "#000000";
+                ctx.fillStyle = inkColor;
 
                 ctx.beginPath();
-                ctx.strokeStyle = "#666666";
+                ctx.strokeStyle = inkFaintColor;
                 ctx.font = "10px sans"
 
                 const sincmax = (20 * Math.log10(1.0 / this.fs) + 100.0);
@@ -312,7 +326,7 @@ During the whole text, we have considered that we can output any power level, bu
 
                 ctx.stroke();
 
-                ctx.strokeStyle = "#6666ff";
+                ctx.strokeStyle = blueColor;
                 ctx.beginPath();
                 const maxn = 50;
                 for(var n = -maxn; n < maxn; n++) 
@@ -340,8 +354,8 @@ During the whole text, we have considered that we can output any power level, bu
                 
                 ctx.stroke();
                 
-                ctx.strokeStyle = "#ff6666";
-                ctx.fillStyle = "#ff6666";
+                ctx.strokeStyle = amberColor;
+                ctx.fillStyle = amberColor;
 
                 ctx.beginPath();
                 var x0 = this.f0 / scale + canvas.width * 0.5;
@@ -355,7 +369,7 @@ During the whole text, we have considered that we can output any power level, bu
                 ctx.fillText(this.f0, x0, canvas.height * zeroff - linesize - marksize);
                 ctx.fillText(-this.f0, x0p, canvas.height * zeroff - linesize - marksize);
                     
-                ctx.strokeStyle = "#000000aa";
+                ctx.strokeStyle = inkFaintOverlay;
                 ctx.beginPath();
                 if(this.zoh) {
                     ctx.moveTo(0, 0);
@@ -373,9 +387,9 @@ During the whole text, we have considered that we can output any power level, bu
                 // TIME PLOT
                 /////////////////////////
 
-                ctx2.strokeStyle = "#000000";
-                ctx2.fillStyle = "#000000";
-                ctx2.clearRect(0, 0, canvas.width, canvas.height);
+                ctx2.strokeStyle = inkColor;
+                ctx2.fillStyle = inkColor;
+                ctx2.clearRect(0, 0, canvas2.width, canvas2.height);
 
                 // Axes
                 ctx2.beginPath();
@@ -386,7 +400,7 @@ During the whole text, we have considered that we can output any power level, bu
                 const tscale = 0.0005; // s / pixel
 
 
-                ctx2.strokeStyle = "#000000aa";
+                ctx2.strokeStyle = inkFaintOverlay;
 
                 ctx2.beginPath();
                 ctx2.moveTo(0, 0);
@@ -399,7 +413,7 @@ During the whole text, we have considered that we can output any power level, bu
                 }
                 ctx2.stroke();
 
-                ctx2.strokeStyle = "#0000ffff";
+                ctx2.strokeStyle = blueColor;
 
                 ctx2.beginPath();
                 if(this.zoh)
@@ -441,4 +455,3 @@ During the whole text, we have considered that we can output any power level, bu
     window.onload = setUpTangle
 
 </script>
-

@@ -29,6 +29,10 @@
 	--grid-size: 28px;
 }
 
+html {
+	font-size: 18px;
+}
+
 @media (prefers-color-scheme: dark) {
     :root:not([data-theme]) {
         color-scheme: dark;

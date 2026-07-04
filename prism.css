@@ -1,176 +1,147 @@
 /*
-
-Name:       Base16 Atelier Sulphurpool Light
-Author:     Bram de Haan (http://atelierbram.github.io/syntax-highlighting/atelier-schemes/sulphurpool)
-
-Prism template by Bram de Haan (http://atelierbram.github.io/syntax-highlighting/prism/)
-Original Base16 color scheme by Chris Kempson (https://github.com/chriskempson/base16)
-
+Name:       Base16 Atelier Sulphurpool (Dynamic Light & Soft Dark Mode Aware)
+Author:     Bram de Haan (Fixed CSS Parser Syntax Routing)
 */
+
 code[class*="language-"],
 pre[class*="language-"] {
-	font-family: Consolas, Menlo, Monaco, "Andale Mono WT", "Andale Mono", "Lucida Console", "Lucida Sans Typewriter", "DejaVu Sans Mono", "Bitstream Vera Sans Mono", "Liberation Mono", "Nimbus Mono L", "Courier New", Courier, monospace;
-	font-size: 14px;
-	line-height: 1.375;
-	direction: ltr;
-	text-align: left;
-	white-space: pre;
-	word-spacing: normal;
-	word-break: normal;
-	-moz-tab-size: 4;
-	-o-tab-size: 4;
-	tab-size: 4;
-	-webkit-hyphens: none;
-	-moz-hyphens: none;
-	-ms-hyphens: none;
-	hyphens: none;
-	background: #f5f7ff;
-	color: #5e6687;
+    /* ==========================================================================
+       1. Core Syntax Theme Palette (Defaults to Light Mode)
+       ========================================================================== */
+    --prism-bg:              #f5f7ff;
+    --prism-text:            #5e6687;
+    --prism-comment:         #898ea4;
+    --prism-punctuation:     #5e6687;
+    --prism-operator:        #c76b29;
+    --prism-property:        #c08b30;
+    --prism-tag:             #3d8fd1;
+    --prism-string:          #22a2c9;
+    --prism-selector:        #6679cc;
+    --prism-keyword:         #ac9739;
+    --prism-important:       #c94922;
+    --prism-line-border:     #dfe2f1;
+    --prism-line-text:       #979db4;
+
+    font-family: Consolas, Menlo, Monaco, "Andale Mono WT", "Andale Mono", "Lucida Console", "Lucida Sans Typewriter", "DejaVu Sans Mono", "Bitstream Vera Sans Mono", "Liberation Mono", "Nimbus Mono L", "Courier New", Courier, monospace;
+    font-size: 14px;
+    line-height: 1.375;
+    direction: ltr;
+    text-align: left;
+    white-space: pre;
+    word-spacing: normal;
+    word-break: normal;
+    -moz-tab-size: 4;
+    -o-tab-size: 4;
+    tab-size: 4;
+    -webkit-hyphens: none;
+    -moz-hyphens: none;
+    -ms-hyphens: none;
+    hyphens: none;
+    
+    background: var(--prism-bg);
+    color: var(--prism-text);
 }
 
+/* ==========================================================================
+   2. Dark Theme Variable Mappings (Toggles Instantly)
+   ========================================================================== */
+
+/* A. Manual JS Selector Toggle */
+:root[data-theme="dark"] code[class*="language-"],
+:root[data-theme="dark"] pre[class*="language-"] {
+    --prism-bg:              var(--code-bg);
+    --prism-text:            var(--ink);
+    --prism-comment:         var(--ink-faint);
+    --prism-punctuation:     var(--ink-soft);
+    --prism-operator:        var(--amber);
+    --prism-property:        var(--amber);
+    --prism-tag:             var(--blue);
+    --prism-string:          var(--blue);
+    --prism-selector:        var(--blue);
+    --prism-keyword:         #e59362; /* Soft copper/orange keyword accent */
+    --prism-line-border:     var(--rule);
+    --prism-line-text:       var(--ink-faint);
+}
+
+/* B. System Theme Preference Toggle */
+@media (prefers-color-scheme: dark) {
+    :root:not([data-theme]) code[class*="language-"],
+    :root:not([data-theme]) pre[class*="language-"] {
+        --prism-bg:              var(--code-bg);
+        --prism-text:            var(--ink);
+        --prism-comment:         var(--ink-faint);
+        --prism-punctuation:     var(--ink-soft);
+        --prism-operator:        var(--amber);
+        --prism-property:        var(--amber);
+        --prism-tag:             var(--blue);
+        --prism-string:          var(--blue);
+        --prism-selector:        var(--blue);
+        --prism-keyword:         #e59362;
+        --prism-line-border:     var(--rule);
+        --prism-line-text:       var(--ink-faint);
+    }
+}
+
+/* ==========================================================================
+   3. Base Prism Structural & Selection Rules
+   ========================================================================== */
 pre > code[class*="language-"] {
-	font-size: 1em;
+    font-size: 1em;
 }
 
 pre[class*="language-"]::-moz-selection, pre[class*="language-"] ::-moz-selection,
 code[class*="language-"]::-moz-selection, code[class*="language-"] ::-moz-selection {
-	text-shadow: none;
-	background: #dfe2f1;
+    text-shadow: none;
+    background: #dfe2f1;
 }
-
 pre[class*="language-"]::selection, pre[class*="language-"] ::selection,
 code[class*="language-"]::selection, code[class*="language-"] ::selection {
-	text-shadow: none;
-	background: #dfe2f1;
+    text-shadow: none;
+    background: #dfe2f1;
 }
 
-/* Code blocks */
 pre[class*="language-"] {
-	padding: 1em;
-	margin: .5em 0;
-	overflow: auto;
+    padding: 1em;
+    margin: .5em 0;
+    overflow: auto;
 }
 
-/* Inline code */
 :not(pre) > code[class*="language-"] {
-	padding: .1em;
-	border-radius: .3em;
+    padding: .1em;
+    border-radius: .3em;
 }
 
-.token.comment,
-.token.prolog,
-.token.doctype,
-.token.cdata {
-	color: #898ea4;
-}
+/* ==========================================================================
+   4. Token Color Assignments
+   ========================================================================== */
+.token.comment, .token.prolog, .token.doctype, .token.cdata { color: var(--prism-comment); }
+.token.punctuation { color: var(--prism-punctuation); }
+.token.namespace { opacity: .7; }
 
-.token.punctuation {
-	color: #5e6687;
-}
+.token.operator, .token.boolean, .token.number, .token.attr-name { color: var(--prism-operator); }
+.token.property { color: var(--prism-property); }
+.token.tag, .token.placeholder, .token.variable { color: var(--prism-tag); }
+.token.string, .token.selector, .token.entity, .token.url, .language-css .token.string, .style .token.string, .token.statement, .token.regex, .token.atrule { color: var(--prism-string); }
+.token.attr-value, .token.keyword, .token.control, .token.directive, .token.unit { color: var(--prism-keyword); }
 
-.token.namespace {
-	opacity: .7;
-}
-
-.token.operator,
-.token.boolean,
-.token.number {
-	color: #c76b29;
-}
-
-.token.property {
-	color: #c08b30;
-}
-
-.token.tag {
-	color: #3d8fd1;
-}
-
-.token.string {
-	color: #22a2c9;
-}
-
-.token.selector {
-	color: #6679cc;
-}
-
-.token.attr-name {
-	color: #c76b29;
-}
-
-.token.entity,
-.token.url,
-.language-css .token.string,
-.style .token.string {
-	color: #22a2c9;
-}
-
-.token.attr-value,
-.token.keyword,
-.token.control,
-.token.directive,
-.token.unit {
-	color: #ac9739;
-}
-
-.token.statement,
-.token.regex,
-.token.atrule {
-	color: #22a2c9;
-}
-
-.token.placeholder,
-.token.variable {
-	color: #3d8fd1;
-}
-
-.token.deleted {
-	text-decoration: line-through;
-}
-
-.token.inserted {
-	border-bottom: 1px dotted #202746;
-	text-decoration: none;
-}
-
-.token.italic {
-	font-style: italic;
-}
-
-.token.important,
-.token.bold {
-	font-weight: bold;
-}
-
-.token.important {
-	color: #c94922;
-}
-
-.token.entity {
-	cursor: help;
-}
+.token.deleted { text-decoration: line-through; }
+.token.inserted { border-bottom: 1px dotted #202746; text-decoration: none; }
+.token.italic { font-style: italic; }
+.token.important, .token.bold { font-weight: bold; }
+.token.important { color: var(--prism-important); }
+.token.entity { cursor: help; }
 
 pre > code.highlight {
-	outline: 0.4em solid #c94922;
-	outline-offset: .4em;
+    outline: 0.4em solid var(--prism-important);
+    outline-offset: .4em;
 }
 
-/* overrides color-values for the Line Numbers plugin
- * http://prismjs.com/plugins/line-numbers/
- */
-.line-numbers .line-numbers-rows {
-	border-right-color: #dfe2f1;
-}
+/* Line Numbers Plugin Mapping */
+.line-numbers .line-numbers-rows { border-right-color: var(--prism-line-border); }
+.line-numbers-rows > span:before { color: var(--prism-line-text); }
 
-.line-numbers-rows > span:before {
-	color: #979db4;
-}
-
-/* overrides color-values for the Line Highlight plugin
- * http://prismjs.com/plugins/line-highlight/
- */
+/* Line Highlight Plugin Mapping */
 .line-highlight {
-	background: rgba(107, 115, 148, 0.2);
-	background: -webkit-linear-gradient(left, rgba(107, 115, 148, 0.2) 70%, rgba(107, 115, 148, 0));
-	background: linear-gradient(to right, rgba(107, 115, 148, 0.2) 70%, rgba(107, 115, 148, 0));
+    background: rgba(107, 115, 148, 0.2);
+    background: linear-gradient(to right, rgba(107, 115, 148, 0.2) 70%, rgba(107, 115, 148, 0));
 }

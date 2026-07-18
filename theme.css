@@ -400,6 +400,24 @@ sup a {
 	font-size: 0.95rem;
 	margin-bottom: 0;
 }
+.main a.post-list .post-header {
+	display: flex;
+	justify-content: space-between;
+	align-items: baseline;
+	gap: 0.75rem;
+}
+
+.main a.post-list .post-header h2 {
+	margin-bottom: 0;
+}
+
+.main a.post-list .post-meta {
+	font-family: var(--font-mono);
+	font-size: 0.78rem;
+	color: var(--ink-faint);
+	white-space: nowrap;
+	margin-bottom: 0;
+}
 
 .canvas-container {
 	width: 100%;

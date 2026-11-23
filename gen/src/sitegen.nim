@@ -4,28 +4,14 @@
 # Entrypoint
 
 import std/[osproc, strutils]
-import convert
+import convert, typst
 
 proc pinnedTypstVersion(): string =
   readFile("gen/typst.version").strip
 
 proc main() =
-  echo "sitegen: hello world"
-
-  let (outp, code) = execCmdEx("typst --version")
-  if code != 0:
-    echo "typst not found in PATH; run 'just install-tools'"
-    quit(1)
-
-  let parts = outp.strip.split(" ")
-  if parts.len < 2 or parts[1] != pinnedTypstVersion():
-    echo "expected typst " & pinnedTypstVersion() & " but found: " & outp.strip
-    echo "run 'just install-tools'"
-    quit(1)
-
-  echo "using ", outp.strip
-
-  convertAll()
+  checkTypstAvailable()
+  let categories = convertAll()
 
 when isMainModule:
   main()

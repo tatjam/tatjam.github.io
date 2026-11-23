@@ -1,0 +1,70 @@
+* {
+  box-sizing: border-box;
+}
+
+/* Create two equal columns that floats next to each other */
+.column {
+  float: left;
+  width: 33%;
+  padding: 10px;
+}
+
+.columncheck { 
+  float: left;
+  width: 11%;
+  padding: 10px;
+}
+
+/* Clear floats after the columns */
+.row:after {
+  content: "";
+  display: table;
+  clear: both;
+}
+
+input {
+    margin-top: 5px;
+    margin-bottom:15px;
+}
+
+input[type=checkbox] {
+    margin-bottom: -5px;
+    margin-top: 0px;
+}
+
+canvas.ChemDoodleWebComponent {
+    border:none;
+}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+input[type=number] {
+  -moz-appearance: textfield;
+}
+
+.nfpa {
+  transform: rotate(45deg);
+  border-collapse:collapse;
+  border: 4px solid;
+}
+
+.nfpatab {
+  transform: rotate(-45deg);
+  position:relative;
+  width:100px;
+  height:100px;
+
+
+}
+
+.nfpatext {
+  position:absolute;
+  text-align:right;
+  top:-30px;
+}
+
+

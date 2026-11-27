@@ -41,9 +41,9 @@ func allCategoriesContent(categories: OrderedTable[Category, seq[LoadedPost]]): 
 
 func allPostContent(listing: PostTheme, posts: seq[LoadedPost]): string =
   for i in 0 ..< posts.len:
-    let prev = max(i - 1, 0)
-    let next = min(i + 1, posts.len - 1)
-    result.add(listing.apply(posts[i], posts[prev], posts[next]))
+    let newer = max(i - 1, 0)
+    let older = min(i + 1, posts.len - 1)
+    result.add(listing.apply(posts[i], posts[older], posts[newer]))
 
 func allPostContent(
     listing: PostTheme, categories: OrderedTable[Category, seq[LoadedPost]]

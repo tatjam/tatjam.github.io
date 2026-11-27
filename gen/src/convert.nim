@@ -17,9 +17,9 @@ func themePost*(
 
 func templatePosts*(posts: seq[LoadedPost], theme: PostTheme): seq[ThemedPost] =
   for i in 0 ..< posts.len:
-    let prev = max(i - 1, 0)
-    let next = min(i + 1, posts.len - 1)
-    result.add(posts[i].themePost(posts[prev], posts[next], theme))
+    let newer = max(i - 1, 0)
+    let older = min(i + 1, posts.len - 1)
+    result.add(posts[i].themePost(posts[older], posts[newer], theme))
 
 func templateCatPage*(
     cat: Category,
@@ -71,7 +71,8 @@ func templateIndex*(
 
 func genRss*(loaded: OrderedTable[Category, seq[LoadedPost]]): string =
   result = """
-  <rss version="2.0">
+  <?xml version="1.0" encoding="utf-8"?
+  <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
     <channel>
     <title>Tatjam's Blog</title>
     <description>Tatjam's Blog</description>
@@ -82,13 +83,13 @@ func genRss*(loaded: OrderedTable[Category, seq[LoadedPost]]): string =
   let allPosts = loaded.allPostsSorted()
 
   for post in allPosts:
-    let datefmt = format(post.date, "yyyy-MM-dd")
+    let datefmt = format(post.date, "ddd, dd MMM yyyy")
     result.add(
       &"""
       <item>
         <title>{post.title}</title>
-        <link>https://tatjam.github.io/{post.url}</link>
-        <guid>https://tatjam.github.io/{post.url}</guid>
+        <link>https://tatjam.github.io{post.url}</link>
+        <guid>https://tatjam.github.io{post.url}</guid>
         <pubDate>{datefmt} 00:00:00 GMT</pubDate>
         <description>
           {post.summary}

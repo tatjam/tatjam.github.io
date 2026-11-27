@@ -31,7 +31,7 @@ These attachment points are defined with a marker (A Blender empty) on the model
 
 While placing pieces, the user can decide which attachment point to use, and also change which piece to use for attachment, allowing very easy building of relatively complex structures. It's easier to understand by watching a video (or trying it yourself by downloading and building the code):
 
-#video("img/editor.mp4")
+#video("/static/Gamedev/img/editor.mp4")
 
 The keybindings used are placeholders, the final editor will probably have some kind of visual interface for selecting attachment pieces and points.
 
@@ -82,7 +82,7 @@ A small shader preprocessor was written, it allows sharing code between shaders 
 
 Also, a screen door transparency effect was written:
 
-#video("img/sdoor.mp4", width: "30%")
+#video("/static/Gamedev/img/sdoor.mp4", width: "30%")
 
 It allows easy and correct transparency on the deferred pass for stuff like fairing look-through, but it's not appropiate for more realistic effects, where a forward transparency pass is required (stuff like engine exhaust and capsule windows).
 
@@ -94,9 +94,9 @@ Barycenters were totally broken, but, due to the relatively small scale of the e
 
 We also had precision errors related to time. Turns out that even a double is too small for storing a date! The planet orbit calculator was being too imprecise, which showed up as jittering while on the surface. It's now fixed by storing an epoch date and a relative date, so the potentially huge floating point number of the epoch date does not reduce the precision of the small time-steps.#footnote[Keep in mind, the year 2020 is roughly 31536000 seconds after J2000, our epoch date. That number is big enough as for some jittering to start becoming apparent, but stuff really started breaking around the year 2060 (or 1940). It may seem really far away but it could easily be reached on interplanetary missions.]
 
- The reason for this jittering is that the orbit calculator amplifies floating point errors really easily, so the planets end up jittering a few meters back and forward. Nothing on the planetary scale, but enough as to fully ruin your day on a more human scale.
+The reason for this jittering is that the orbit calculator amplifies floating point errors really easily, so the planets end up jittering a few meters back and forward. Nothing on the planetary scale, but enough as to fully ruin your day on a more human scale.
 
- The jittering is now impossible to notice even as far away as Pluto, but you will certainly meet floating point errors if you go really far away. Stuff like interstellar travel needs to change the origin of coordinates.
+The jittering is now impossible to notice even as far away as Pluto, but you will certainly meet floating point errors if you go really far away. Stuff like interstellar travel needs to change the origin of coordinates.
 
 The model loader also had plenty of bugs related to matrix multiplications... The order is always tricky to get right.
 
@@ -112,5 +112,7 @@ Sadly, the perfomance improvement is not that spectacular (on my PC, from 0.12s 
 #html.elem(
   "div",
   attrs: (style: "text-align: center"),
-  video("img/fly.mp4", center: true) + html.br() + [(Footage is spedup by a factor of 2)],
+  video("/static/Gamedev/img/fly.mp4", center: true)
+    + html.br()
+    + [(Footage is spedup by a factor of 2)],
 )

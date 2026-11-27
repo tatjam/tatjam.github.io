@@ -122,4 +122,7 @@ to avoid perfomance issues.
 
 That's it for this update. Hopefully next one will actually showcase game features, as the engine is about to become complete enough to start writing the game!
 
-#pic("img/launchpad.png", alt: "The launchpad, the vessel and a sunset")
+#pic(
+  "/static/Gamedev/img/launchpad.png",
+  alt: "The launchpad, the vessel and a sunset",
+)

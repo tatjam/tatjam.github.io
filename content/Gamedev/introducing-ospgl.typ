@@ -102,12 +102,18 @@ A view of the Earth from space, with a lot of debug stuff visible, and part of t
 
 The velocity is 0 as the reference frame is set to "Earth-Rotating" and the vessel is on a geostationary orbit.
 
-#pic("img/osp0.png", alt: "The Earth, The Debug Drawers, The Navball")
+#pic(
+  "/static/Gamedev/img/osp0.png",
+  alt: "The Earth, The Debug Drawers, The Navball",
+)
 
 A view high on the Earth's atmosphere, the Moon is visible.
 
-#pic("img/osp1.png", alt: "View of the moon from high atmosphere")
+#pic(
+  "/static/Gamedev/img/osp1.png",
+  alt: "View of the moon from high atmosphere",
+)
 
 A view of Mars from space, you can see its thin atmosphere.
 
-#pic("img/osp2.png", alt: "View of the mars from space")
+#pic("/static/Gamedev/img/osp2.png", alt: "View of the mars from space")

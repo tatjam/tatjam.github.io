@@ -45,7 +45,7 @@ The results are fairly satisfactory, both in the performance side, and on the vi
 Here's an example of crater distribution on a moon-sized planet, with exaggerated craters. Note that only one pass of craters is done,
 in a real use case, there would be many layers of differently sized craters, down to tiny craters only a few meters in diameter.
 
-#pic("img/roadway/craters.png", alt: "Crater genereation")
+#pic("/static/Gamedev/img/roadway/craters.png", alt: "Crater genereation")
 
 == Lua take-over
 
@@ -105,7 +105,7 @@ further improved the simplicity of writing lua code, as you don't need to have s
 
 The GUI is slowly becoming fully-featured, as a showcase, here's a screenshot from the (WIP) group manager in the editor:
 
-#pic("img/roadway/editor.png", alt: "Group manager")
+#pic("/static/Gamedev/img/roadway/editor.png", alt: "Group manager")
 
 Drop-down boxes were particularly hard to implement, as they require overlaying a canvas on top of the rest of the layout.
 
@@ -177,7 +177,10 @@ heuristic could be fairly simple to implement.
 An efficient line drawer has been implemented. It does most of the work in the GPU, as it turns out that drawing lines is an extremely parallel operation. It allows
 arbitrarily thick lines with mitering, so the end result is a really smooth curve.
 
-#pic("img/roadway/orbit.png", alt: "An elliptical orbit around the Earth")
+#pic(
+  "/static/Gamedev/img/roadway/orbit.png",
+  alt: "An elliptical orbit around the Earth",
+)
 
 == Bullet3 Patches
 
@@ -194,7 +197,12 @@ the raycast callbacks.
 
 In the following video you can see that raycast picking works just fine in the flight scene, where the whole vehicle is a single rigidbody:
 
-#video("img/roadway/output.webm", vid-type: "video/webm", width: "20%", center: true)
+#video(
+  "/static/Gamedev/img/roadway/output.webm",
+  vid-type: "video/webm",
+  width: "20%",
+  center: true,
+)
 
 = What's needed for a first release
 

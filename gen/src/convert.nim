@@ -52,6 +52,9 @@ proc loadAll*(): OrderedTable[Category, seq[LoadedPost]] =
     let path = contentDir / category
     result[Category(category)] = Category(category).loadPosts(path)
 
+  result.sort do(x, y: (Category, seq[LoadedPost])) -> int:
+    cmp($x[0], $y[0])
+
 func templateAll*(
     loaded: OrderedTable[Category, seq[LoadedPost]], theme: Theme
 ): OrderedTable[Category, seq[ThemedPost]] =
@@ -71,13 +74,13 @@ func templateIndex*(
 
 func genRss*(loaded: OrderedTable[Category, seq[LoadedPost]]): string =
   result = """
-  <?xml version="1.0" encoding="utf-8"?
-  <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
-    <channel>
-    <title>Tatjam's Blog</title>
-    <description>Tatjam's Blog</description>
-    <link>https://tatjam.github.io</link>
-    <atom:link href="https://tatjam.github.io/feed.xml" rel="self" type="application/rss+xml"/>
+<?xml version="1.0" encoding="utf-8"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+<channel>
+<title>Tatjam's Blog</title>
+<description>Tatjam's Blog</description>
+<link>https://tatjam.github.io</link>
+<atom:link href="https://tatjam.github.io/feed.xml" rel="self" type="application/rss+xml"/>
   """
 
   let allPosts = loaded.allPostsSorted()
@@ -86,24 +89,24 @@ func genRss*(loaded: OrderedTable[Category, seq[LoadedPost]]): string =
     let datefmt = format(post.date, "ddd, dd MMM yyyy")
     result.add(
       &"""
-      <item>
-        <title>{post.title}</title>
-        <link>https://tatjam.github.io{post.url}</link>
-        <guid>https://tatjam.github.io{post.url}</guid>
-        <pubDate>{datefmt} 00:00:00 GMT</pubDate>
-        <description>
-          {post.summary}
-        </description>
-        <category>
-          {post.cat}
-        </category>
-      </item>
+<item>
+<title>{post.title}</title>
+<link>https://tatjam.github.io{post.url}</link>
+<guid>https://tatjam.github.io{post.url}</guid>
+<pubDate>{datefmt} 00:00:00 GMT</pubDate>
+<description>
+{post.summary}
+</description>
+<category>
+{post.cat}
+</category>
+</item>
     """
     )
 
   result.add(
     """
-    </channel>
-    </rss>
+</channel>
+</rss>
   """
   )

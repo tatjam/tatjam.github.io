@@ -9,13 +9,29 @@
 
 #let field(id, label, type: "text", extra: (:)) = [
   #html.elem("label", attrs: ("for": id), label)
-  #html.elem("input", attrs: (type: type, id: id, name: id, onchange: "generate()", ..extra))
+  #html.elem("input", attrs: (
+    type: type,
+    id: id,
+    name: id,
+    onchange: "generate()",
+    ..extra,
+  ))
 ]
 
 #let check(id, label, checked: false, extra: (:)) = {
-  let attrs = (type: "checkbox", id: id, name: id, onchange: "generate()", ..extra)
+  let attrs = (
+    type: "checkbox",
+    id: id,
+    name: id,
+    onchange: "generate()",
+    ..extra,
+  )
   if checked { attrs.checked = "" }
-  html.elem("input", attrs: attrs) + html.elem("label", attrs: ("for": id), label) + html.br()
+  (
+    html.elem("input", attrs: attrs)
+      + html.elem("label", attrs: ("for": id), label)
+      + html.br()
+  )
 }
 
 #let radio(name, id, label, selected: false) = {
@@ -27,18 +43,25 @@
 #let ghs-check(id, icon) = html.elem(
   "div",
   attrs: (class: "columncheck"),
-  html.elem("input", attrs: (type: "checkbox", id: id, class: "columncheck", onchange: "generate()"))
+  html.elem("input", attrs: (
+    type: "checkbox",
+    id: id,
+    class: "columncheck",
+    onchange: "generate()",
+  ))
     + html.elem("label", attrs: ("for": id), pic(icon, style: "width:32px;")),
 )
 
 #let select(id, options, onchange: "generate()") = html.elem(
   "select",
   attrs: (name: id, id: id, onchange: onchange),
-  options.map(((value, text, selected)) => {
-    let attrs = (value: value)
-    if selected { attrs.selected = "selected" }
-    html.elem("option", attrs: attrs, text)
-  }).join(),
+  options
+    .map(((value, text, selected)) => {
+      let attrs = (value: value)
+      if selected { attrs.selected = "selected" }
+      html.elem("option", attrs: attrs, text)
+    })
+    .join(),
 )
 
 This is a very valuable tool that's surprisingly not available online. I decided to make a simple solution
@@ -60,7 +83,10 @@ For example, `<b>Text</b>` shows bold text and `<i>Wathever</i>` shows italic te
     You may only enter one of the options.
     #html.br()
 
-    #field("cid", [PubChem's CID: ], extra: (value: "276350", onchange: "change_name('cid')"))
+    #field("cid", [PubChem's CID: ], extra: (
+      value: "276350",
+      onchange: "change_name('cid')",
+    ))
 
     #html.br()
 
@@ -68,17 +94,23 @@ For example, `<b>Text</b>` shows bold text and `<i>Wathever</i>` shows italic te
 
     #html.br()
 
-    #field("name-fm", [Name (First Match): ], extra: (onchange: "change_name('name-fm')"))
+    #field("name-fm", [Name (First Match): ], extra: (
+      onchange: "change_name('name-fm')",
+    ))
 
     #html.br()
 
     #html.elem("label", attrs: ("for": "type"), [Label presets:])
-    #select("type", (
-      ("compact", [Compact Label], false),
-      ("small", [Small Label], false),
-      ("normal", [Normal Label], true),
-      ("detailed", [Detailed Label], false),
-    ), onchange: "change_preset(this.value)")
+    #select(
+      "type",
+      (
+        ("compact", [Compact Label], false),
+        ("small", [Small Label], false),
+        ("normal", [Normal Label], true),
+        ("detailed", [Detailed Label], false),
+      ),
+      onchange: "change_preset(this.value)",
+    )
     (Changes customization!)
 
     #html.br()
@@ -89,16 +121,25 @@ For example, `<b>Text</b>` shows bold text and `<i>Wathever</i>` shows italic te
     are not very well supported.
     #html.br()
 
-    #check("use-pubchem", [Use PubChem image instead of generated one. #strong[Download by screenshot!]])
+    #check(
+      "use-pubchem",
+      [Use PubChem image instead of generated one. #strong[Download by screenshot!]],
+    )
 
     #html.br()
 
     #html.elem("div", attrs: (id: "image-settings"), [
-      #field("bond-length", [Image Scale: ], type: "number", extra: (value: "1.5", min: "0", max: "5"))
+      #field("bond-length", [Image Scale: ], type: "number", extra: (
+        value: "1.5",
+        min: "0",
+        max: "5",
+      ))
 
       #html.br()
 
-      #field("bond-width", [Bond Width (Pixels): ], type: "number", extra: (value: "1"))
+      #field("bond-width", [Bond Width (Pixels): ], type: "number", extra: (
+        value: "1",
+      ))
 
       #html.br()
 
@@ -106,7 +147,10 @@ For example, `<b>Text</b>` shows bold text and `<i>Wathever</i>` shows italic te
 
       #html.br()
 
-      #check("terminal-carbons", [Draw terminal carbons as CH#html.elem("sub", [3])])
+      #check(
+        "terminal-carbons",
+        [Draw terminal carbons as CH#html.elem("sub", [3])],
+      )
 
       #field("atom-radius", [Atom Size: ], type: "number", extra: (value: "4"))
 
@@ -130,31 +174,61 @@ For example, `<b>Text</b>` shows bold text and `<i>Wathever</i>` shows italic te
 
     #html.elem("p", [
       #html.elem("label", attrs: ("for": "custom_name"), [Custom Name: ])
-      #html.elem("input", attrs: (type: "text", id: "custom_name", placeholder: "Default (Allows HTML)", name: "custom_name", onchange: "generate()"))
+      #html.elem("input", attrs: (
+        type: "text",
+        id: "custom_name",
+        placeholder: "Default (Allows HTML)",
+        name: "custom_name",
+        onchange: "generate()",
+      ))
     ])
 
     #html.elem("p", [
       #html.elem("label", attrs: ("for": "custom_text"), [Custom Text: ])
-      #html.elem("textarea", attrs: (id: "custom_text", placeholder: "None (Allows HTML)", name: "custom_text", onchange: "generate()"))
+      #html.elem("textarea", attrs: (
+        id: "custom_text",
+        placeholder: "None (Allows HTML)",
+        name: "custom_text",
+        onchange: "generate()",
+      ))
     ])
 
     #html.elem("p", [
       #html.elem("label", attrs: ("for": "custom_prop"), [Custom Properties: ])
-      #html.elem("textarea", attrs: (id: "custom_prop", placeholder: "None (Allows HTML)", name: "custom_prop", onchange: "generate()"))
+      #html.elem("textarea", attrs: (
+        id: "custom_prop",
+        placeholder: "None (Allows HTML)",
+        name: "custom_prop",
+        onchange: "generate()",
+      ))
     ])
 
     #html.elem("p", [
       #html.elem("label", attrs: ("for": "custom_text"), [Custom Formula: ])
-      #html.elem("input", attrs: (type: "text", id: "custom_formula", placeholder: "Example: CuSO4*5H2O", name: "custom_formula", onchange: "generate()"))
+      #html.elem("input", attrs: (
+        type: "text",
+        id: "custom_formula",
+        placeholder: "Example: CuSO4*5H2O",
+        name: "custom_formula",
+        onchange: "generate()",
+      ))
     ])
 
-    #html.elem("p", check("show-image", [Show Image], checked: true, extra: (value: "Image")))
+    #html.elem("p", check("show-image", [Show Image], checked: true, extra: (
+      value: "Image",
+    )))
 
-    #html.elem("p", field("iwidth", [Image Width: ], type: "number", extra: (value: "300")))
+    #html.elem("p", field("iwidth", [Image Width: ], type: "number", extra: (
+      value: "300",
+    )))
 
-    #html.elem("p", field("iheight", [Image Height: ], type: "number", extra: (value: "300")))
+    #html.elem("p", field("iheight", [Image Height: ], type: "number", extra: (
+      value: "300",
+    )))
 
-    #html.elem("p", field("margins", [Margins: ], type: "number", extra: (value: "3")))
+    #html.elem("p", field("margins", [Margins: ], type: "number", extra: (
+      value: "3",
+    )))
   ])
 
   #html.elem("div", attrs: (class: "column"), [
@@ -226,35 +300,80 @@ For example, `<b>Text</b>` shows bold text and `<i>Wathever</i>` shows italic te
       ])
     ])
 
-    #html.elem("p", field("ghs_size", [Hazard Icon Size: ], type: "number", extra: (value: "64")))
+    #html.elem("p", field(
+      "ghs_size",
+      [Hazard Icon Size: ],
+      type: "number",
+      extra: (value: "64"),
+    ))
 
     #html.elem("p", [
       #html.elem("label", attrs: ("for": "custom_text"), [Extra Hazard Text: ])
-      #html.elem("textarea", attrs: (id: "hazard_text", placeholder: "None (Allows HTML)", name: "hazard_text", onchange: "generate()"))
+      #html.elem("textarea", attrs: (
+        id: "hazard_text",
+        placeholder: "None (Allows HTML)",
+        name: "hazard_text",
+        onchange: "generate()",
+      ))
     ])
 
-    #html.elem("p", check("unknown-hazard", [Use Unknown Hazard Symbol], checked: true, extra: (value: "Unknown Hazard")))
+    #html.elem("p", check(
+      "unknown-hazard",
+      [Use Unknown Hazard Symbol],
+      checked: true,
+      extra: (value: "Unknown Hazard"),
+    ))
 
     #html.elem("h3", [Other Configurations])
-    #html.elem("p", [(Warning: Some may not be available, or not correctly extracted!)])
+    #html.elem(
+      "p",
+      [(Warning: Some may not be available, or not correctly extracted!)],
+    )
 
     #html.elem("div", attrs: (class: "row"), [
       #html.elem("div", attrs: (class: "column"), [
-        #html.elem("p", check("formula", [Formula], checked: true, extra: (value: "Formula")))
-        #html.elem("p", check("molar-mass", [Molar Mass], checked: true, extra: (value: "Molar Mass")))
-        #html.elem("p", check("melting", [Density], checked: true, extra: (value: "Melting")))
-        #html.elem("p", check("melting", [Melting Point], checked: true, extra: (value: "Melting")))
+        #html.elem("p", check("formula", [Formula], checked: true, extra: (
+          value: "Formula",
+        )))
+        #html.elem("p", check(
+          "molar-mass",
+          [Molar Mass],
+          checked: true,
+          extra: (value: "Molar Mass"),
+        ))
+        #html.elem("p", check("melting", [Density], checked: true, extra: (
+          value: "Melting",
+        )))
+        #html.elem("p", check(
+          "melting",
+          [Melting Point],
+          checked: true,
+          extra: (value: "Melting"),
+        ))
       ])
 
       #html.elem("div", attrs: (class: "column"), [
-        #html.elem("p", check("boiling", [Boiling Point], checked: true, extra: (value: "Boiling")))
-        #html.elem("p", check("flash", [Flash Point], checked: true, extra: (value: "flash")))
-        #html.elem("p", check("vapor", [Vapor Pressure], checked: true, extra: (value: "Vapor")))
+        #html.elem("p", check(
+          "boiling",
+          [Boiling Point],
+          checked: true,
+          extra: (value: "Boiling"),
+        ))
+        #html.elem("p", check("flash", [Flash Point], checked: true, extra: (
+          value: "flash",
+        )))
+        #html.elem("p", check("vapor", [Vapor Pressure], checked: true, extra: (
+          value: "Vapor",
+        )))
       ])
     ])
 
     #html.elem("p", [
-      #field("density", [Pixel Density: ], type: "number", extra: (value: "2.5", min: "0.5", max: "8.0"))
+      #field("density", [Pixel Density: ], type: "number", extra: (
+        value: "2.5",
+        min: "0.5",
+        max: "8.0",
+      ))
       High values may slow down your browser, but very low values will be very pixelated once you save them. The default
       value should be more than enough for printing.
     ])
@@ -268,61 +387,178 @@ molecule geometry engine.
 
 #html.elem("button", attrs: (onclick: "generate()"), [Regenerate])
 
-#html.elem("div", attrs: (id: "generated", style: "background-color:#ffffff;padding-top:0px;overflow:visible;"), [
-  #html.elem("div", attrs: (id: "margin-holder", style: "border:solid 1px;display:inline-block;padding-top:0px;"), [
-    #html.elem("div", attrs: (id: "base-text"), [
-      #html.elem("h3", attrs: (id: "cname"))
-      #html.elem("p", attrs: (id: "ctext"))
-      #html.elem("p", attrs: (id: "cformula"))
-      #html.elem("p", attrs: (id: "mmass"))
-    ])
+#html.elem(
+  "div",
+  attrs: (
+    id: "generated",
+    style: "background-color:#ffffff;padding-top:0px;overflow:visible;",
+  ),
+  [
+    #html.elem(
+      "div",
+      attrs: (
+        id: "margin-holder",
+        style: "border:solid 1px;display:inline-block;padding-top:0px;",
+      ),
+      [
+        #html.elem("div", attrs: (id: "base-text"), [
+          #html.elem("h3", attrs: (id: "cname"))
+          #html.elem("p", attrs: (id: "ctext"))
+          #html.elem("p", attrs: (id: "cformula"))
+          #html.elem("p", attrs: (id: "mmass"))
+        ])
 
-    #html.elem("div", attrs: (id: "custom-prop"), [
-      #html.elem("p", attrs: (id: "dens"))
-      #html.elem("p", attrs: (id: "temps"))
-      #html.elem("p", attrs: (id: "vap"))
-      #html.elem("p", attrs: (id: "expl"))
-      #html.elem("p", attrs: (id: "cprop"))
-    ])
+        #html.elem("div", attrs: (id: "custom-prop"), [
+          #html.elem("p", attrs: (id: "dens"))
+          #html.elem("p", attrs: (id: "temps"))
+          #html.elem("p", attrs: (id: "vap"))
+          #html.elem("p", attrs: (id: "expl"))
+          #html.elem("p", attrs: (id: "cprop"))
+        ])
 
-    #html.elem("div", attrs: (id: "ghs"), [
-      #html.elem("img", attrs: (id: "ghs-corrosive", style: "width:64px;", src: "/external/ghs/corrosive.svg"))
-      #html.elem("img", attrs: (id: "ghs-environment", style: "width:64px;", src: "/external/ghs/environment.svg"))
-      #html.elem("img", attrs: (id: "ghs-gas", style: "width:64px;", src: "/external/ghs/gas.svg"))
-      #html.elem("img", attrs: (id: "ghs-harmful", style: "width:64px;", src: "/external/ghs/harmful.svg"))
-      #html.elem("img", attrs: (id: "ghs-hazard", style: "width:64px;", src: "/external/ghs/hazard.svg"))
-      #html.elem("img", attrs: (id: "ghs-oxidizer", style: "width:64px;", src: "/external/ghs/oxidizer.svg"))
-      #html.elem("img", attrs: (id: "ghs-explosive", style: "width:64px;", src: "/external/ghs/explosive.svg"))
-      #html.elem("img", attrs: (id: "ghs-flammable", style: "width:64px;", src: "/external/ghs/flammable.svg"))
-      #html.elem("img", attrs: (id: "ghs-toxic", style: "width:64px;", src: "/external/ghs/toxic.svg"))
-      #html.elem("img", attrs: (id: "ghs-unknown", style: "width:64px;", src: "/external/ghs/unknown.svg"))
-      #html.elem("p", attrs: (id: "ghs-string"))
-      #html.elem("p", attrs: (id: "ghs-extra"))
-    ])
+        #html.elem("div", attrs: (id: "ghs"), [
+          #html.elem("img", attrs: (
+            id: "ghs-corrosive",
+            style: "width:64px;",
+            src: "/external/ghs/corrosive.svg",
+          ))
+          #html.elem("img", attrs: (
+            id: "ghs-environment",
+            style: "width:64px;",
+            src: "/external/ghs/environment.svg",
+          ))
+          #html.elem("img", attrs: (
+            id: "ghs-gas",
+            style: "width:64px;",
+            src: "/external/ghs/gas.svg",
+          ))
+          #html.elem("img", attrs: (
+            id: "ghs-harmful",
+            style: "width:64px;",
+            src: "/external/ghs/harmful.svg",
+          ))
+          #html.elem("img", attrs: (
+            id: "ghs-hazard",
+            style: "width:64px;",
+            src: "/external/ghs/hazard.svg",
+          ))
+          #html.elem("img", attrs: (
+            id: "ghs-oxidizer",
+            style: "width:64px;",
+            src: "/external/ghs/oxidizer.svg",
+          ))
+          #html.elem("img", attrs: (
+            id: "ghs-explosive",
+            style: "width:64px;",
+            src: "/external/ghs/explosive.svg",
+          ))
+          #html.elem("img", attrs: (
+            id: "ghs-flammable",
+            style: "width:64px;",
+            src: "/external/ghs/flammable.svg",
+          ))
+          #html.elem("img", attrs: (
+            id: "ghs-toxic",
+            style: "width:64px;",
+            src: "/external/ghs/toxic.svg",
+          ))
+          #html.elem("img", attrs: (
+            id: "ghs-unknown",
+            style: "width:64px;",
+            src: "/external/ghs/unknown.svg",
+          ))
+          #html.elem("p", attrs: (id: "ghs-string"))
+          #html.elem("p", attrs: (id: "ghs-extra"))
+        ])
 
-    #html.elem("div", attrs: (id: "nfpa-float", style: "float:left; margin-left:-5rem"), [
-      #html.elem("div", attrs: (id: "nfpa-diamond", style: "scale:0.5;"), [
         #html.elem(
-          "table",
-          attrs: (border: "1", class: "nfpa"),
-          html.elem("tr", [
-            #html.elem("td", attrs: (style: "background:#ff0030; width=100px; height=100px;"), html.elem("div", attrs: (class: "nfpatab"), html.elem("p", attrs: (id: "nfpa-fire", class: "nfpatext", style: "top:-10px; right:0px; font-size:35px;"), [1])))
-            #html.elem("td", attrs: (style: "background:#ffdc45; width=100px; height=100px;"), html.elem("div", attrs: (class: "nfpatab"), html.elem("p", attrs: (id: "nfpa-react", class: "nfpatext", style: "top:-10px; right:0px; font-size:35px;"), [2])))
-          ])
-            + html.elem("tr", [
-              #html.elem("td", attrs: (style: "background:#008aca; width=100px; height=100px;"), html.elem("div", attrs: (class: "nfpatab"), html.elem("p", attrs: (id: "nfpa-health", class: "nfpatext", style: "top:-10px; right:0px; font-size:35px;"), [3])))
-              #html.elem("td", attrs: (style: "background:white; width=100px; height=100px;"), html.elem("div", attrs: (class: "nfpatab"), html.elem("p", attrs: (id: "nfpa-special", class: "nfpatext", style: "right:0px; font-size:35px; top:-10px;"))))
-            ]),
+          "div",
+          attrs: (id: "nfpa-float", style: "float:left; margin-left:-5rem"),
+          [
+            #html.elem(
+              "div",
+              attrs: (id: "nfpa-diamond", style: "scale:0.5;"),
+              [
+                #html.elem(
+                  "table",
+                  attrs: (border: "1", class: "nfpa"),
+                  html.elem("tr", [
+                    #html.elem(
+                      "td",
+                      attrs: (
+                        style: "background:#ff0030; width=100px; height=100px;",
+                      ),
+                      html.elem("div", attrs: (class: "nfpatab"), html.elem(
+                        "p",
+                        attrs: (
+                          id: "nfpa-fire",
+                          class: "nfpatext",
+                          style: "top:-10px; right:0px; font-size:35px;",
+                        ),
+                        [1],
+                      )),
+                    )
+                    #html.elem(
+                      "td",
+                      attrs: (
+                        style: "background:#ffdc45; width=100px; height=100px;",
+                      ),
+                      html.elem("div", attrs: (class: "nfpatab"), html.elem(
+                        "p",
+                        attrs: (
+                          id: "nfpa-react",
+                          class: "nfpatext",
+                          style: "top:-10px; right:0px; font-size:35px;",
+                        ),
+                        [2],
+                      )),
+                    )
+                  ])
+                    + html.elem("tr", [
+                      #html.elem(
+                        "td",
+                        attrs: (
+                          style: "background:#008aca; width=100px; height=100px;",
+                        ),
+                        html.elem("div", attrs: (class: "nfpatab"), html.elem(
+                          "p",
+                          attrs: (
+                            id: "nfpa-health",
+                            class: "nfpatext",
+                            style: "top:-10px; right:0px; font-size:35px;",
+                          ),
+                          [3],
+                        )),
+                      )
+                      #html.elem(
+                        "td",
+                        attrs: (
+                          style: "background:white; width=100px; height=100px;",
+                        ),
+                        html.elem("div", attrs: (class: "nfpatab"), html.elem(
+                          "p",
+                          attrs: (
+                            id: "nfpa-special",
+                            class: "nfpatext",
+                            style: "right:0px; font-size:35px; top:-10px;",
+                          ),
+                        )),
+                      )
+                    ]),
+                )
+              ],
+            )
+          ],
         )
-      ])
-    ])
 
-    #html.elem("div", attrs: (id: "images"), [
-      #html.elem("img", attrs: (id: "image", style: "width:auto;"))
-      #html.elem("canvas", attrs: (id: "chem-doodle-canvas"))
-    ])
-  ])
-])
+        #html.elem("div", attrs: (id: "images"), [
+          #html.elem("img", attrs: (id: "image", style: "width:auto;"))
+          #html.elem("canvas", attrs: (id: "chem-doodle-canvas"))
+        ])
+      ],
+    )
+  ],
+)
 
 #html.elem("div", attrs: (id: "holder"))
 
@@ -351,7 +587,11 @@ and check the source code at #link("https://github.com/tatjam/tatjam.github.io")
 
 #ext-script("/external/html2canvas/html2canvas.min.js")
 
-#html.elem("link", attrs: (rel: "stylesheet", href: "/external/chemdoodle/ChemDoodleWeb.css", type: "text/css"))
+#html.elem("link", attrs: (
+  rel: "stylesheet",
+  href: "/external/chemdoodle/ChemDoodleWeb.css",
+  type: "text/css",
+))
 
 #ext-script("/external/chemdoodle/ChemDoodleWeb.js")
 

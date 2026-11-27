@@ -335,7 +335,8 @@ hr {
 }
 
 .main .footnotes,
-.main section.footnotes {
+.main section.footnotes,
+.main section[role="doc-endnotes"] {
 	margin-top: 3rem;
 	padding-top: 1.5rem;
 	border-top: 2px solid var(--rule);
@@ -344,7 +345,8 @@ hr {
 	position: relative;
 }
 .main .footnotes::before,
-.main section.footnotes::before {
+.main section.footnotes::before,
+.main section[role="doc-endnotes"]::before {
 	content: "Notes";
 	display: block;
 	font-family: var(--font-mono);
@@ -355,15 +357,18 @@ hr {
 	margin-bottom: 0.9rem;
 }
 .main .footnotes > hr:first-child,
-.main section.footnotes > hr:first-child {
+.main section.footnotes > hr:first-child,
+.main section[role="doc-endnotes"] > hr:first-child {
 	display: none;
 }
 .main .footnotes ol,
-.main section.footnotes ol {
+.main section.footnotes ol,
+.main section[role="doc-endnotes"] ol {
 	padding-left: 1.4rem;
 }
 .main .footnotes li,
-.main section.footnotes li {
+.main section.footnotes li,
+.main section[role="doc-endnotes"] li {
 	margin-bottom: 0.5rem;
 }
 

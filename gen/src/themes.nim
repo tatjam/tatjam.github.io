@@ -18,22 +18,22 @@ type Theme* = object
 func apply*(
     tmp: PostTheme, post: LoadedPost, prevPost: LoadedPost, nextPost: LoadedPost
 ): string =
-  string(tmp).multiReplace(
-    [
-      ("<$POST_TITLE>", post.title),
-      ("<$POST_URL>", post.url),
-      ("<$EXTRA_HEAD>", post.extraHead),
-      ("<$CATEGORY_LINK>", post.cat.url),
-      ("<$CATEGORY_NAME>", $post.cat),
-      ("<$PREV_POST>", prevPost.url),
-      ("<$PREV_POST_TITLE>", prevPost.title),
-      ("<$NEXT_POST>", nextPost.url),
-      ("<$NEXT_POST_TITLE>", nextPost.title),
-      ("<$POST_DATE>", post.date.format("yyyy-MM-dd")),
-      ("<$POST_CONTENTS>", post.body),
-      ("<$POST_SUMMARY>", post.summary),
-    ]
-  )
+  result = string(tmp).multiReplace(
+      [
+        ("<$POST_TITLE>", post.title),
+        ("<$POST_URL>", post.url),
+        ("<$EXTRA_HEAD>", post.extraHead),
+        ("<$CATEGORY_LINK>", post.cat.url),
+        ("<$CATEGORY_NAME>", $post.cat),
+        ("<$PREV_POST>", prevPost.url),
+        ("<$PREV_POST_TITLE>", prevPost.title),
+        ("<$NEXT_POST>", nextPost.url),
+        ("<$NEXT_POST_TITLE>", nextPost.title),
+        ("<$POST_DATE>", post.date.format("yyyy-MM-dd")),
+        ("<$POST_CONTENTS>", post.body),
+        ("<$POST_SUMMARY>", post.summary),
+      ]
+    )
 
 func allCategoriesContent(categories: OrderedTable[Category, seq[LoadedPost]]): string =
   for cat, _ in categories:
@@ -59,13 +59,13 @@ func apply*(
   let allCats = categories.allCategoriesContent
   let posts = listing.allPostContent(categories[category])
 
-  string(tmp).multiReplace(
-    [
-      ("<$CUR_CAT_NAME>", $category),
-      ("<$ALL_CATEGORIES>", allCats),
-      ("<$POST_LIST_CAT>", posts),
-    ]
-  )
+  result = string(tmp).multiReplace(
+      [
+        ("<$CUR_CAT_NAME>", $category),
+        ("<$ALL_CATEGORIES>", allCats),
+        ("<$POST_LIST_CAT>", posts),
+      ]
+    )
 
 func apply*(
     tmp: IndexTheme,
@@ -75,4 +75,5 @@ func apply*(
   let allCats = categories.allCategoriesContent
   let posts = listing.allPostContent(categories)
 
-  string(tmp).multiReplace([("<$ALL_CATEGORIES>", allCats), ("<$POST_LIST>", posts)])
+  result =
+    string(tmp).multiReplace([("<$ALL_CATEGORIES>", allCats), ("<$POST_LIST>", posts)])

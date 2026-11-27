@@ -82,7 +82,11 @@ Our ideal sampling process can be easily achieved within a computer by sampling 
 
 We can represent such a device as a convolution in the time domain between our sampled signal and the "boxcar" function with the sample period as width:
 
-#pic("./fourier1img/rect.svg", alt: "Rectangle function", style: "width: 40%")
+#pic(
+  "/static/Mathematics/fourier1img/rect.svg",
+  alt: "Rectangle function",
+  style: "width: 40%",
+)
 
 Applying the convolution theorem, we can obtain the spectrum of the resulting signal as the product of the spectrum of the original samples, and of the spectrum of the "boxcar" function, which is known as the "sinc" function:
 

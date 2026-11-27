@@ -127,14 +127,14 @@ stuff to work.
 
 Vehicles are currently implemented as a tree of pieces. While this simplifies a lot of stuff, it could go away further in development
 as it introduces some weird problems such as multiple port docking being impossible to do correctly #footnote[Another option, which can be found on #link("https://github.com/TheOpenSpaceProgram/urho-osp")[Capital-Asterisk's Urho OSP],
- is to avoid the tree structure. This fixes the big problem of multi-port docking, but introduces user experience challenges, how will
- parts be joined together? How can the user create complex relations between parts?
+  is to avoid the tree structure. This fixes the big problem of multi-port docking, but introduces user experience challenges, how will
+  parts be joined together? How can the user create complex relations between parts?
 
- The code changes required are actually not that big, pieces need to allow multiple links instead of just one, and all tree traversing code
- needs to be adjusted to keep that in mind.
+  The code changes required are actually not that big, pieces need to allow multiple links instead of just one, and all tree traversing code
+  needs to be adjusted to keep that in mind.
 
- A good example of ignoring the tree structure are KSP's struts and fuel lines, but they, as far as I know, are not conventional
- parts, and are implemented separately. If we don't implement a tree style vehicle, then fuel lines will be conventional parts.].
+  A good example of ignoring the tree structure are KSP's struts and fuel lines, but they, as far as I know, are not conventional
+  parts, and are implemented separately. If we don't implement a tree style vehicle, then fuel lines will be conventional parts.].
 
 Parts are the functional units of a vehicle, they can have Machines attached which do some kind of action.
 
@@ -149,11 +149,11 @@ It's made out of two pieces, the first one, the root piece, is what you attach t
 Meanwhile, the second piece is where you attach whatever is decoupled. This secondary piece
 could perfectly be invisible and just a collider, but it must be present (otherwise the decoupler couldn't
 know what link to separate #footnote[Parts may or may not know what is linked to them, this is one of the important decisions that are needed.
- It makes sense for part code to only have access to the pieces that are inside that part, after all,
- all multi-part interactions that I can think of will be handled by external systems (resource flow, for example).
- On the other hand, making pieces be aware of what is connected to them, even if it makes the code structures more complex, allows decouplers
- made of a single piece.
- This needs some thinking before any hard to change code is written.]).
+  It makes sense for part code to only have access to the pieces that are inside that part, after all,
+  all multi-part interactions that I can think of will be handled by external systems (resource flow, for example).
+  On the other hand, making pieces be aware of what is connected to them, even if it makes the code structures more complex, allows decouplers
+  made of a single piece.
+  This needs some thinking before any hard to change code is written.]).
 
 Upon decoupling, the secondary piece becomes a dummy piece as it's no longer linked to the root piece, and the
 part has lost the reference to it.

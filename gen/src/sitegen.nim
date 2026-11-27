@@ -35,12 +35,12 @@ proc main() =
   echo "writing posts..."
   for cat, posts in templated:
     for post in posts:
-      writeFile(post.targetFilename.string, post.contents)
-      echo &"\twrote {post.targetFilename.absolutePath.string}"
+      writeFile(post.targetPath.string, post.contents)
+      echo &"\twrote {post.targetPath.absolutePath.string}"
 
   echo "writing category pages..."
   for cat, contents in templatedCat:
-    let path = Path(&".{cat.url}")
+    let path = Path(&".{cat.targetPath}")
     path.parentDir.createDir()
     writeFile(path.string, contents)
     echo &"\twrote {path.absolutePath.string}"

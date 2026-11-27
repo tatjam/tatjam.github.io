@@ -23,51 +23,36 @@ proc checkTypstAvailable*() =
 
   echo "using ", outp.strip
 
-proc runTypst*(file: Path): string =
-  let p = startProcess(
-    "typst",
-    "",
-    @["compile", "--root", ".", "--features", "html", "--format", "html", $file, "-"],
-    options = {poUsePath},
-  )
-
-  let html = p.outputStream.readAll()
+proc runTypstCommand(args: openArray[string]): string =
+  let p = startProcess("typst", "", args, options = {poUsePath})
+  result = p.outputStream.readAll()
   let err = p.errorStream.readAll()
 
   let code = p.waitForExit()
 
   if code != 0:
     echo err
-    raise newException(ValueError, &"Typst failed for {file}")
+    raise newException(ValueError, &"Typst failed for invocation 'typst {args}'")
 
-  html
+proc runTypst*(file: Path): string =
+  runTypstCommand(
+    @["compile", "--root", ".", "--features", "html", "--format", "html", $file, "-"]
+  )
 
 proc runTypstMetadata*(file: Path): JsonNode =
-  let p = startProcess(
-    "typst",
-    "",
-    @[
-      "eval",
-      "--root",
-      ".",
-      "--features",
-      "html",
-      "--format",
-      "json",
-      "query(<post-meta>).first().value",
-      "--in",
-      $file,
-    ],
-    options = {poUsePath},
+  parseJson(
+    runTypstCommand(
+      @[
+        "eval",
+        "--root",
+        ".",
+        "--features",
+        "html",
+        "--format",
+        "json",
+        "query(<post-meta>).first().value",
+        "--in",
+        $file,
+      ]
+    )
   )
-
-  let jsonText = p.outputStream.readAll()
-  let err = p.errorStream.readAll()
-
-  let code = p.waitForExit()
-
-  if code != 0:
-    echo err
-    raise newException(ValueError, &"Typst metadata failed for {file}")
-
-  parseJson(jsonText)

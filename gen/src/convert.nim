@@ -63,7 +63,7 @@ func themePost*(
     post: LoadedPost, prev: LoadedPost, next: LoadedPost, theme: PostTheme
 ): ThemedPost =
   ThemedPost(
-    targetFilename: Path(&".{post.url}"), contents: theme.apply(post, prev, next)
+    targetPath: Path(&"{post.targetPath}"), contents: theme.apply(post, prev, next)
   )
 
 func templatePosts*(posts: seq[LoadedPost], theme: PostTheme): seq[ThemedPost] =

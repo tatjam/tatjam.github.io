@@ -19,6 +19,9 @@ func `==`*(a: Category, b: Category): bool =
 func url*(cat: Category): string =
   &"/category-{cat}.html"
 
+func targetPath*(cat: Category): string =
+  &"./category-{cat}.html"
+
 type LoadedPost* = object
   sourceFilename*: Path
   cat*: Category
@@ -34,6 +37,10 @@ func url*(p: LoadedPost): string =
   let (_, name, _) = p.sourceFilename.splitFile()
   &"/{p.cat}/{name}.html"
 
+func targetPath*(p: LoadedPost): string =
+  let (_, name, _) = p.sourceFilename.splitFile()
+  &"./{p.cat}/{name}.html"
+
 type ThemedPost* = object
-  targetFilename*: Path
+  targetPath*: Path
   contents*: string

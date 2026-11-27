@@ -6,17 +6,17 @@
 import posts
 import std/[tables, strutils, algorithm, times, strformat]
 
-type PostTemplate* = distinct string
-type IndexTemplate* = distinct string
+type PostTheme* = distinct string
+type IndexTheme* = distinct string
 
 type Theme* = object
-  indexTheme*: IndexTemplate
-  categoryTheme*: IndexTemplate
-  postTheme*: PostTemplate
-  listingTheme*: PostTemplate
+  indexTheme*: IndexTheme
+  categoryTheme*: IndexTheme
+  postTheme*: PostTheme
+  listingTheme*: PostTheme
 
 func apply*(
-    tmp: PostTemplate, post: LoadedPost, prevPost: LoadedPost, nextPost: LoadedPost
+    tmp: PostTheme, post: LoadedPost, prevPost: LoadedPost, nextPost: LoadedPost
 ): string =
   string(tmp).multiReplace(
     [
@@ -49,20 +49,20 @@ func allPostsSorted(
   result.sort do(x, y: LoadedPost) -> int:
     cmp(y.date, x.date)
 
-func allPostContent(listing: PostTemplate, posts: seq[LoadedPost]): string =
+func allPostContent(listing: PostTheme, posts: seq[LoadedPost]): string =
   for i in 0 ..< posts.len:
     let prev = max(i - 1, 0)
     let next = min(i + 1, posts.len - 1)
     result.add(listing.apply(posts[i], posts[prev], posts[next]))
 
 func allPostContent(
-    listing: PostTemplate, categories: OrderedTable[Category, seq[LoadedPost]]
+    listing: PostTheme, categories: OrderedTable[Category, seq[LoadedPost]]
 ): string =
   listing.allPostContent(categories.allPostsSorted)
 
 func apply*(
-    tmp: IndexTemplate,
-    listing: PostTemplate,
+    tmp: IndexTheme,
+    listing: PostTheme,
     category: Category,
     categories: OrderedTable[Category, seq[LoadedPost]],
 ): string =
@@ -78,8 +78,8 @@ func apply*(
   )
 
 func apply*(
-    tmp: IndexTemplate,
-    listing: PostTemplate,
+    tmp: IndexTheme,
+    listing: PostTheme,
     categories: OrderedTable[Category, seq[LoadedPost]],
 ): string =
   let allCats = categories.allCategoriesContent

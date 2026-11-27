@@ -4,17 +4,17 @@
 # Entrypoint
 
 import std/[osproc, strutils, tables, paths, strformat, dirs]
-import convert, typst, templates, posts
+import convert, typst, themes, posts
 
 # unhandledExceptionHook = proc(e: ref Exception) {.nimcall.} =
 #   if e of Defect:
 #     echo e.getStackTrace()
 
 proc loadTheme(): Theme =
-  result.postTheme = PostTemplate(readFile("theme/post.html"))
-  result.categoryTheme = IndexTemplate(readFile("theme/category.html"))
-  result.indexTheme = IndexTemplate(readFile("theme/index.html"))
-  result.listingTheme = PostTemplate(readFile("theme/list.html"))
+  result.postTheme = PostTheme(readFile("theme/post.html"))
+  result.categoryTheme = IndexTheme(readFile("theme/category.html"))
+  result.indexTheme = IndexTheme(readFile("theme/index.html"))
+  result.listingTheme = PostTheme(readFile("theme/list.html"))
 
 proc main() =
   echo "converting posts..."

@@ -4,7 +4,7 @@
 # Invoking typst for the conversion and storing posts / categories
 
 import std/[paths, json, strformat, dirs, tables, times, strutils]
-import posts, typst, templates
+import posts, typst, themes
 
 const contentDir = Path("content/")
 
@@ -59,24 +59,24 @@ proc loadPosts*(cat: Category, basePath: Path): seq[LoadedPost] =
     let postPath = contentDir / Path(cat) / post
     result.add cat.loadPost(postPath)
 
-func templatePost*(
-    post: LoadedPost, prev: LoadedPost, next: LoadedPost, theme: PostTemplate
-): TemplatedPost =
-  TemplatedPost(
+func themePost*(
+    post: LoadedPost, prev: LoadedPost, next: LoadedPost, theme: PostTheme
+): ThemedPost =
+  ThemedPost(
     targetFilename: Path(&".{post.url}"), contents: theme.apply(post, prev, next)
   )
 
-func templatePosts*(posts: seq[LoadedPost], theme: PostTemplate): seq[TemplatedPost] =
+func templatePosts*(posts: seq[LoadedPost], theme: PostTheme): seq[ThemedPost] =
   for i in 0 ..< posts.len:
     let prev = max(i - 1, 0)
     let next = min(i + 1, posts.len - 1)
-    result.add(posts[i].templatePost(posts[prev], posts[next], theme))
+    result.add(posts[i].themePost(posts[prev], posts[next], theme))
 
 func templateCatPage*(
     cat: Category,
     posts: OrderedTable[Category, seq[LoadedPost]],
-    theme: IndexTemplate,
-    listing: PostTemplate,
+    theme: IndexTheme,
+    listing: PostTheme,
 ): string =
   theme.apply(listing, cat, posts)
 
@@ -90,7 +90,7 @@ proc loadAll*(): OrderedTable[Category, seq[LoadedPost]] =
 
 func templateAll*(
     loaded: OrderedTable[Category, seq[LoadedPost]], theme: Theme
-): OrderedTable[Category, seq[TemplatedPost]] =
+): OrderedTable[Category, seq[ThemedPost]] =
   for cat, posts in loaded:
     result[cat] = posts.templatePosts(theme.postTheme)
 

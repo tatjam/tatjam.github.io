@@ -34,6 +34,6 @@ func url*(p: LoadedPost): string =
   let (_, name, _) = p.sourceFilename.splitFile()
   &"/{p.cat}/{name}.html"
 
-type TemplatedPost* = object
+type ThemedPost* = object
   targetFilename*: Path
   contents*: string

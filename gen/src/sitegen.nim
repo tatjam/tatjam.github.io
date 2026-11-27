@@ -32,23 +32,31 @@ proc main() =
   echo "templating index..."
   let templatedIndex = loaded.templateIndex(theme)
 
+  echo "templating RSS feed..."
+  let templatedRss = loaded.genRss()
+
   echo "writing posts..."
   for cat, posts in templated:
     for post in posts:
+      post.targetPath.parentDir.createDir()
       writeFile(post.targetPath.string, post.contents)
       echo &"\twrote {post.targetPath.absolutePath.string}"
 
   echo "writing category pages..."
   for cat, contents in templatedCat:
     let path = Path(&".{cat.targetPath}")
-    path.parentDir.createDir()
     writeFile(path.string, contents)
     echo &"\twrote {path.absolutePath.string}"
 
   echo "writing index..."
-  let indexPath = Path(&"index.html")
+  let indexPath = Path("index.html")
   writeFile(indexPath.string, templatedIndex)
   echo &"\twrote {indexPath.absolutePath.string}"
+
+  echo "writing RSS feed..."
+  let rssPath = Path("feed.xml")
+  writeFile(rssPath.string, templatedRss)
+  echo &"\twrote {rssPath.absolutePath.string}"
 
 when isMainModule:
   main()

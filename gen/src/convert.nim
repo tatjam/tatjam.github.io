@@ -3,61 +3,10 @@
 # ------------------------------------------
 # Invoking typst for the conversion and storing posts / categories
 
-import std/[paths, json, strformat, dirs, tables, times, strutils]
-import posts, typst, themes
+import std/[paths, strformat, dirs, tables, times]
+import posts, themes
 
 const contentDir = Path("content/")
-
-proc loadPost*(cat: Category, postPath: Path): LoadedPost =
-  echo "\tconverting " & string(postPath)
-  let post = postPath.extractFilename
-
-  let contents = postPath.runTypst()
-  let metadata = postPath.runTypstMetadata()
-
-  let title = metadata["title"].getStr()
-  if title == "":
-    raise newException(ValueError, &"Post {postPath} missing title")
-
-  let dateStr = metadata["date"].getStr()
-  if dateStr == "":
-    raise newException(ValueError, &"Post {postPath} missing date")
-
-  let date = parse(dateStr, "yyyy-MM-dd")
-
-  let summary = metadata["summary"].getStr()
-  if summary == "":
-    raise newException(ValueError, &"Post {postPath} missing summary")
-
-  let extraHead = metadata["extra-head"].getStr()
-
-  let bodyStart = contents.find("<body>") + 6
-  let bodyEnd = contents.rfind("</body>") - 1
-
-  let body = contents.substr(bodyStart, bodyEnd)
-
-  LoadedPost(
-    sourceFilename: post,
-    body: body,
-    title: title,
-    cat: cat,
-    date: date,
-    summary: summary,
-    extraHead: extraHead,
-  )
-
-proc loadPosts*(cat: Category, basePath: Path): seq[LoadedPost] =
-  echo "converting " & string(cat)
-  for kind, post in walkDir(basePath, relative = true, checkDir = true):
-    if kind != pcFile:
-      continue
-
-    let (_, _, ext) = post.splitFile
-    if ext != ".typ":
-      continue
-
-    let postPath = contentDir / Path(cat) / post
-    result.add cat.loadPost(postPath)
 
 func themePost*(
     post: LoadedPost, prev: LoadedPost, next: LoadedPost, theme: PostTheme
@@ -79,6 +28,21 @@ func templateCatPage*(
     listing: PostTheme,
 ): string =
   theme.apply(listing, cat, posts)
+
+proc loadPosts*(cat: Category, basePath: Path): seq[LoadedPost] =
+  echo "converting " & string(cat)
+  for kind, post in walkDir(basePath, relative = true, checkDir = true):
+    if kind != pcFile:
+      continue
+
+    let (_, _, ext) = post.splitFile
+    if ext != ".typ":
+      continue
+
+    let postPath = contentDir / Path(cat) / post
+    result.add cat.loadPost(postPath)
+
+  result.orderByDate()
 
 proc loadAll*(): OrderedTable[Category, seq[LoadedPost]] =
   for kind, category in walkDir(contentDir, relative = true, checkDir = true):
@@ -104,3 +68,41 @@ func templateIndex*(
     loaded: OrderedTable[Category, seq[LoadedPost]], theme: Theme
 ): string =
   theme.indexTheme.apply(theme.listingTheme, loaded)
+
+func genRss*(loaded: OrderedTable[Category, seq[LoadedPost]]): string =
+  result = """
+  <rss version="2.0">
+    <channel>
+    <title>Tatjam's Blog</title>
+    <description>Tatjam's Blog</description>
+    <link>https://tatjam.github.io</link>
+    <atom:link href="https://tatjam.github.io/feed.xml" rel="self" type="application/rss+xml"/>
+  """
+
+  let allPosts = loaded.allPostsSorted()
+
+  for post in allPosts:
+    let datefmt = format(post.date, "yyyy-MM-dd")
+    result.add(
+      &"""
+      <item>
+        <title>{post.title}</title>
+        <link>https://tatjam.github.io/{post.url}</link>
+        <guid>https://tatjam.github.io/{post.url}</guid>
+        <pubDate>{datefmt} 00:00:00 GMT</pubDate>
+        <description>
+          {post.summary}
+        </description>
+        <category>
+          {post.cat}
+        </category>
+      </item>
+    """
+    )
+
+  result.add(
+    """
+    </channel>
+    </rss>
+  """
+  )

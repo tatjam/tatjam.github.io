@@ -4,7 +4,7 @@
 # Filling the theme templates
 
 import posts
-import std/[tables, strutils, algorithm, times, strformat]
+import std/[tables, strutils, times, strformat]
 
 type PostTheme* = distinct string
 type IndexTheme* = distinct string
@@ -38,16 +38,6 @@ func apply*(
 func allCategoriesContent(categories: OrderedTable[Category, seq[LoadedPost]]): string =
   for cat, _ in categories:
     result.add(&"<a href=\"{cat.url}\">{cat}</a>")
-
-func allPostsSorted(
-    categories: OrderedTable[Category, seq[LoadedPost]]
-): seq[LoadedPost] =
-  for cat, posts in categories:
-    for post in posts:
-      result.add(post)
-
-  result.sort do(x, y: LoadedPost) -> int:
-    cmp(y.date, x.date)
 
 func allPostContent(listing: PostTheme, posts: seq[LoadedPost]): string =
   for i in 0 ..< posts.len:

@@ -31,7 +31,7 @@ These attachment points are defined with a marker (A Blender empty) on the model
 
 While placing pieces, the user can decide which attachment point to use, and also change which piece to use for attachment, allowing very easy building of relatively complex structures. It's easier to understand by watching a video (or trying it yourself by downloading and building the code):
 
-#video("/static/Gamedev/img/editor.mp4")
+#video("/static/Gamedev/img/editor.mp4", center: true)
 
 The keybindings used are placeholders, the final editor will probably have some kind of visual interface for selecting attachment pieces and points.
 

@@ -293,6 +293,13 @@ code, pre {
   height: auto;
 }
 
+.main video {
+	display: block;
+	width: 85%;
+	height: auto;
+	margin: 1.4em auto;
+}
+
 .main pre {
 	background: var(--code-bg);
 	border: 1px solid var(--rule);

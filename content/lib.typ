@@ -1,7 +1,9 @@
 #let heading-tag(it) = html.elem("h" + str(it.level), it.body)
 
 #let code-block(it) = {
-  let attrs = if it.lang == none or it.lang == "" { (:) } else { (class: "language-" + it.lang) }
+  let attrs = if it.lang == none or it.lang == "" { (:) } else {
+    (class: "language-" + it.lang)
+  }
   html.elem("pre", html.elem("code", attrs: attrs, it.text))
 }
 
@@ -22,13 +24,20 @@
     html.elem("source", attrs: (src: src, type: vid-type))
       + [Your browser does not support the video tag],
   )
-  if center { html.elem("div", attrs: (style: "text-align: center"), player) } else { player }
+  if center {
+    html.elem("div", attrs: (style: "text-align: center"), player)
+  } else { player }
 }
 
 #let post(title: "", date: "", summary: "", extra-head: none, body) = {
   set document(title: title, description: summary)
   show heading: heading-tag
   show raw.where(block: true): code-block
-  [#metadata((date: date, summary: summary, extra-head: extra-head)) <post-meta>]
+  [#metadata((
+    title: title,
+    date: date,
+    summary: summary,
+    extra-head: extra-head,
+  )) <post-meta>]
   body
 }

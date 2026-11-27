@@ -27,11 +27,21 @@ install-tools:
 build:
     nimble build -d:release
 
+[working-directory: 'gen']
+build-debug:
+    nimble build -d:debug --stacktrace:on --linetrace:on
+
 site: build
     ./gen/sitegen
 
+site-debug: build-debug
+    ./gen/sitegen
+
 watch:
-    watchexec -w content -w static -w gen/src -- just site
+    watchexec -w content -w static -w gen/src -w theme -- just site
+
+watch-debug:
+    watchexec -w content -w static -w gen/src -w theme -- just site-debug
 
 serve:
     python3 -m http.server

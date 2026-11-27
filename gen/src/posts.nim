@@ -3,12 +3,38 @@
 # ------------------------------------------
 # Post metadata and state
 
-import std/paths
+import std/[paths, strformat, times, hashes]
 
-type Post* = object
+type Category* = distinct string
+
+proc `$`*(c: Category): string =
+  c.string
+
+proc hash*(cat: Category): Hash =
+  string(cat).hash
+
+proc `==`*(a: Category, b: Category): bool =
+  return string(a) == string(b)
+
+proc url*(cat: Category): string =
+  return &"/category-{cat}.html"
+
+type LoadedPost* {.requiresInit.} = object
+  sourceFilename*: Path
+  cat*: Category
+  # Raw body as rendered by Typst
+  body*: string
+
   title*: string
-  date*: string
+  date*: DateTime
   summary*: string
   extraHead*: string
 
-  htmlPath*: Path
+proc url*(p: LoadedPost): string =
+  let (_, name, _) = p.sourceFilename.splitFile()
+  &"/{p.cat}/{name}.html"
+
+type TemplatedPost* {.requiresInit.} = object
+  sourceFilename*: Path
+  targetFilename*: Path
+  contents*: string

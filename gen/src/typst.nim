@@ -3,7 +3,8 @@
 # ------------------------------------------
 # Util to call typst
 
-import std/[osproc, strutils, paths, strformat]
+import std/[osproc, strutils, paths, strformat, streams, json]
+import system/exceptions
 
 proc pinnedTypstVersion(): string =
   readFile("gen/typst.version").strip
@@ -22,14 +23,51 @@ proc checkTypstAvailable*() =
 
   echo "using ", outp.strip
 
-proc runTypst*(file: Path, ofile: Path) =
-  let (outp, code) =
-    execCmdEx(&"typst compile --root . --features html --format html {file} {ofile}")
+proc runTypst*(file: Path): string =
+  let p = startProcess(
+    "typst",
+    "",
+    @["compile", "--root", ".", "--features", "html", "--format", "html", $file, "-"],
+    options = {poUsePath},
+  )
 
-  echo outp
+  let html = p.outputStream.readAll()
+  let err = p.errorStream.readAll()
+
+  let code = p.waitForExit()
 
   if code != 0:
-    var e: ref ValueError
-    new(e)
-    e.msg = &"Typst failed for {file}"
-    raise e
+    echo err
+    raise newException(ValueError, &"Typst failed for {file}")
+
+  return html
+
+proc runTypstMetadata*(file: Path): JsonNode =
+  let p = startProcess(
+    "typst",
+    "",
+    @[
+      "eval",
+      "--root",
+      ".",
+      "--features",
+      "html",
+      "--format",
+      "json",
+      "query(<post-meta>).first().value",
+      "--in",
+      $file,
+    ],
+    options = {poUsePath},
+  )
+
+  let jsonText = p.outputStream.readAll()
+  let err = p.errorStream.readAll()
+
+  let code = p.waitForExit()
+
+  if code != 0:
+    echo err
+    raise newException(ValueError, &"Typst metadata failed for {file}")
+
+  return parseJson(jsonText)

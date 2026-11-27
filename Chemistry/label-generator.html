@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8">
+		<script>
+			(function () {
+				var stored = null;
+				try { stored = localStorage.getItem('theme'); } catch (e) {}
+				if (stored) document.documentElement.setAttribute('data-theme', stored);
+			})();
+		</script>
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<title>Label Generator</title>
+		<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+		<link href="/static/prism.css" rel="stylesheet" />
+		<link rel="stylesheet" type="text/css" href="/static/theme.css">
+		<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:ital@0;1&family=IBM+Plex+Sans+Condensed:ital@0;1&family=IBM+Plex+Sans:ital,wght@0,100;0,400;0,700;1,100;1,400;1,700&family=IBM+Plex+Serif:ital@0;1&display=swap" rel="stylesheet">
+		<script type="text/javascript" src="/external/offsetanchor.js"></script>
+		<style>#page, .intro, .intro.p { max-width: var(--content-width-wide); }</style><style>.main {text-align: left;}</style>
+	</head>
+	<body>
+		<script src="/static/prism.js"></script>
+		<script src="/static/theme-toggle.js"></script>
+
+		<div class="navbar">
+			<div class="nav-left">
+				<a href="/index.html">Label Generator</a>
+			</div>
+			<div class="nav-right">
+				<a href="/category-Chemistry.html">Chemistry</a>
+				<a href="/Chemistry/label-generator.html" title="Previous: Label Generator" class="nav-arrow">&#9664</a>
+				<a href="/Chemistry/label-generator.html" title="Next: Label Generator" class="nav-arrow">&#9654</a>
+				<button id="theme-toggle" class="theme-toggle" type="button" aria-label="Toggle dark mode">
+					<span class="theme-toggle-track"><span class="theme-toggle-thumb"></span></span>
+				</button>
+			</div>
+		</div>
+		<div class="intro">
+			<h1>Label Generator</h1>
+			<p>A chemical label generator designed with ease of use and beautiful labels in mind<br>2021-06-21</p>
+		</div>
+		<div id="page">
+			<div class="main">
+				<p>This is a very valuable tool that’s surprisingly not available online. I decided to make a simple solution that could be quickly used to generate beautiful labels, a must have in any lab.</p><hr><style>* {
+  box-sizing: border-box;
+}
+
+/* Create two equal columns that floats next to each other */
+.column {
+  float: left;
+  width: 33%;
+  padding: 10px;
+}
+
+.columncheck { 
+  float: left;
+  width: 11%;
+  padding: 10px;
+}
+
+/* Clear floats after the columns */
+.row:after {
+  content: "";
+  display: table;
+  clear: both;
+}
+
+input {
+    margin-top: 5px;
+    margin-bottom:15px;
+}
+
+input[type=checkbox] {
+    margin-bottom: -5px;
+    margin-top: 0px;
+}
+
+canvas.ChemDoodleWebComponent {
+    border:none;
+}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+input[type=number] {
+  -moz-appearance: textfield;
+}
+
+.nfpa {
+  transform: rotate(45deg);
+  border-collapse:collapse;
+  border: 4px solid;
+}
+
+.nfpatab {
+  transform: rotate(-45deg);
+  position:relative;
+  width:100px;
+  height:100px;
+
+
+}
+
+.nfpatext {
+  position:absolute;
+  text-align:right;
+  top:-30px;
+}
+
+
+</style><h1>Inputs</h1><p>In the inputs that allow HTML you can use <code>&lt;br></code> to input a line break. You can also use any other HTML tags! For example, <code>&lt;b>Text&lt;/b></code> shows bold text and <code>&lt;i>Wathever&lt;/i></code> shows italic text.</p><div class="row"><div class="column"><h3>Basic</h3><p>You may only enter one of the options.<br></p><p><label for="cid">PubChem’s CID:</label> <input type="text" id="cid" name="cid" onchange="change_name('cid')" value="276350"></p><p><br></p><p><label for="smiles">SMILES:</label> <input type="text" id="smiles" name="smiles" onchange="change_name('smiles')"></p><p><br></p><p><label for="name-fm">Name (First Match):</label> <input type="text" id="name-fm" name="name-fm" onchange="change_name('name-fm')"></p><p><br></p><p><label for="type">Label presets:</label><span style="white-space: pre-wrap">&#x20;</span><select name="type" id="type" onchange="change_preset(this.value)"><option value="compact">Compact Label</option><option value="small">Small Label</option><option value="normal" selected="selected">Normal Label</option><option value="detailed">Detailed Label</option></select><span style="white-space: pre-wrap">&#x20;</span>(Changes customization!)</p><p><br></p><h3>Renderer Settings</h3><p>This setting may be useful if the generated image is buggy or you are working with coordination complexes which are not very well supported.<br></p><p><input type="checkbox" id="use-pubchem" name="use-pubchem" onchange="generate()"><label for="use-pubchem">Use PubChem image instead of generated one. <strong>Download by screenshot!</strong></label><br></p><p><br></p><div id="image-settings"><p><label for="bond-length">Image Scale:</label> <input type="number" id="bond-length" name="bond-length" onchange="generate()" value="1.5" min="0" max="5"></p><p><br></p><p><label for="bond-width">Bond Width (Pixels):</label> <input type="number" id="bond-width" name="bond-width" onchange="generate()" value="1"></p><p><br></p><p><input type="checkbox" id="use-colors" name="use-colors" onchange="generate()" checked><label for="use-colors">Use colored atoms</label><br></p><p><br></p><p><input type="checkbox" id="terminal-carbons" name="terminal-carbons" onchange="generate()"><label for="terminal-carbons">Draw terminal carbons as CH<sub>3</sub></label><br></p><p><label for="atom-radius">Atom Size:</label> <input type="number" id="atom-radius" name="atom-radius" onchange="generate()" value="4"></p><p><br></p><p><input type="checkbox" id="circle-atoms" name="circle-atoms" onchange="generate()"><label for="circle-atoms">Draw atoms as a circle</label><br></p></div></div><div class="column"><h3>Customization</h3><p><label for="layout_type">Layout type:</label><span style="white-space: pre-wrap">&#x20;</span><select name="layout_type" id="layout_type" onchange="generate()"><option value="hor">Horizontal</option><option value="ver">Vertical</option><option value="corners" selected="selected">Corners</option></select></p><p><label for="custom_name">Custom Name:</label> <input type="text" id="custom_name" placeholder="Default (Allows HTML)" name="custom_name" onchange="generate()"></p><p><label for="custom_text">Custom Text:</label><span style="white-space: pre-wrap">&#x20;</span><textarea id="custom_text" placeholder="None (Allows HTML)" name="custom_text" onchange="generate()"></textarea></p><p><label for="custom_prop">Custom Properties:</label><span style="white-space: pre-wrap">&#x20;</span><textarea id="custom_prop" placeholder="None (Allows HTML)" name="custom_prop" onchange="generate()"></textarea></p><p><label for="custom_text">Custom Formula:</label> <input type="text" id="custom_formula" placeholder="Example: CuSO4*5H2O" name="custom_formula" onchange="generate()"></p><p><input type="checkbox" id="show-image" name="show-image" onchange="generate()" value="Image" checked><label for="show-image">Show Image</label><br></p><p><label for="iwidth">Image Width:</label> <input type="number" id="iwidth" name="iwidth" onchange="generate()" value="300"></p><p><label for="iheight">Image Height:</label> <input type="number" id="iheight" name="iheight" onchange="generate()" value="300"></p><p><label for="margins">Margins:</label> <input type="number" id="margins" name="margins" onchange="generate()" value="3"></p></div><div class="column"><h3>Hazard Configuration</h3><p><label for="hazard_type">Hazard type:</label><span style="white-space: pre-wrap">&#x20;</span><select name="hazard_type" id="hazard_type" onchange="generate()"><option value="none">No Hazards Shown</option><option value="danger">GHS Danger (Force)</option><option value="ghs">GHS Hazards</option><option value="ghs-custom">Custom GHS Hazards</option><option value="nfpa-custom">NFPA diamond (Manual input)</option><option value="ghs-nt" selected="selected">GHS Hazards (No Text)</option></select></p><div id="custom-ghs" class="row"><p>You may toggle the icons manually. Insert the appropriate text into Extra Hazard Text.<br></p><div class="columncheck"><input type="checkbox" id="custom-ghs-explosive" class="columncheck" onchange="generate()"><label for="custom-ghs-explosive"><img src="/external/ghs/explosive.svg" alt style="width:32px;"></label></div><div class="columncheck"><input type="checkbox" id="custom-ghs-flammable" class="columncheck" onchange="generate()"><label for="custom-ghs-flammable"><img src="/external/ghs/flammable.svg" alt style="width:32px;"></label></div><div class="columncheck"><input type="checkbox" id="custom-ghs-oxidizer" class="columncheck" onchange="generate()"><label for="custom-ghs-oxidizer"><img src="/external/ghs/oxidizer.svg" alt style="width:32px;"></label></div><div class="columncheck"><input type="checkbox" id="custom-ghs-gas" class="columncheck" onchange="generate()"><label for="custom-ghs-gas"><img src="/external/ghs/gas.svg" alt style="width:32px;"></label></div><div class="columncheck"><input type="checkbox" id="custom-ghs-corrosive" class="columncheck" onchange="generate()"><label for="custom-ghs-corrosive"><img src="/external/ghs/corrosive.svg" alt style="width:32px;"></label></div><div class="columncheck"><input type="checkbox" id="custom-ghs-toxic" class="columncheck" onchange="generate()"><label for="custom-ghs-toxic"><img src="/external/ghs/toxic.svg" alt style="width:32px;"></label></div><div class="columncheck"><input type="checkbox" id="custom-ghs-harmful" class="columncheck" onchange="generate()"><label for="custom-ghs-harmful"><img src="/external/ghs/harmful.svg" alt style="width:32px;"></label></div><div class="columncheck"><input type="checkbox" id="custom-ghs-hazard" class="columncheck" onchange="generate()"><label for="custom-ghs-hazard"><img src="/external/ghs/hazard.svg" alt style="width:32px;"></label></div><div class="columncheck"><input type="checkbox" id="custom-ghs-environment" class="columncheck" onchange="generate()"><label for="custom-ghs-environment"><img src="/external/ghs/environment.svg" alt style="width:32px;"></label></div></div><div id="custom-nfpa"><div class="row">Fire: <input type="radio" name="fire" id="fire-0" onchange="generate()">0 <input type="radio" name="fire" id="fire-1" onchange="generate()">1 <input type="radio" name="fire" id="fire-2" onchange="generate()">2 <input type="radio" name="fire" id="fire-3" onchange="generate()">3 <input type="radio" name="fire" id="fire-4" onchange="generate()">4 <input type="radio" name="fire" id="fire-u" onchange="generate()" checked>?</div><div class="row">Health: <input type="radio" name="health" id="health-0" onchange="generate()">0 <input type="radio" name="health" id="health-1" onchange="generate()">1 <input type="radio" name="health" id="health-2" onchange="generate()">2 <input type="radio" name="health" id="health-3" onchange="generate()">3 <input type="radio" name="health" id="health-4" onchange="generate()">4 <input type="radio" name="health" id="health-u" onchange="generate()" checked>?</div><div class="row">Reactivity: <input type="radio" name="react" id="react-0" onchange="generate()">0 <input type="radio" name="react" id="react-1" onchange="generate()">1 <input type="radio" name="react" id="react-2" onchange="generate()">2 <input type="radio" name="react" id="react-3" onchange="generate()">3 <input type="radio" name="react" id="react-4" onchange="generate()">4 <input type="radio" name="react" id="react-u" onchange="generate()" checked>?</div><div class="row">Other: <input type="radio" name="special" id="special-ox" onchange="generate()">OX <input type="radio" name="special" id="special-w" onchange="generate()"><s>W</s> <input type="radio" name="special" id="special-sa" onchange="generate()">SA <input type="radio" name="special" id="special-cor" onchange="generate()">COR <input type="radio" name="special" id="special-acid" onchange="generate()">ACID <input type="radio" name="special" id="special-alk" onchange="generate()">ALK <input type="radio" name="special" id="special-bio" onchange="generate()">☣ <input type="radio" name="special" id="special-rad" onchange="generate()">☢ <input type="radio" name="special" id="special-cry" onchange="generate()">CRY <input type="radio" name="special" id="special-u" onchange="generate()" checked>None</div></div><p><label for="ghs_size">Hazard Icon Size:</label> <input type="number" id="ghs_size" name="ghs_size" onchange="generate()" value="64"></p><p><label for="custom_text">Extra Hazard Text:</label><span style="white-space: pre-wrap">&#x20;</span><textarea id="hazard_text" placeholder="None (Allows HTML)" name="hazard_text" onchange="generate()"></textarea></p><p><input type="checkbox" id="unknown-hazard" name="unknown-hazard" onchange="generate()" value="Unknown Hazard" checked><label for="unknown-hazard">Use Unknown Hazard Symbol</label><br></p><h3>Other Configurations</h3><p>(Warning: Some may not be available, or not correctly extracted!)</p><div class="row"><div class="column"><p><input type="checkbox" id="formula" name="formula" onchange="generate()" value="Formula" checked><label for="formula">Formula</label><br></p><p><input type="checkbox" id="molar-mass" name="molar-mass" onchange="generate()" value="Molar Mass" checked><label for="molar-mass">Molar Mass</label><br></p><p><input type="checkbox" id="melting" name="melting" onchange="generate()" value="Melting" checked><label for="melting">Density</label><br></p><p><input type="checkbox" id="melting" name="melting" onchange="generate()" value="Melting" checked><label for="melting">Melting Point</label><br></p></div><div class="column"><p><input type="checkbox" id="boiling" name="boiling" onchange="generate()" value="Boiling" checked><label for="boiling">Boiling Point</label><br></p><p><input type="checkbox" id="flash" name="flash" onchange="generate()" value="flash" checked><label for="flash">Flash Point</label><br></p><p><input type="checkbox" id="vapor" name="vapor" onchange="generate()" value="Vapor" checked><label for="vapor">Vapor Pressure</label><br></p></div></div><p><label for="density">Pixel Density:</label> <input type="number" id="density" name="density" onchange="generate()" value="2.5" min="0.5" max="8.0"> High values may slow down your browser, but very low values will be very pixelated once you save them. The default value should be more than enough for printing.</p></div></div><h1>Results</h1><p>Use this button if the molecule is badly rendered or atoms are clumped up, as there’s an element of chance in the molecule geometry engine.</p><p><button onclick="generate()">Regenerate</button></p><div id="generated" style="background-color:#ffffff;padding-top:0px;overflow:visible;"><div id="margin-holder" style="border:solid 1px;display:inline-block;padding-top:0px;"><div id="base-text"><h3 id="cname"></h3><p id="ctext"></p><p id="cformula"></p><p id="mmass"></p></div><div id="custom-prop"><p id="dens"></p><p id="temps"></p><p id="vap"></p><p id="expl"></p><p id="cprop"></p></div><div id="ghs"><img id="ghs-corrosive" style="width:64px;" src="/external/ghs/corrosive.svg"> <img id="ghs-environment" style="width:64px;" src="/external/ghs/environment.svg"> <img id="ghs-gas" style="width:64px;" src="/external/ghs/gas.svg"> <img id="ghs-harmful" style="width:64px;" src="/external/ghs/harmful.svg"> <img id="ghs-hazard" style="width:64px;" src="/external/ghs/hazard.svg"> <img id="ghs-oxidizer" style="width:64px;" src="/external/ghs/oxidizer.svg"> <img id="ghs-explosive" style="width:64px;" src="/external/ghs/explosive.svg"> <img id="ghs-flammable" style="width:64px;" src="/external/ghs/flammable.svg"> <img id="ghs-toxic" style="width:64px;" src="/external/ghs/toxic.svg"> <img id="ghs-unknown" style="width:64px;" src="/external/ghs/unknown.svg"><p id="ghs-string"></p><p id="ghs-extra"></p></div><div id="nfpa-float" style="float:left; margin-left:-5rem"><div id="nfpa-diamond" style="scale:0.5;"><table border="1" class="nfpa"><tr><td style="background:#ff0030; width=100px; height=100px;"><div class="nfpatab"><p id="nfpa-fire" class="nfpatext" style="top:-10px; right:0px; font-size:35px;">1</p></div></td><td style="background:#ffdc45; width=100px; height=100px;"><div class="nfpatab"><p id="nfpa-react" class="nfpatext" style="top:-10px; right:0px; font-size:35px;">2</p></div></td></tr><tr><td style="background:#008aca; width=100px; height=100px;"><div class="nfpatab"><p id="nfpa-health" class="nfpatext" style="top:-10px; right:0px; font-size:35px;">3</p></div></td><td style="background:white; width=100px; height=100px;"><div class="nfpatab"><p id="nfpa-special" class="nfpatext" style="right:0px; font-size:35px; top:-10px;"></p></div></td></tr></table></div></div><div id="images"><img id="image" style="width:auto;"> <canvas id="chem-doodle-canvas"></canvas></div></div></div><div id="holder"></div><p>To download the file, you can right-click and save the image. Alternatively, you may copy-paste the image into an image editing software to print multiple labels at once.</p><p>If you have used the pubchem images, you must take a screenshot with a screenshot software, such as Window’s Snipping Tool. This limitation has to do with how JavaScript handles off-site resources, and cannot be fixed easily.</p><h1>Credits</h1><p>PubChem is used to obtain the information and GHS hazard information. Optionally, it’s also used to obtain a representation of the molecule.</p><p>OpenBabel is used to convert the SMILES given by PubChem into a MOL file, and to generate the position of the atoms inside of this file. ChemDoodle is used to draw the MOL file into a canvas, allowing the image to be downloaded.</p><p>Lastly, html2canvas allows converting the label into a downloadable image.</p><p>GHS pictograms (Including the unofficial question mark one) were obtained from Wikipedia, they are in the public domain.</p><p><a href="https://www.github.com/tatjam">I (tatjam)</a> have glued these great tools together into this generator. You can give feedback and check the source code at <a href="https://github.com/tatjam/tatjam.github.io">github</a>.</p><script src="/external/html2canvas/html2canvas.min.js"></script><link rel="stylesheet" href="/external/chemdoodle/ChemDoodleWeb.css" type="text/css"><script src="/external/chemdoodle/ChemDoodleWeb.js"></script><script src="/external/openbabel/openbabel.js"></script><script src="/external/label-generator.js"></script>
+			</div>
+		</div>
+	</body>
+</html>

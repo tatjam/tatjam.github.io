@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8">
+		<script>
+			(function () {
+				var stored = null;
+				try { stored = localStorage.getItem('theme'); } catch (e) {}
+				if (stored) document.documentElement.setAttribute('data-theme', stored);
+			})();
+		</script>
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<title>Tatjam's Blog</title>
+		<link rel="stylesheet" type="text/css" href="/static/theme.css">
+		<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:ital@0;1&family=IBM+Plex+Sans+Condensed:ital@0;1&family=IBM+Plex+Sans:ital,wght@0,100;0,400;0,700;1,100;1,400;1,700&family=IBM+Plex+Serif:ital@0;1&display=swap" rel="stylesheet">
+	</head>
+	<body>
+		<script src="/static/prism.js"></script>
+		<script src="/static/theme-toggle.js"></script>
+
+		<div class="navbar">
+			<div class="nav-left">
+				<a href="">Category: Gamedev</a>
+			</div>
+			<div class="nav-right">
+				<a href="/index.html">Home</a>
+				<a href="/category-Gamedev.html">Gamedev</a><a href="/category-Chemistry.html">Chemistry</a><a href="/category-Mathematics.html">Mathematics</a>
+				<button id="theme-toggle" class="theme-toggle" type="button" aria-label="Toggle dark mode">
+					<span class="theme-toggle-track"><span class="theme-toggle-thumb"></span></span>
+				</button>
+			</div>
+		</div>
+		<div class="intro">
+			<h1>Gamedev</h1>
+		</div>
+		<div id="page">
+			<div class="main">
+					<a href="/Gamedev/enter-the-editor.html" class="post-list">
+		<div class="post-header">
+			<h2>Enter the Editor</h2>
+			<p class="post-meta">(2020-06-03 in Gamedev)</p>
+		</div>
+		<p>The last two months of progress feature the beginnings of the editor, among other changes</p>
+	</a>
+	<a href="/Gamedev/introducing-ospgl.html" class="post-list">
+		<div class="post-header">
+			<h2>Introducing OSPGL</h2>
+			<p class="post-meta">(2019-11-30 in Gamedev)</p>
+		</div>
+		<p>OSPGL (OSP + OpenGL) is an ongoing attempt at creating a game similar to Squad's Kerbal Space Program, focusing on perfomance and moddability</p>
+	</a>
+	<a href="/Gamedev/models-and-vehicles.html" class="post-list">
+		<div class="post-header">
+			<h2>Models and Vehicles</h2>
+			<p class="post-meta">(2019-12-22 in Gamedev)</p>
+		</div>
+		<p>An introduction to Vehicles and Model loading in OSPGL</p>
+	</a>
+	<a href="/Gamedev/two-years-of-progress.html" class="post-list">
+		<div class="post-header">
+			<h2>Two years of progress</h2>
+			<p class="post-meta">(2022-05-15 in Gamedev)</p>
+		</div>
+		<p>Almost 2 years have passed since last blogpost, but the project has kept on going!</p>
+	</a>
+	<a href="/Gamedev/roadway-to-release.html" class="post-list">
+		<div class="post-header">
+			<h2>Roadway to Release</h2>
+			<p class="post-meta">(2023-02-08 in Gamedev)</p>
+		</div>
+		<p>A summary of progress over the last year, and an overview of what's to come</p>
+	</a>
+	<a href="/Gamedev/ospgl-progress.html" class="post-list">
+		<div class="post-header">
+			<h2>Early 2020 progress</h2>
+			<p class="post-meta">(2020-04-06 in Gamedev)</p>
+		</div>
+		<p>A summary of the progress that has happened since the last blogpost</p>
+	</a>
+
+			</div>
+		</div>
+	</body>
+</html>

@@ -48,13 +48,30 @@ and $1/T = f_s$ = #html.elem("input", attrs: ("data-var": "fs", class: "Draggabl
 
 #html.elem("input", attrs: ("data-var": "zoh", class: "Checkbox")) (Enable zero-order hold in graph).
 
-#html.elem("div", attrs: (id: "stick-enable", class: "sticky"), html.elem("input", attrs: ("data-var": "stick", class: "Checkbox")) + [(Stick graph to screen).])
+#html.elem(
+  "div",
+  attrs: (id: "stick-enable", class: "sticky"),
+  html.elem("input", attrs: ("data-var": "stick", class: "Checkbox"))
+    + [(Stick graph to screen).],
+)
 
 #html.elem(
   "div",
   attrs: (id: "stick", class: "sticky", style: "top:30px;width:100%;"),
-  html.elem("div", attrs: (id: "graph-anchor", class: "canvas-container", style: "height: 12em;width:100%;"), html.elem("canvas", attrs: (id: "graph0")))
-    + html.elem("div", attrs: (class: "canvas-container", style: "height: 10em"), html.elem("canvas", attrs: (id: "graph1"))),
+  html.elem(
+    "div",
+    attrs: (
+      id: "graph-anchor",
+      class: "canvas-container",
+      style: "height: 12em;width:100%;",
+    ),
+    html.elem("canvas", attrs: (id: "graph0")),
+  )
+    + html.elem(
+      "div",
+      attrs: (class: "canvas-container", style: "height: 10em"),
+      html.elem("canvas", attrs: (id: "graph1")),
+    ),
 )
 
 Sure enough, our original frequency is one of the components of the sampled signal. Note that if you reduce the signal frequency to within the Nyquist zone (grey area), the signal is perfectly reproduced within that area, without any spurious signal appearing.
@@ -89,7 +106,9 @@ Remarkably, this equation has no closed form solution. Nonetheless, we can infer
 
 Afterwards, note that taking the arc-tangent:
 
-$ pi f / f_s = arctan(lr((pi f / f_s))) + 2k pi arrow.r.double.long f = f_s / pi (arctan(lr((pi f / f_s))) + 2k pi) $
+$
+  pi f / f_s = arctan(lr((pi f / f_s))) + 2k pi arrow.r.double.long f = f_s / pi (arctan(lr((pi f / f_s))) + 2k pi)
+$
 
 Except for small $k$, the term in the parenthesis is dominated by $2k pi$. Furthermore, only one solution is located in each Nyquist zone, because the arc-tangent approaches $pi/2$ as its argument grows, and is positive. In fact, for big enough $f$ (and thus $k$ ), the solution is located extremely close to $frac(4k + 1, 2) f_s$, at the center of each Nyquist zone.
 
@@ -120,7 +139,11 @@ Thus, if we want to emit a signal that's symmetric around a given $f_c$, we need
 
 Consider $f_c$ = #html.elem("input", attrs: ("data-var": "f0_symin", class: "DraggableNumber", size: "4", style: "width: 4em")) Hz
 and $m$ = #html.elem("input", attrs: ("data-var": "n_symin", class: "DraggableNumber", size: "2", style: "width: 4em")), the sample rate must be set to $f_s$ = #html.elem("a", attrs: ("data-var": "fs_symin")) Hz.
-#html.elem("input", attrs: (id: "symin-send", type: "button", value: "Send to graph")) #link("#graph-anchor")[Go to graph]
+#html.elem("input", attrs: (
+  id: "symin-send",
+  type: "button",
+  value: "Send to graph",
+)) #link("#graph-anchor")[Go to graph]
 
 == For emitting non-symmetric signals
 
@@ -134,7 +157,11 @@ If you only care about having the highest bandwidth without interference from ot
 
 Consider $f_c$ = #html.elem("input", attrs: ("data-var": "f0_symin", class: "DraggableNumber", size: "4", style: "width: 4em")) Hz
 and $m$ = #html.elem("input", attrs: ("data-var": "n_symin", class: "DraggableNumber", size: "2", style: "width: 4em")), the sample rate must be set to $f_s$ = #html.elem("a", attrs: ("data-var": "fs_asymin")) Hz.
-#html.elem("input", attrs: (id: "asymin-send", type: "button", value: "Send to graph")) #link("#graph-anchor")[Go to graph]
+#html.elem("input", attrs: (
+  id: "asymin-send",
+  type: "button",
+  value: "Send to graph",
+)) #link("#graph-anchor")[Go to graph]
 
 = Further non-idealities
 

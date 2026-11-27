@@ -3,7 +3,7 @@
 # ------------------------------------------
 # Entrypoint
 
-import std/[osproc, strutils, tables, paths, strformat]
+import std/[osproc, strutils, tables, paths, strformat, dirs]
 import convert, typst, templates, posts
 
 # unhandledExceptionHook = proc(e: ref Exception) {.nimcall.} =
@@ -41,6 +41,7 @@ proc main() =
   echo "writing category pages..."
   for cat, contents in templatedCat:
     let path = Path(&".{cat.url}")
+    path.parentDir.createDir()
     writeFile(path.string, contents)
     echo &"\twrote {path.absolutePath.string}"
 

@@ -36,7 +36,7 @@ proc loadPost*(cat: Category, postPath: Path): LoadedPost =
 
   let body = contents.substr(bodyStart, bodyEnd)
 
-  return LoadedPost(
+  LoadedPost(
     sourceFilename: post,
     body: body,
     title: title,
@@ -59,28 +59,20 @@ proc loadPosts*(cat: Category, basePath: Path): seq[LoadedPost] =
     let postPath = contentDir / Path(cat) / post
     result.add cat.loadPost(postPath)
 
-proc templatePost*(
-    cat: Category,
-    post: LoadedPost,
-    prev: LoadedPost,
-    next: LoadedPost,
-    theme: PostTemplate,
+func templatePost*(
+    post: LoadedPost, prev: LoadedPost, next: LoadedPost, theme: PostTemplate
 ): TemplatedPost =
   TemplatedPost(
-    sourceFilename: post.sourceFilename,
-    targetFilename: Path(&".{post.url}"),
-    contents: theme.apply(post, prev, next),
+    targetFilename: Path(&".{post.url}"), contents: theme.apply(post, prev, next)
   )
 
-proc templatePosts*(
-    cat: Category, posts: seq[LoadedPost], theme: PostTemplate
-): seq[TemplatedPost] =
+func templatePosts*(posts: seq[LoadedPost], theme: PostTemplate): seq[TemplatedPost] =
   for i in 0 ..< posts.len:
     let prev = max(i - 1, 0)
     let next = min(i + 1, posts.len - 1)
-    result.add(cat.templatePost(posts[i], posts[prev], posts[next], theme))
+    result.add(posts[i].templatePost(posts[prev], posts[next], theme))
 
-proc templateCatPage*(
+func templateCatPage*(
     cat: Category,
     posts: OrderedTable[Category, seq[LoadedPost]],
     theme: IndexTemplate,
@@ -96,19 +88,19 @@ proc loadAll*(): OrderedTable[Category, seq[LoadedPost]] =
     let path = contentDir / category
     result[Category(category)] = Category(category).loadPosts(path)
 
-proc templateAll*(
+func templateAll*(
     loaded: OrderedTable[Category, seq[LoadedPost]], theme: Theme
 ): OrderedTable[Category, seq[TemplatedPost]] =
   for cat, posts in loaded:
-    result[cat] = cat.templatePosts(posts, theme.postTheme)
+    result[cat] = posts.templatePosts(theme.postTheme)
 
-proc templateCatPages*(
+func templateCatPages*(
     loaded: OrderedTable[Category, seq[LoadedPost]], theme: Theme
 ): OrderedTable[Category, string] =
   for cat, posts in loaded:
     result[cat] = cat.templateCatPage(loaded, theme.categoryTheme, theme.listingTheme)
 
-proc templateIndex*(
+func templateIndex*(
     loaded: OrderedTable[Category, seq[LoadedPost]], theme: Theme
 ): string =
   theme.indexTheme.apply(theme.listingTheme, loaded)

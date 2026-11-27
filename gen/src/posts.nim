@@ -7,19 +7,19 @@ import std/[paths, strformat, times, hashes]
 
 type Category* = distinct string
 
-proc `$`*(c: Category): string =
+func `$`*(c: Category): string =
   c.string
 
-proc hash*(cat: Category): Hash =
+func hash*(cat: Category): Hash =
   string(cat).hash
 
-proc `==`*(a: Category, b: Category): bool =
-  return string(a) == string(b)
+func `==`*(a: Category, b: Category): bool =
+  string(a) == string(b)
 
-proc url*(cat: Category): string =
-  return &"/category-{cat}.html"
+func url*(cat: Category): string =
+  &"/category-{cat}.html"
 
-type LoadedPost* {.requiresInit.} = object
+type LoadedPost* = object
   sourceFilename*: Path
   cat*: Category
   # Raw body as rendered by Typst
@@ -30,11 +30,10 @@ type LoadedPost* {.requiresInit.} = object
   summary*: string
   extraHead*: string
 
-proc url*(p: LoadedPost): string =
+func url*(p: LoadedPost): string =
   let (_, name, _) = p.sourceFilename.splitFile()
   &"/{p.cat}/{name}.html"
 
-type TemplatedPost* {.requiresInit.} = object
-  sourceFilename*: Path
+type TemplatedPost* = object
   targetFilename*: Path
   contents*: string

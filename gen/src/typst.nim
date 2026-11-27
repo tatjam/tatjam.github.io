@@ -40,7 +40,7 @@ proc runTypst*(file: Path): string =
     echo err
     raise newException(ValueError, &"Typst failed for {file}")
 
-  return html
+  html
 
 proc runTypstMetadata*(file: Path): JsonNode =
   let p = startProcess(
@@ -70,4 +70,4 @@ proc runTypstMetadata*(file: Path): JsonNode =
     echo err
     raise newException(ValueError, &"Typst metadata failed for {file}")
 
-  return parseJson(jsonText)
+  parseJson(jsonText)

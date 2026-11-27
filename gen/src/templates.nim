@@ -15,7 +15,7 @@ type Theme* = object
   postTheme*: PostTemplate
   listingTheme*: PostTemplate
 
-proc apply*(
+func apply*(
     tmp: PostTemplate, post: LoadedPost, prevPost: LoadedPost, nextPost: LoadedPost
 ): string =
   string(tmp).multiReplace(
@@ -35,11 +35,11 @@ proc apply*(
     ]
   )
 
-proc allCategoriesContent(categories: OrderedTable[Category, seq[LoadedPost]]): string =
+func allCategoriesContent(categories: OrderedTable[Category, seq[LoadedPost]]): string =
   for cat, _ in categories:
-    result.add(&"<a href={cat.url}>{cat}</a>")
+    result.add(&"<a href=\"{cat.url}\">{cat}</a>")
 
-proc allPostsSorted(
+func allPostsSorted(
     categories: OrderedTable[Category, seq[LoadedPost]]
 ): seq[LoadedPost] =
   for cat, posts in categories:
@@ -49,18 +49,18 @@ proc allPostsSorted(
   result.sort do(x, y: LoadedPost) -> int:
     cmp(y.date, x.date)
 
-proc allPostContent(listing: PostTemplate, posts: seq[LoadedPost]): string =
+func allPostContent(listing: PostTemplate, posts: seq[LoadedPost]): string =
   for i in 0 ..< posts.len:
     let prev = max(i - 1, 0)
     let next = min(i + 1, posts.len - 1)
     result.add(listing.apply(posts[i], posts[prev], posts[next]))
 
-proc allPostContent(
+func allPostContent(
     listing: PostTemplate, categories: OrderedTable[Category, seq[LoadedPost]]
 ): string =
   listing.allPostContent(categories.allPostsSorted)
 
-proc apply*(
+func apply*(
     tmp: IndexTemplate,
     listing: PostTemplate,
     category: Category,
@@ -77,7 +77,7 @@ proc apply*(
     ]
   )
 
-proc apply*(
+func apply*(
     tmp: IndexTemplate,
     listing: PostTemplate,
     categories: OrderedTable[Category, seq[LoadedPost]],

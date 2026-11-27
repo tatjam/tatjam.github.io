@@ -32,7 +32,7 @@ proc loadPost*(cat: Category, postPath: Path): LoadedPost =
   let extraHead = metadata["extra-head"].getStr()
 
   let bodyStart = contents.find("<body>") + 6
-  let bodyEnd = contents.rfind("</body>")
+  let bodyEnd = contents.rfind("</body>") - 1
 
   let body = contents.substr(bodyStart, bodyEnd)
 

@@ -47,7 +47,7 @@ proc allPostsSorted(
       result.add(post)
 
   result.sort do(x, y: LoadedPost) -> int:
-    cmp(x.date, y.date)
+    cmp(y.date, x.date)
 
 proc allPostContent(listing: PostTemplate, posts: seq[LoadedPost]): string =
   for i in 0 ..< posts.len:

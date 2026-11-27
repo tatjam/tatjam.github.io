@@ -44,7 +44,7 @@ proc main() =
 
   echo "writing category pages..."
   for cat, contents in templatedCat:
-    let path = Path(&".{cat.targetPath}")
+    let path = Path(&"{cat.targetPath}")
     writeFile(path.string, contents)
     echo &"\twrote {path.absolutePath.string}"
 

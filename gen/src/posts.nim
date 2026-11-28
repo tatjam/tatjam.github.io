@@ -3,7 +3,7 @@
 # ------------------------------------------
 # Post metadata and state
 
-import std/[paths, strformat, times, hashes, json, strutils, algorithm, tables]
+import std/[os, paths, strformat, times, hashes, json, strutils, algorithm, tables, dirs]
 import typst
 
 type Category* = distinct string
@@ -22,6 +22,14 @@ func url*(cat: Category): string =
 
 func targetPath*(cat: Category): string =
   &"./category-{cat}.html"
+
+const cacheDir = Path(".cache/sitegen/")
+
+proc cachePaths(cat: Category, postPath: Path): tuple[html, meta: Path] =
+  let (_, name, _) = postPath.splitFile()
+  let h = $hash(readFile(postPath.string))
+  let base = cacheDir / Path(cat) / Path(&"{name}.{h}")
+  (Path(&"{base}.html"), Path(&"{base}.json"))
 
 type LoadedPost* = object
   sourceFilename*: Path
@@ -47,11 +55,24 @@ type ThemedPost* = object
   contents*: string
 
 proc loadPost*(cat: Category, postPath: Path): LoadedPost =
-  echo "\tconverting " & string(postPath)
   let post = postPath.extractFilename
+  let (htmlCache, metaCache) = cachePaths(cat, postPath)
 
-  let contents = postPath.runTypst()
-  let metadata = postPath.runTypstMetadata()
+  var contents: string
+  var metadata: JsonNode
+
+  if fileExists(htmlCache.string) and fileExists(metaCache.string):
+    echo "\tusing cache for " & string(postPath)
+    contents = readFile(htmlCache.string)
+    metadata = parseJson(readFile(metaCache.string))
+  else:
+    echo "\tconverting " & string(postPath)
+    contents = postPath.runTypst()
+    metadata = postPath.runTypstMetadata()
+
+    htmlCache.parentDir.createDir()
+    writeFile(htmlCache.string, contents)
+    writeFile(metaCache.string, $metadata)
 
   let title = metadata["title"].getStr()
   if title == "":

@@ -46,6 +46,9 @@ watch-debug:
 serve:
     python3 -m http.server
 
-clean:
+clean-cache:
+    rm -rf .cache/sitegen
+
+clean: clean-cache
     rm -f gen/sitegen
     rm -rf ~/.cache/nim/sitegen_*

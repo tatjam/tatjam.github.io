@@ -2,24 +2,55 @@
   box-sizing: border-box;
 }
 
-/* Create two equal columns that floats next to each other */
+.columns {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0 1.25rem;
+  align-items: start;
+}
+
+.main > .columns { font-size: 0.92rem; }
+.columns p { margin: 0 0 0.35rem; }
+
+.columns .columns {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0 0.75rem;
+}
+
 .column {
-  float: left;
-  width: 33%;
-  padding: 10px;
+  min-width: 0;
+  padding: 0.5rem 0;
 }
 
-.columncheck { 
-  float: left;
-  width: 11%;
-  padding: 10px;
+.checks {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(5rem, 1fr));
+  gap: 0.25rem;
 }
 
-/* Clear floats after the columns */
-.row:after {
-  content: "";
-  display: table;
-  clear: both;
+.columncheck {
+  min-width: 0;
+  padding: 0.35rem 0.25rem;
+  text-align: center;
+}
+
+@media (max-width: 900px) {
+  .columns { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+
+@media (max-width: 600px) {
+  .columns, .columns .columns { grid-template-columns: minmax(0, 1fr); }
+  .column { padding: 0.25rem 0; }
+  #page label { font-size: 0.72rem; margin-right: 0.35rem; }
+  #page input[type="text"],
+  #page input[type="number"],
+  #page textarea,
+  #page select {
+    font-size: 0.85rem;
+    margin: 2px 0 10px;
+    max-width: 100%;
+  }
+  #page input[type="number"] { width: 6rem; }
 }
 
 input {
@@ -111,6 +142,22 @@ input[type=number] {
 #page textarea,
 #page select {
   margin: 5px 0 15px;
+}
+
+#image-settings {
+  line-height: 1.35;
+}
+
+#image-settings input[type="number"] {
+  margin: 1px 0 2px;
+}
+
+#image-settings input[type="checkbox"] {
+  margin: 0 4px 0 0;
+}
+
+#image-settings label {
+  margin-right: 0.35rem;
 }
 
 

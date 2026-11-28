@@ -30,7 +30,6 @@
   (
     html.elem("input", attrs: attrs)
       + html.elem("label", attrs: ("for": id), label)
-      + html.br()
   )
 }
 
@@ -76,29 +75,29 @@ that could be quickly used to generate beautiful labels, a must have in any lab.
 In the inputs that allow HTML you can use `<br>` to input a line break. You can also use any other HTML tags!
 For example, `<b>Text</b>` shows bold text and `<i>Wathever</i>` shows italic text.
 
-#html.elem("div", attrs: (class: "row"), [
+#html.elem("div", attrs: (class: "columns"), [
   #html.elem("div", attrs: (class: "column"), [
     #html.elem("h3", [Basic])
 
     You may only enter one of the options.
-    #html.br()
+    
 
     #field("cid", [PubChem's CID: ], extra: (
       value: "276350",
       onchange: "change_name('cid')",
     ))
 
-    #html.br()
+    
 
     #field("smiles", [SMILES: ], extra: (onchange: "change_name('smiles')"))
 
-    #html.br()
+    
 
     #field("name-fm", [Name (First Match): ], extra: (
       onchange: "change_name('name-fm')",
     ))
 
-    #html.br()
+    
 
     #html.elem("label", attrs: ("for": "type"), [Label presets:])
     #select(
@@ -113,20 +112,20 @@ For example, `<b>Text</b>` shows bold text and `<i>Wathever</i>` shows italic te
     )
     (Changes customization!)
 
-    #html.br()
+    
 
     #html.elem("h3", [Renderer Settings])
 
     This setting may be useful if the generated image is buggy or you are working with coordination complexes which
     are not very well supported.
-    #html.br()
+    
 
     #check(
       "use-pubchem",
       [Use PubChem image instead of generated one. #strong[Download by screenshot!]],
     )
 
-    #html.br()
+    
 
     #html.elem("div", attrs: (id: "image-settings"), [
       #field("bond-length", [Image Scale: ], type: "number", extra: (
@@ -135,17 +134,17 @@ For example, `<b>Text</b>` shows bold text and `<i>Wathever</i>` shows italic te
         max: "5",
       ))
 
-      #html.br()
+      
 
       #field("bond-width", [Bond Width (Pixels): ], type: "number", extra: (
         value: "1",
       ))
 
-      #html.br()
+      
 
       #check("use-colors", [Use colored atoms], checked: true)
 
-      #html.br()
+      
 
       #check(
         "terminal-carbons",
@@ -154,7 +153,7 @@ For example, `<b>Text</b>` shows bold text and `<i>Wathever</i>` shows italic te
 
       #field("atom-radius", [Atom Size: ], type: "number", extra: (value: "4"))
 
-      #html.br()
+      
 
       #check("circle-atoms", [Draw atoms as a circle])
     ])
@@ -246,9 +245,9 @@ For example, `<b>Text</b>` shows bold text and `<i>Wathever</i>` shows italic te
       ))
     ])
 
-    #html.elem("div", attrs: (id: "custom-ghs", class: "row"), [
+    #html.elem("div", attrs: (id: "custom-ghs", class: "checks"), [
       You may toggle the icons manually. Insert the appropriate text into Extra Hazard Text.
-      #html.br()
+      
 
       #ghs-check("custom-ghs-explosive", "/external/ghs/explosive.svg")
       #ghs-check("custom-ghs-flammable", "/external/ghs/flammable.svg")
@@ -330,7 +329,7 @@ For example, `<b>Text</b>` shows bold text and `<i>Wathever</i>` shows italic te
       [(Warning: Some may not be available, or not correctly extracted!)],
     )
 
-    #html.elem("div", attrs: (class: "row"), [
+    #html.elem("div", attrs: (class: "columns"), [
       #html.elem("div", attrs: (class: "column"), [
         #html.elem("p", check("formula", [Formula], checked: true, extra: (
           value: "Formula",

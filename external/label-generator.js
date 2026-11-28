@@ -882,7 +882,7 @@ function show_correct_divs()
 
     if($("hazard_type").value == "ghs-custom")
     {
-        $("custom-ghs").style.display = "block";
+        $("custom-ghs").style.display = "grid";
     }
     else
     {

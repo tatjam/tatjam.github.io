@@ -34,6 +34,19 @@ document.addEventListener('DOMContentLoaded', function () {
 		});
 	}
 
+	var topbar = document.querySelector('.topbar');
+	if (topbar) {
+		function syncStickyTop() {
+			document.documentElement.style.setProperty('--sticky-top', topbar.offsetHeight + 'px');
+		}
+		syncStickyTop();
+		if (window.ResizeObserver) {
+			new ResizeObserver(syncStickyTop).observe(topbar);
+		} else {
+			window.addEventListener('resize', syncStickyTop);
+		}
+	}
+
 	var bar = document.querySelector('.reading-progress');
 	if (bar) {
 		function updateProgress() {

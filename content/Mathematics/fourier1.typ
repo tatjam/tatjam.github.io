@@ -31,7 +31,7 @@ $ G(f) = 1/2 delta(f - f_0) + 1/2 delta(f + f_0) $
 
 To compute the spectrum of the sampled signal, we can apply the convolution theorem. It states that the Fourier transform of the product of two functions is the convolution of their respective Fourier transforms (the converse is also true). We can obtain the Fourier transform of the "sampling function" (Dirac comb) and find it to be:
 
-$ 1/T sum_(n=-oo)^oo delta(lr((f - n/T))) $
+$ 1/T sum_(n=-oo)^oo delta(f - n/T) $
 
 Now, we need to convolve the previous expression with $G(omega)$. The convolution of a Dirac delta with another obeys the following law:
 
@@ -39,7 +39,7 @@ $ delta(t - a) ast delta(t - b) = delta((a + b) - t) $
 
 Thus we may write the spectrum of the sampled signal by applying the previous "law" linearly:
 
-$ G_s (f) = 1/2 sum_(n=-oo)^oo delta(lr((n/T plus.minus f_0) - f)) $
+$ G_s (f) = 1/2 sum_(n=-oo)^oo delta((n/T plus.minus f_0) - f) $
 
 The following graph allows you to play around with the values and get a feel for the results. Note that the vertical scale of the graph represents the intensity of each term of the Fourier series in a logarithmic scale #footnote[Actually, the signals are divided by the would-be intensity of the "DC" signal of $f = 0$ before taking logarithms, such that the graph scale remains consistent.], and the horizontal scale is the frequency in Hz. The shaded area represents the Nyquist area, where the signal frequency is less than half the sampling frequency.
 
@@ -57,7 +57,7 @@ and $1/T = f_s$ = #html.elem("input", attrs: ("data-var": "fs", class: "Draggabl
 
 #html.elem(
   "div",
-  attrs: (id: "stick", class: "sticky", style: "top:30px;width:100%;"),
+  attrs: (id: "stick", class: "sticky", style: "width:100%;"),
   html.elem(
     "div",
     attrs: (
@@ -90,7 +90,7 @@ We can represent such a device as a convolution in the time domain between our s
 
 Applying the convolution theorem, we can obtain the spectrum of the resulting signal as the product of the spectrum of the original samples, and of the spectrum of the "boxcar" function, which is known as the "sinc" function:
 
-$ frac(1, pi f) sin(lr((pi f / f_s))) $
+$ frac(1, pi f) sin(pi f / f_s) $
 
 Due to the denominator, the bigger $f$ is, the more attenuation we have. Furthermore, if $f$ is badly placed it may be completely attenuated. Note that, even with a properly sampled signal (i.e. sampling frequency more than twice the signal frequency), some attenuation will take place for signals relatively close to the Nyquist frequency (half the sampling frequency). This is commonly known as "sinc roll-off".
 
@@ -104,14 +104,14 @@ Each of the areas between two zeros is referred to as a "Nyquist zone". The zero
 
 If we compute the derivative of said function we can find the frequencies at which it's of maximum amplitude, which requires solving (for non-zero $f$):
 
-$ tan(lr((pi f / f_s))) = pi f / f_s $
+$ tan(pi f / f_s) = pi f / f_s $
 
 Remarkably, this equation has no closed form solution. Nonetheless, we can infer some properties about its solutions, and cook up a quick numerical method to find them #footnote[Adapted from #link("https://math.stackexchange.com/q/18744")[leonbloy's post on Mathematics Stack Exchange].]. First of all, note that it's intuitive to see that infinite solutions exist, as surely the line in the right hand side intersects the tangent (whose image spans all reals over and over) infinitely many times.
 
 Afterwards, note that taking the arc-tangent:
 
 $
-  pi f / f_s = arctan(lr((pi f / f_s))) + 2k pi arrow.r.double.long f = f_s / pi (arctan(lr((pi f / f_s))) + 2k pi)
+  pi f / f_s = arctan(pi f / f_s) + 2k pi arrow.r.double.long f = f_s / pi (arctan(pi f / f_s) + 2k pi)
 $
 
 Except for small $k$, the term in the parenthesis is dominated by $2k pi$. Furthermore, only one solution is located in each Nyquist zone, because the arc-tangent approaches $pi/2$ as its argument grows, and is positive. In fact, for big enough $f$ (and thus $k$ ), the solution is located extremely close to $frac(4k + 1, 2) f_s$, at the center of each Nyquist zone.

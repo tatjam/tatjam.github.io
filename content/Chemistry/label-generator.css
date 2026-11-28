@@ -67,4 +67,50 @@ input[type=number] {
   top:-30px;
 }
 
+#generated {
+  color: #17242e;
+  background-color: #ffffff;
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 16px;
+  line-height: 1.3;
+  text-align: left;
+  text-wrap: wrap;
+  hyphens: none;
+}
+
+#generated h3 {
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 1.4rem;
+  font-weight: 700;
+  line-height: 1.2;
+  letter-spacing: normal;
+  text-transform: none;
+  color: #17242e;
+  margin: 0 0 0.35em;
+}
+
+#generated p {
+  font-size: 1rem;
+  line-height: 1.3;
+  color: #17242e;
+  margin: 0 0 0.35em;
+}
+
+#generated img {
+  display: inline;
+  width: auto;
+  height: auto;
+  margin: 0;
+  filter: none !important;
+  background-color: transparent !important;
+  padding: 0 !important;
+}
+
+#page input[type="text"],
+#page input[type="number"],
+#page textarea,
+#page select {
+  margin: 5px 0 15px;
+}
+
 

@@ -271,15 +271,6 @@ code, pre { font-family: var(--font-mono); }
 	margin: 0 auto;
 	padding: clamp(3rem, 7vw, 5.5rem) clamp(1.25rem, 4vw, 2.5rem) 3rem;
 }
-.hero::before {
-	content: "";
-	position: absolute;
-	top: 0;
-	left: clamp(1.25rem, 4vw, 2.5rem);
-	width: min(22rem, 60%);
-	height: 1px;
-	background: var(--amber);
-}
 
 .eyebrow {
 	margin: 0 0 0.9rem;

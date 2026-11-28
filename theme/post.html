@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8">
+		<script>
+			(function () {
+				var stored = null;
+				try { stored = localStorage.getItem('theme'); } catch (e) {}
+				if (stored) document.documentElement.setAttribute('data-theme', stored);
+			})();
+		</script>
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<title><$POST_TITLE></title>
+		<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+		<link href="/static/prism.css" rel="stylesheet" />
+		<link rel="stylesheet" type="text/css" href="/static/theme.css">
+		<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:ital,wght@0,400;0,500;1,400&family=Space+Grotesk:wght@400;500;600&display=swap" rel="stylesheet">
+		<script type="text/javascript" src="/external/offsetanchor.js"></script>
+		<$EXTRA_HEAD>
+	</head>
+	<body class="page-post">
+		<script src="/static/prism.js"></script>
+		<script src="/static/theme-toggle.js"></script>
+
+		<div class="reading-progress" aria-hidden="true"></div>
+
+		<header class="topbar navbar">
+			<a class="brand nav-left" href="/index.html">
+				<span class="brand-name">Tatjam's Blog</span>
+			</a>
+			<nav class="nav-right" aria-label="Site navigation">
+				<a href="<$CATEGORY_LINK>"><$CATEGORY_NAME></a>
+				<$PREV_ARROW>
+				<$NEXT_ARROW>
+				<button id="theme-toggle" class="theme-toggle" type="button" aria-label="Toggle dark mode" aria-pressed="false">
+					<span class="theme-toggle-track"><span class="theme-toggle-thumb"></span></span>
+				</button>
+			</nav>
+		</header>
+
+		<main>
+			<section class="intro hero hero-post">
+				<div class="hero-copy">
+					<p class="eyebrow">entry / <$CATEGORY_NAME> / <$POST_DATE></p>
+					<h1><$POST_TITLE></h1>
+					<p class="hero-summary"><$POST_SUMMARY></p>
+				</div>
+			</section>
+
+			<article id="page">
+				<div class="main"><$POST_CONTENTS></div>
+			</article>
+
+			<nav class="post-pager" aria-label="Post navigation">
+				<$PREV_PAGER>
+				<$NEXT_PAGER>
+			</nav>
+		</main>
+
+		<footer class="colophon">
+			<span>&copy; 2019-2026 Tatjam &middot; <a href="/feed.xml">RSS</a> &middot; <a href="mailto:blog@tatjam.eu">Contact</a></span>
+			<span>Built with Nim + Typst &middot; GPL-3.0</span>
+		</footer>
+	</body>
+</html>

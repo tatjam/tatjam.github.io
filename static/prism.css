@@ -143,5 +143,4 @@ pre > code.highlight {
 /* Line Highlight Plugin Mapping */
 .line-highlight {
     background: rgba(107, 115, 148, 0.2);
-    background: linear-gradient(to right, rgba(107, 115, 148, 0.2) 70%, rgba(107, 115, 148, 0));
 }

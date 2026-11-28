@@ -14,34 +14,41 @@
 		<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
 		<link href="/static/prism.css" rel="stylesheet" />
 		<link rel="stylesheet" type="text/css" href="/static/theme.css">
-		<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:ital@0;1&family=IBM+Plex+Sans+Condensed:ital@0;1&family=IBM+Plex+Sans:ital,wght@0,100;0,400;0,700;1,100;1,400;1,700&family=IBM+Plex+Serif:ital@0;1&display=swap" rel="stylesheet">
+		<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:ital,wght@0,400;0,500;1,400&family=Space+Grotesk:wght@400;500;600&display=swap" rel="stylesheet">
 		<script type="text/javascript" src="/external/offsetanchor.js"></script>
 		
 	</head>
-	<body>
+	<body class="page-post">
 		<script src="/static/prism.js"></script>
 		<script src="/static/theme-toggle.js"></script>
 
-		<div class="navbar">
-			<div class="nav-left">
-				<a href="/index.html">Models and Vehicles</a>
-			</div>
-			<div class="nav-right">
+		<div class="reading-progress" aria-hidden="true"></div>
+
+		<header class="topbar navbar">
+			<a class="brand nav-left" href="/index.html">
+				<span class="brand-name">Tatjam's Blog</span>
+			</a>
+			<nav class="nav-right" aria-label="Site navigation">
 				<a href="/category-Gamedev.html">Gamedev</a>
-				<a href="/Gamedev/introducing-ospgl.html" title="Previous: Introducing OSPGL" class="nav-arrow">&#9664</a>
-				<a href="/Gamedev/ospgl-progress.html" title="Next: Early 2020 progress" class="nav-arrow">&#9654</a>
-				<button id="theme-toggle" class="theme-toggle" type="button" aria-label="Toggle dark mode">
+				<a href="/Gamedev/introducing-ospgl.html" title="Previous: Introducing OSPGL" class="nav-arrow" aria-label="Previous post">&#9664;</a>
+				<a href="/Gamedev/ospgl-progress.html" title="Next: Early 2020 progress" class="nav-arrow" aria-label="Next post">&#9654;</a>
+				<button id="theme-toggle" class="theme-toggle" type="button" aria-label="Toggle dark mode" aria-pressed="false">
 					<span class="theme-toggle-track"><span class="theme-toggle-thumb"></span></span>
 				</button>
-			</div>
-		</div>
-		<div class="intro">
-			<h1>Models and Vehicles</h1>
-			<p>An introduction to Vehicles and Model loading in OSPGL<br>2019-12-22</p>
-		</div>
-		<div id="page">
-			<div class="main">
-				<p>My current development focus are vehicles. They are almost the most important part of KSP, the player can build anything they imagine using simple, intuitive tools, by combining multiple parts.</p><hr><h1>Model Loading</h1><p><a href="http://www.assimp.org/">Assimp</a> is an awesome library that allows the integration of a huge number of 3D model formats into a program with a shared interface. It’s very straightforward to implement, you just need to copy the assimp data to your own 3D data format.</p><p>I decided to structure Models into a tree of Nodes. Nodes can contain an arbitrary ammount of Meshes, each with its own Material.</p><p>This structure is really similar to that used by Assimp, and is actually quite comfortable to use, specially for part making where some nodes of the model may need to have some custom behaviour, for example, the nozzle of a rocket engine.</p><h2>Materials</h2><p>Materials are always tricky to implement. Copying the material system from, say, Blender (not Cycles), could work, but would make editing models with other software weird and cumbersome.</p><p>Instead, I have decided to have two types of materials:</p><h3>Custom Materials</h3><p>They are defined by a TOML file and a shader. They can define constant uniforms that are set for said shaders and define the names in the shader of the different core uniforms (projection matrix, camera position, lights, etc…). They also define what vertex data is loaded into each mesh, as needed by the shader.</p><p>The 3D artist, in order to assign a material, simply sets the name of the material in the modelling software to the package path to the material file. For example, in blender, to assign the material <code></code>my_mod:materials/metallic.toml<code></code> to a mesh, I would set its material to be named like that.</p><p>This COULD change in the future to use an attribute in the material instead, allowing material names to stay fully readable.</p><p>Here’s an example material file for a model that displays a texture (in this case the navball texture), and has a uniform vec3, <code>color</code>. The mesh that gets loaded only contains position, normal and texture data.</p><pre><code class="language-toml">shader = "shader/simple.vs"
+			</nav>
+		</header>
+
+		<main>
+			<section class="intro hero hero-post">
+				<div class="hero-copy">
+					<p class="eyebrow">entry / Gamedev / 2019-12-22</p>
+					<h1>Models and Vehicles</h1>
+					<p class="hero-summary">An introduction to Vehicles and Model loading in OSPGL</p>
+				</div>
+			</section>
+
+			<article id="page">
+				<div class="main"><p>My current development focus are vehicles. They are almost the most important part of KSP, the player can build anything they imagine using simple, intuitive tools, by combining multiple parts.</p><hr><h1>Model Loading</h1><p><a href="http://www.assimp.org/">Assimp</a> is an awesome library that allows the integration of a huge number of 3D model formats into a program with a shared interface. It’s very straightforward to implement, you just need to copy the assimp data to your own 3D data format.</p><p>I decided to structure Models into a tree of Nodes. Nodes can contain an arbitrary ammount of Meshes, each with its own Material.</p><p>This structure is really similar to that used by Assimp, and is actually quite comfortable to use, specially for part making where some nodes of the model may need to have some custom behaviour, for example, the nozzle of a rocket engine.</p><h2>Materials</h2><p>Materials are always tricky to implement. Copying the material system from, say, Blender (not Cycles), could work, but would make editing models with other software weird and cumbersome.</p><p>Instead, I have decided to have two types of materials:</p><h3>Custom Materials</h3><p>They are defined by a TOML file and a shader. They can define constant uniforms that are set for said shaders and define the names in the shader of the different core uniforms (projection matrix, camera position, lights, etc…). They also define what vertex data is loaded into each mesh, as needed by the shader.</p><p>The 3D artist, in order to assign a material, simply sets the name of the material in the modelling software to the package path to the material file. For example, in blender, to assign the material <code></code>my_mod:materials/metallic.toml<code></code> to a mesh, I would set its material to be named like that.</p><p>This COULD change in the future to use an attribute in the material instead, allowing material names to stay fully readable.</p><p>Here’s an example material file for a model that displays a texture (in this case the navball texture), and has a uniform vec3, <code>color</code>. The mesh that gets loaded only contains position, normal and texture data.</p><pre><code class="language-toml">shader = "shader/simple.vs"
 
 [uniforms]
 	diffuse = "navball:navball.png"
@@ -84,8 +91,18 @@ function activate()
 	end
 
 end
-</code></pre><h2>Welding</h2><p>A known problem of KSP is how laggy the game can get when you have a vehicle made of hundreds of parts. A big portion of this lag comes from the physics engine, every single part is a rigid body that has to be fully simulated.</p><p>Welding solves this issue, and also makes rockets less wobbly.</p><p>The technique consists on creating single rigidbodies for a set of linked pieces, using a <code>btCompoundShape</code> for the collision mesh.</p><p>It’s important to keep in mind that welding can exist alongside other links, parts can be unwelded and still be joined by a physics constraint, but that will not usually be the case, welded pieces will most of the time have no other link.</p><p>An example of a piece which may need a link after unwelding is a winch. If it’s fully retracted then the winch head will be welded and locked in place. But after extending the cable, the weld will be broken and a soft-body rope link will be spawned between the pieces.</p><hr><p>Not much more can be said for now as stuff will likely change, I hope to have a working vehicle demo coming soon!</p><section role="doc-endnotes"><ol style="list-style-type: none"><li id="loc-3"><p><sup role="doc-backlink"><a href="#loc-1">1</a></sup>Another option, which can be found on <a href="https://github.com/TheOpenSpaceProgram/urho-osp">Capital-Asterisk’s Urho OSP</a>, is to avoid the tree structure. This fixes the big problem of multi-port docking, but introduces user experience challenges, how will parts be joined together? How can the user create complex relations between parts?</p><p>The code changes required are actually not that big, pieces need to allow multiple links instead of just one, and all tree traversing code needs to be adjusted to keep that in mind.</p><p>A good example of ignoring the tree structure are KSP’s struts and fuel lines, but they, as far as I know, are not conventional parts, and are implemented separately. If we don’t implement a tree style vehicle, then fuel lines will be conventional parts.</p></li><li id="loc-4"><sup role="doc-backlink"><a href="#loc-2">2</a></sup>Parts may or may not know what is linked to them, this is one of the important decisions that are needed. It makes sense for part code to only have access to the pieces that are inside that part, after all, all multi-part interactions that I can think of will be handled by external systems (resource flow, for example). On the other hand, making pieces be aware of what is connected to them, even if it makes the code structures more complex, allows decouplers made of a single piece. This needs some thinking before any hard to change code is written.</li></ol></section>
-			</div>
-		</div>
+</code></pre><h2>Welding</h2><p>A known problem of KSP is how laggy the game can get when you have a vehicle made of hundreds of parts. A big portion of this lag comes from the physics engine, every single part is a rigid body that has to be fully simulated.</p><p>Welding solves this issue, and also makes rockets less wobbly.</p><p>The technique consists on creating single rigidbodies for a set of linked pieces, using a <code>btCompoundShape</code> for the collision mesh.</p><p>It’s important to keep in mind that welding can exist alongside other links, parts can be unwelded and still be joined by a physics constraint, but that will not usually be the case, welded pieces will most of the time have no other link.</p><p>An example of a piece which may need a link after unwelding is a winch. If it’s fully retracted then the winch head will be welded and locked in place. But after extending the cable, the weld will be broken and a soft-body rope link will be spawned between the pieces.</p><hr><p>Not much more can be said for now as stuff will likely change, I hope to have a working vehicle demo coming soon!</p><section role="doc-endnotes"><ol style="list-style-type: none"><li id="loc-3"><p><sup role="doc-backlink"><a href="#loc-1">1</a></sup>Another option, which can be found on <a href="https://github.com/TheOpenSpaceProgram/urho-osp">Capital-Asterisk’s Urho OSP</a>, is to avoid the tree structure. This fixes the big problem of multi-port docking, but introduces user experience challenges, how will parts be joined together? How can the user create complex relations between parts?</p><p>The code changes required are actually not that big, pieces need to allow multiple links instead of just one, and all tree traversing code needs to be adjusted to keep that in mind.</p><p>A good example of ignoring the tree structure are KSP’s struts and fuel lines, but they, as far as I know, are not conventional parts, and are implemented separately. If we don’t implement a tree style vehicle, then fuel lines will be conventional parts.</p></li><li id="loc-4"><sup role="doc-backlink"><a href="#loc-2">2</a></sup>Parts may or may not know what is linked to them, this is one of the important decisions that are needed. It makes sense for part code to only have access to the pieces that are inside that part, after all, all multi-part interactions that I can think of will be handled by external systems (resource flow, for example). On the other hand, making pieces be aware of what is connected to them, even if it makes the code structures more complex, allows decouplers made of a single piece. This needs some thinking before any hard to change code is written.</li></ol></section></div>
+			</article>
+
+			<nav class="post-pager" aria-label="Post navigation">
+				<a href="/Gamedev/introducing-ospgl.html" class="pager-link pager-prev"><span>&#9664; previous entry</span><strong>Introducing OSPGL</strong></a>
+				<a href="/Gamedev/ospgl-progress.html" class="pager-link pager-next"><span>next entry &#9654;</span><strong>Early 2020 progress</strong></a>
+			</nav>
+		</main>
+
+		<footer class="colophon">
+			<span>&copy; 2019-2026 Tatjam &middot; <a href="/feed.xml">RSS</a> &middot; <a href="mailto:blog@tatjam.eu">Contact</a></span>
+			<span>Built with Nim + Typst &middot; GPL-3.0</span>
+		</footer>
 	</body>
 </html>

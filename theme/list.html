@@ -1,7 +1,11 @@
 	<a href="<$POST_URL>" class="post-list">
-		<div class="post-header">
+		<div class="entry-body">
+			<div class="post-header">
+				<span class="entry-tag"><$CATEGORY_NAME></span>
+				<span class="post-meta"><$POST_DATE></span>
+			</div>
 			<h2><$POST_TITLE></h2>
-			<p class="post-meta">(<$POST_DATE> in <$CATEGORY_NAME>)</p>
+			<p><$POST_SUMMARY></p>
 		</div>
-		<p><$POST_SUMMARY></p>
+		<span class="entry-arrow" aria-hidden="true">&#9654;</span>
 	</a>

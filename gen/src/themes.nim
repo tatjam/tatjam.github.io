@@ -4,7 +4,7 @@
 # Filling the theme templates
 
 import posts
-import std/[tables, strutils, times, strformat]
+import std/[tables, strutils, times, strformat, options]
 
 type PostTheme* = distinct string
 type IndexTheme* = distinct string
@@ -15,9 +15,32 @@ type Theme* = object
   postTheme*: PostTheme
   listingTheme*: PostTheme
 
+func navArrow(post: LoadedPost, label, arrow: string): string =
+  &"<a href=\"{post.url}\" title=\"{label}: {post.title}\" class=\"nav-arrow\" aria-label=\"{label} post\">{arrow}</a>"
+
+func pagerLink(post: LoadedPost, inner, direction: string): string =
+  &"<a href=\"{post.url}\" class=\"pager-link pager-{direction}\">{inner}<strong>{post.title}</strong></a>"
+
 func apply*(
-    tmp: PostTheme, post: LoadedPost, prevPost: LoadedPost, nextPost: LoadedPost
+    tmp: PostTheme, post: LoadedPost, prevPost: Option[LoadedPost], nextPost: Option[LoadedPost]
 ): string =
+  let prevArrow = if prevPost.isSome:
+      navArrow(prevPost.get, "Previous", "&#9664;")
+    else:
+      "<span class=\"nav-arrow nav-arrow-empty\" aria-hidden=\"true\">&#9664;</span>"
+  let nextArrow = if nextPost.isSome:
+      navArrow(nextPost.get, "Next", "&#9654;")
+    else:
+      "<span class=\"nav-arrow nav-arrow-empty\" aria-hidden=\"true\">&#9654;</span>"
+  let prevPager = if prevPost.isSome:
+      pagerLink(prevPost.get, "<span>&#9664; previous entry</span>", "prev")
+    else:
+      "<span class=\"pager-empty\" aria-hidden=\"true\"></span>"
+  let nextPager = if nextPost.isSome:
+      pagerLink(nextPost.get, "<span>next entry &#9654;</span>", "next")
+    else:
+      "<span class=\"pager-empty\" aria-hidden=\"true\"></span>"
+
   result = string(tmp).multiReplace(
       [
         ("<$POST_TITLE>", post.title),
@@ -25,10 +48,10 @@ func apply*(
         ("<$EXTRA_HEAD>", post.extraHead),
         ("<$CATEGORY_LINK>", post.cat.url),
         ("<$CATEGORY_NAME>", $post.cat),
-        ("<$PREV_POST>", prevPost.url),
-        ("<$PREV_POST_TITLE>", prevPost.title),
-        ("<$NEXT_POST>", nextPost.url),
-        ("<$NEXT_POST_TITLE>", nextPost.title),
+        ("<$PREV_ARROW>", prevArrow),
+        ("<$NEXT_ARROW>", nextArrow),
+        ("<$PREV_PAGER>", prevPager),
+        ("<$NEXT_PAGER>", nextPager),
         ("<$POST_DATE>", post.date.format("yyyy-MM-dd")),
         ("<$POST_CONTENTS>", post.body),
         ("<$POST_SUMMARY>", post.summary),
@@ -41,9 +64,7 @@ func allCategoriesContent(categories: OrderedTable[Category, seq[LoadedPost]]): 
 
 func allPostContent(listing: PostTheme, posts: seq[LoadedPost]): string =
   for i in 0 ..< posts.len:
-    let newer = max(i - 1, 0)
-    let older = min(i + 1, posts.len - 1)
-    result.add(listing.apply(posts[i], posts[older], posts[newer]))
+    result.add(listing.apply(posts[i], none(LoadedPost), none(LoadedPost)))
 
 func allPostContent(
     listing: PostTheme, categories: OrderedTable[Category, seq[LoadedPost]]

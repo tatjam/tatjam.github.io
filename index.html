@@ -3,8 +3,6 @@
 	<head>
 		<meta charset="UTF-8">
 		<script>
-			// Set data-theme before first paint to avoid a flash of the
-			// wrong theme. Pairs with /theme-toggle.js for the button.
 			(function () {
 				var stored = null;
 				try { stored = localStorage.getItem('theme'); } catch (e) {}
@@ -14,97 +12,140 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1">
 		<title>Tatjam's Blog</title>
 		<link rel="stylesheet" type="text/css" href="/static/theme.css">
-		<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:ital@0;1&family=IBM+Plex+Sans+Condensed:ital@0;1&family=IBM+Plex+Sans:ital,wght@0,100;0,400;0,700;1,100;1,400;1,700&family=IBM+Plex+Serif:ital@0;1&display=swap" rel="stylesheet">
+		<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:ital,wght@0,400;0,500;1,400&family=Space+Grotesk:wght@400;500;600&display=swap" rel="stylesheet">
 	</head>
-	<body>
+	<body class="page-index">
 		<script src="/static/prism.js"></script>
 		<script src="/static/theme-toggle.js"></script>
+		<script src="/static/tumbler.js"></script>
 
-		<div class="navbar">
-			<div class="nav-left">
-				<a href="">Tatjam's Blog</a>
-			</div>
-			<div class="nav-right">
+		<div class="reading-progress" aria-hidden="true"></div>
+
+		<header class="topbar navbar">
+			<a class="brand nav-left" href="/index.html">
+				<span class="brand-name">Tatjam's Blog</span>
+			</a>
+			<nav class="nav-right" aria-label="Site navigation">
 				<a href="/category-Chemistry.html">Chemistry</a><a href="/category-Gamedev.html">Gamedev</a><a href="/category-Mathematics.html">Mathematics</a>
-				<button id="theme-toggle" class="theme-toggle" type="button" aria-label="Toggle dark mode">
+				<button id="theme-toggle" class="theme-toggle" type="button" aria-label="Toggle dark mode" aria-pressed="false">
 					<span class="theme-toggle-track"><span class="theme-toggle-thumb"></span></span>
 				</button>
+			</nav>
+		</header>
+
+		<main>
+			<section class="intro hero">
+				<div class="hero-copy">
+					<p class="eyebrow">aerospace engineer</p>
+					<h1><em>Hello!</em></h1>
+					<div class="hero-text">
+						<p>I'm an aerospace engineer, currently working on attitude and orbit control systems for small satellites.</p>
+						<p>This is my corner of the internet where I write about everything I like, from mathematics to game dev. Pick a topic above, or follow the <a href="/feed.xml">RSS feed</a> for new entries.</p>
+						<p>Reach me at <a href="mailto:blog@tatjam.eu">blog@tatjam.eu</a>, or find me on <a href="https://www.linkedin.com/in/jos%C3%A9-antonio-mayo-garc%C3%ADa-6aab4a241">LinkedIn</a>.</p>
+					</div>
+				</div>
+				<div class="tumbler" aria-hidden="true">
+					<canvas id="tumbler-canvas"></canvas>
+				</div>
+			</section>
+
+			<section class="entries">
+				<div class="section-head"><h2>Recent entries</h2></div>
+				<div class="entry-list">	<a href="/Mathematics/fourier1.html" class="post-list">
+		<div class="entry-body">
+			<div class="post-header">
+				<span class="entry-tag">Mathematics</span>
+				<span class="post-meta">2025-04-21</span>
 			</div>
-		</div>
-		<div class="intro">
-			<h1>Welcome to Tatjam's Blog</h1>
-			<p>Hello! I'm an aerospace engineer, currently working on Europe's Galileo ground segment.<br>
-			This is my corner of the internet where I write about everything I like, from signal processing to game dev.
-			<br>
-			<br>
-			You can use the categories at the top, or browse by date of publication below.
-			To know when I add new content, use this <a href="/feed.xml">RSS feed</a>.
-			<br>
-			<br>
-			Feel free to contact me through e-mail, <a href="mailto:blog@tatjam.eu">blog@tatjam.eu</a> or find me in
-			<a href=https://www.linkedin.com/in/josé-antonio-mayo-garcía-6aab4a241>LinkedIn</a>.
-			</p>
-		</div>
-		<div id="page">
-			<div class="main">
-					<a href="/Mathematics/fourier1.html" class="post-list">
-		<div class="post-header">
 			<h2>Understanding undersampling - 1</h2>
-			<p class="post-meta">(2025-04-21 in Mathematics)</p>
+			<p>Using the Fourier transform and interactive graphics to intuitively understand undersampling transmitters</p>
 		</div>
-		<p>Using the Fourier transform and interactive graphics to intuitively understand undersampling transmitters</p>
+		<span class="entry-arrow" aria-hidden="true">&#9654;</span>
 	</a>
 	<a href="/Gamedev/roadway-to-release.html" class="post-list">
-		<div class="post-header">
+		<div class="entry-body">
+			<div class="post-header">
+				<span class="entry-tag">Gamedev</span>
+				<span class="post-meta">2023-02-08</span>
+			</div>
 			<h2>Roadway to Release</h2>
-			<p class="post-meta">(2023-02-08 in Gamedev)</p>
+			<p>A summary of progress over the last year, and an overview of what's to come</p>
 		</div>
-		<p>A summary of progress over the last year, and an overview of what's to come</p>
+		<span class="entry-arrow" aria-hidden="true">&#9654;</span>
 	</a>
 	<a href="/Gamedev/two-years-of-progress.html" class="post-list">
-		<div class="post-header">
+		<div class="entry-body">
+			<div class="post-header">
+				<span class="entry-tag">Gamedev</span>
+				<span class="post-meta">2022-05-15</span>
+			</div>
 			<h2>Two years of progress</h2>
-			<p class="post-meta">(2022-05-15 in Gamedev)</p>
+			<p>Almost 2 years have passed since last blogpost, but the project has kept on going!</p>
 		</div>
-		<p>Almost 2 years have passed since last blogpost, but the project has kept on going!</p>
+		<span class="entry-arrow" aria-hidden="true">&#9654;</span>
 	</a>
 	<a href="/Chemistry/label-generator.html" class="post-list">
-		<div class="post-header">
+		<div class="entry-body">
+			<div class="post-header">
+				<span class="entry-tag">Chemistry</span>
+				<span class="post-meta">2021-06-21</span>
+			</div>
 			<h2>Label Generator</h2>
-			<p class="post-meta">(2021-06-21 in Chemistry)</p>
+			<p>A chemical label generator designed with ease of use and beautiful labels in mind</p>
 		</div>
-		<p>A chemical label generator designed with ease of use and beautiful labels in mind</p>
+		<span class="entry-arrow" aria-hidden="true">&#9654;</span>
 	</a>
 	<a href="/Gamedev/enter-the-editor.html" class="post-list">
-		<div class="post-header">
+		<div class="entry-body">
+			<div class="post-header">
+				<span class="entry-tag">Gamedev</span>
+				<span class="post-meta">2020-06-03</span>
+			</div>
 			<h2>Enter the Editor</h2>
-			<p class="post-meta">(2020-06-03 in Gamedev)</p>
+			<p>The last two months of progress feature the beginnings of the editor, among other changes</p>
 		</div>
-		<p>The last two months of progress feature the beginnings of the editor, among other changes</p>
+		<span class="entry-arrow" aria-hidden="true">&#9654;</span>
 	</a>
 	<a href="/Gamedev/ospgl-progress.html" class="post-list">
-		<div class="post-header">
+		<div class="entry-body">
+			<div class="post-header">
+				<span class="entry-tag">Gamedev</span>
+				<span class="post-meta">2020-04-06</span>
+			</div>
 			<h2>Early 2020 progress</h2>
-			<p class="post-meta">(2020-04-06 in Gamedev)</p>
+			<p>A summary of the progress that has happened since the last blogpost</p>
 		</div>
-		<p>A summary of the progress that has happened since the last blogpost</p>
+		<span class="entry-arrow" aria-hidden="true">&#9654;</span>
 	</a>
 	<a href="/Gamedev/models-and-vehicles.html" class="post-list">
-		<div class="post-header">
+		<div class="entry-body">
+			<div class="post-header">
+				<span class="entry-tag">Gamedev</span>
+				<span class="post-meta">2019-12-22</span>
+			</div>
 			<h2>Models and Vehicles</h2>
-			<p class="post-meta">(2019-12-22 in Gamedev)</p>
+			<p>An introduction to Vehicles and Model loading in OSPGL</p>
 		</div>
-		<p>An introduction to Vehicles and Model loading in OSPGL</p>
+		<span class="entry-arrow" aria-hidden="true">&#9654;</span>
 	</a>
 	<a href="/Gamedev/introducing-ospgl.html" class="post-list">
-		<div class="post-header">
-			<h2>Introducing OSPGL</h2>
-			<p class="post-meta">(2019-11-30 in Gamedev)</p>
-		</div>
-		<p>OSPGL (OSP + OpenGL) is an ongoing attempt at creating a game similar to Squad's Kerbal Space Program, focusing on perfomance and moddability</p>
-	</a>
-
+		<div class="entry-body">
+			<div class="post-header">
+				<span class="entry-tag">Gamedev</span>
+				<span class="post-meta">2019-11-30</span>
 			</div>
+			<h2>Introducing OSPGL</h2>
+			<p>OSPGL (OSP + OpenGL) is an ongoing attempt at creating a game similar to Squad's Kerbal Space Program, focusing on perfomance and moddability</p>
 		</div>
+		<span class="entry-arrow" aria-hidden="true">&#9654;</span>
+	</a>
+</div>
+			</section>
+		</main>
+
+		<footer class="colophon">
+			<span>&copy; 2019-2026 Tatjam &middot; <a href="/feed.xml">RSS</a> &middot; <a href="mailto:blog@tatjam.eu">Contact</a></span>
+			<span>Built with Nim + Typst &middot; GPL-3.0</span>
+		</footer>
 	</body>
 </html>

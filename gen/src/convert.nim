@@ -3,13 +3,13 @@
 # ------------------------------------------
 # Invoking typst for the conversion and storing posts / categories
 
-import std/[paths, strformat, dirs, tables, times]
+import std/[paths, strformat, dirs, tables, times, options]
 import posts, themes
 
 const contentDir = Path("content/")
 
 func themePost*(
-    post: LoadedPost, prev: LoadedPost, next: LoadedPost, theme: PostTheme
+    post: LoadedPost, prev: Option[LoadedPost], next: Option[LoadedPost], theme: PostTheme
 ): ThemedPost =
   ThemedPost(
     targetPath: Path(&"{post.targetPath}"), contents: theme.apply(post, prev, next)
@@ -17,9 +17,9 @@ func themePost*(
 
 func templatePosts*(posts: seq[LoadedPost], theme: PostTheme): seq[ThemedPost] =
   for i in 0 ..< posts.len:
-    let newer = max(i - 1, 0)
-    let older = min(i + 1, posts.len - 1)
-    result.add(posts[i].themePost(posts[older], posts[newer], theme))
+    let prev = if i + 1 < posts.len: some(posts[i + 1]) else: none(LoadedPost)
+    let next = if i > 0: some(posts[i - 1]) else: none(LoadedPost)
+    result.add(posts[i].themePost(prev, next, theme))
 
 func templateCatPage*(
     cat: Category,

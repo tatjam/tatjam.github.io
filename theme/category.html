@@ -12,31 +12,49 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1">
 		<title>Tatjam's Blog</title>
 		<link rel="stylesheet" type="text/css" href="/static/theme.css">
-		<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:ital@0;1&family=IBM+Plex+Sans+Condensed:ital@0;1&family=IBM+Plex+Sans:ital,wght@0,100;0,400;0,700;1,100;1,400;1,700&family=IBM+Plex+Serif:ital@0;1&display=swap" rel="stylesheet">
+		<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:ital,wght@0,400;0,500;1,400&family=Space+Grotesk:wght@400;500;600&display=swap" rel="stylesheet">
 	</head>
-	<body>
+	<body class="page-category">
 		<script src="/static/prism.js"></script>
 		<script src="/static/theme-toggle.js"></script>
+		<script src="/static/tumbler.js"></script>
 
-		<div class="navbar">
-			<div class="nav-left">
-				<a href="">Category: <$CUR_CAT_NAME></a>
-			</div>
-			<div class="nav-right">
+		<div class="reading-progress" aria-hidden="true"></div>
+
+		<header class="topbar navbar">
+			<a class="brand nav-left" href="/index.html">
+				<span class="brand-name">Tatjam's Blog</span>
+			</a>
+			<nav class="nav-right" aria-label="Site navigation">
 				<a href="/index.html">Home</a>
 				<$ALL_CATEGORIES>
-				<button id="theme-toggle" class="theme-toggle" type="button" aria-label="Toggle dark mode">
+				<a href="/feed.xml">RSS</a>
+				<button id="theme-toggle" class="theme-toggle" type="button" aria-label="Toggle dark mode" aria-pressed="false">
 					<span class="theme-toggle-track"><span class="theme-toggle-thumb"></span></span>
 				</button>
-			</div>
-		</div>
-		<div class="intro">
-			<h1><$CUR_CAT_NAME></h1>
-		</div>
-		<div id="page">
-			<div class="main">
-				<$POST_LIST_CAT>
-			</div>
-		</div>
+			</nav>
+		</header>
+
+		<main>
+			<section class="intro hero">
+				<div class="hero-copy">
+					<p class="eyebrow">category / <$CUR_CAT_NAME></p>
+					<h1><$CUR_CAT_NAME></h1>
+				</div>
+				<div class="tumbler" aria-hidden="true">
+					<canvas id="tumbler-canvas"></canvas>
+				</div>
+			</section>
+
+			<section class="entries">
+				<div class="section-head"><h2>Entries in <$CUR_CAT_NAME></h2></div>
+				<div class="entry-list"><$POST_LIST_CAT></div>
+			</section>
+		</main>
+
+		<footer class="colophon">
+			<span>&copy; 2019-2026 Tatjam &middot; <a href="/feed.xml">RSS</a> &middot; <a href="mailto:blog@tatjam.eu">Contact</a></span>
+			<span>Built with Nim + Typst &middot; GPL-3.0</span>
+		</footer>
 	</body>
 </html>

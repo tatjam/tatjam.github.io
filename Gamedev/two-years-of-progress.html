@@ -14,34 +14,41 @@
 		<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
 		<link href="/static/prism.css" rel="stylesheet" />
 		<link rel="stylesheet" type="text/css" href="/static/theme.css">
-		<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:ital@0;1&family=IBM+Plex+Sans+Condensed:ital@0;1&family=IBM+Plex+Sans:ital,wght@0,100;0,400;0,700;1,100;1,400;1,700&family=IBM+Plex+Serif:ital@0;1&display=swap" rel="stylesheet">
+		<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:ital,wght@0,400;0,500;1,400&family=Space+Grotesk:wght@400;500;600&display=swap" rel="stylesheet">
 		<script type="text/javascript" src="/external/offsetanchor.js"></script>
 		
 	</head>
-	<body>
+	<body class="page-post">
 		<script src="/static/prism.js"></script>
 		<script src="/static/theme-toggle.js"></script>
 
-		<div class="navbar">
-			<div class="nav-left">
-				<a href="/index.html">Two years of progress</a>
-			</div>
-			<div class="nav-right">
+		<div class="reading-progress" aria-hidden="true"></div>
+
+		<header class="topbar navbar">
+			<a class="brand nav-left" href="/index.html">
+				<span class="brand-name">Tatjam's Blog</span>
+			</a>
+			<nav class="nav-right" aria-label="Site navigation">
 				<a href="/category-Gamedev.html">Gamedev</a>
-				<a href="/Gamedev/enter-the-editor.html" title="Previous: Enter the Editor" class="nav-arrow">&#9664</a>
-				<a href="/Gamedev/roadway-to-release.html" title="Next: Roadway to Release" class="nav-arrow">&#9654</a>
-				<button id="theme-toggle" class="theme-toggle" type="button" aria-label="Toggle dark mode">
+				<a href="/Gamedev/enter-the-editor.html" title="Previous: Enter the Editor" class="nav-arrow" aria-label="Previous post">&#9664;</a>
+				<a href="/Gamedev/roadway-to-release.html" title="Next: Roadway to Release" class="nav-arrow" aria-label="Next post">&#9654;</a>
+				<button id="theme-toggle" class="theme-toggle" type="button" aria-label="Toggle dark mode" aria-pressed="false">
 					<span class="theme-toggle-track"><span class="theme-toggle-thumb"></span></span>
 				</button>
-			</div>
-		</div>
-		<div class="intro">
-			<h1>Two years of progress</h1>
-			<p>Almost 2 years have passed since last blogpost, but the project has kept on going!<br>2022-05-15</p>
-		</div>
-		<div id="page">
-			<div class="main">
-				<p>University has meant that a big portion of the free time I used to have is not there anymore. Still, a lot of very important features have been developed, and I believe OSPGL may be playable by the end of this year. In this blogpost the most important changes will be presented, alongside some plans for the future!</p><hr><script>var head = document.getElementsByTagName("head")[0],
+			</nav>
+		</header>
+
+		<main>
+			<section class="intro hero hero-post">
+				<div class="hero-copy">
+					<p class="eyebrow">entry / Gamedev / 2022-05-15</p>
+					<h1>Two years of progress</h1>
+					<p class="hero-summary">Almost 2 years have passed since last blogpost, but the project has kept on going!</p>
+				</div>
+			</section>
+
+			<article id="page">
+				<div class="main"><p>University has meant that a big portion of the free time I used to have is not there anymore. Still, a lot of very important features have been developed, and I believe OSPGL may be playable by the end of this year. In this blogpost the most important changes will be presented, alongside some plans for the future!</p><hr><script>var head = document.getElementsByTagName("head")[0],
 cssLink = document.createElement("link");
 
 cssLink.href = "../external/slider/before-effect-slider.min.css";
@@ -76,8 +83,18 @@ beforeEffectslider(
     BeforeImage: "/static/Gamedev/img/2years/terrainold.png",
     AfterImage: "/static/Gamedev/img/2years/terrainnew.png"
 })
-</script>
-			</div>
-		</div>
+</script></div>
+			</article>
+
+			<nav class="post-pager" aria-label="Post navigation">
+				<a href="/Gamedev/enter-the-editor.html" class="pager-link pager-prev"><span>&#9664; previous entry</span><strong>Enter the Editor</strong></a>
+				<a href="/Gamedev/roadway-to-release.html" class="pager-link pager-next"><span>next entry &#9654;</span><strong>Roadway to Release</strong></a>
+			</nav>
+		</main>
+
+		<footer class="colophon">
+			<span>&copy; 2019-2026 Tatjam &middot; <a href="/feed.xml">RSS</a> &middot; <a href="mailto:blog@tatjam.eu">Contact</a></span>
+			<span>Built with Nim + Typst &middot; GPL-3.0</span>
+		</footer>
 	</body>
 </html>
